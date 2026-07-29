@@ -1,0 +1,1406 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Manager Benefits Demo</title>
+  <style>
+    :root {
+      --purple: #8c45ff;
+      --purple-2: #c02dff;
+      --pink: #f04bdc;
+      --ink: #23212a;
+      --muted: #9b98a6;
+      --line: #eceaf2;
+      --surface: rgba(255,255,255,.94);
+      --bg: #f6f6fb;
+      --success: #22bd83;
+      --danger: #f26f82;
+      --shadow: 0 12px 32px rgba(97, 73, 148, .10);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 50% -5%, #e8dcff 0 11%, transparent 35%),
+        #ececf2;
+      color: var(--ink);
+      font-family: Inter, ui-rounded, "SF Pro Display", -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input { font: inherit; }
+    button { border: 0; cursor: pointer; }
+
+    .phone {
+      position: relative;
+      width: min(100%, 430px);
+      min-height: 100dvh;
+      margin: 0 auto;
+      overflow: hidden;
+      background: var(--bg);
+      box-shadow: 0 0 50px rgba(55, 38, 84, .12);
+    }
+
+    .view {
+      display: none;
+      min-height: 100dvh;
+      padding-bottom: calc(24px + env(safe-area-inset-bottom));
+      animation: enter .22s ease both;
+    }
+    .view.active { display: block; }
+    @keyframes enter {
+      from { opacity: 0; transform: translateX(10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .home-hero {
+      position: relative;
+      height: 365px;
+      padding: max(22px, env(safe-area-inset-top)) 24px 0;
+      color: white;
+      background:
+        radial-gradient(circle at 18% 15%, rgba(255,255,255,.22), transparent 22%),
+        radial-gradient(circle at 77% 41%, rgba(255,255,255,.2), transparent 28%),
+        linear-gradient(150deg, #6d33ed 0%, #a24dff 49%, #d7b5ff 100%);
+    }
+    .home-hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 122px;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+    }
+
+    .nav {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 48px 1fr 48px;
+      align-items: center;
+      height: 52px;
+    }
+    .nav-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 650;
+      letter-spacing: -.3px;
+    }
+    .icon-button {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 14px;
+      color: inherit;
+      background: rgba(66, 29, 130, .28);
+    }
+    .icon-button svg { width: 24px; height: 24px; }
+    .back {
+      justify-self: start;
+      background: transparent;
+    }
+
+    .profile {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 27px;
+    }
+    .avatar {
+      position: relative;
+      display: grid;
+      flex: 0 0 auto;
+      width: 72px;
+      height: 72px;
+      place-items: center;
+      overflow: hidden;
+      border: 3px solid rgba(255,255,255,.7);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 37%, #fff 0 20%, transparent 21%),
+        radial-gradient(circle at 50% 61%, #fff 0 30%, transparent 31%),
+        linear-gradient(145deg, #f7a6db, #ffe1c9);
+      box-shadow: 0 8px 22px rgba(93, 36, 147, .2);
+    }
+    .avatar::after {
+      content: "M";
+      color: #7f3bed;
+      font-size: 25px;
+      font-weight: 850;
+    }
+    .profile-name {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      font-size: 19px;
+      font-weight: 750;
+    }
+    .manager-tag {
+      padding: 4px 9px;
+      border: 1px solid rgba(255,248,177,.55);
+      border-radius: 7px;
+      background: linear-gradient(180deg, #144c35, #0c2c22);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
+      color: #ffefad;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .5px;
+    }
+    .profile-id {
+      margin-top: 8px;
+      color: rgba(255,255,255,.68);
+      font-size: 15px;
+    }
+
+    .team-card {
+      position: absolute;
+      z-index: 3;
+      top: 199px;
+      left: 20px;
+      right: 20px;
+      overflow: hidden;
+      border-radius: 19px;
+      box-shadow: var(--shadow);
+      background: white;
+    }
+    .team-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 54px;
+      padding: 0 19px;
+      color: white;
+      background: linear-gradient(100deg, #d52bd9, #811df2);
+    }
+    .team-head strong { font-size: 18px; }
+    .team-link {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: white;
+      background: transparent;
+      font-size: 13px;
+    }
+    .arrow-pill {
+      display: grid;
+      width: 27px;
+      height: 27px;
+      place-items: center;
+      border-radius: 14px;
+      background: white;
+      color: var(--purple);
+      font-size: 19px;
+    }
+    .team-body { padding: 17px 18px 18px; }
+    .updated { margin-bottom: 12px; color: #77737f; font-size: 12px; }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+    .team-stat {
+      min-width: 0;
+      padding: 12px 11px;
+      border: 1px solid #e9e4f2;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #f9f3ff, #fff);
+    }
+    .team-stat span { color: #aa83d1; font-size: 12px; }
+    .team-stat b { display: block; margin: 11px 0; font-size: 20px; }
+    .mini-add {
+      padding: 6px 13px;
+      border-radius: 17px;
+      background: linear-gradient(100deg, #b044ff, #e852e2);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .home-content {
+      position: relative;
+      z-index: 4;
+      margin-top: 19px;
+      padding: 0 20px;
+    }
+    .period-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 5px;
+      border-radius: 30px;
+      background: white;
+      box-shadow: 0 5px 22px rgba(84, 72, 106, .05);
+    }
+    .period-switch button {
+      height: 43px;
+      border-radius: 23px;
+      background: transparent;
+      color: #807c86;
+    }
+    .period-switch .selected {
+      color: white;
+      background: linear-gradient(100deg, #9447ff, #f14fd7);
+      box-shadow: 0 5px 14px rgba(179, 56, 229, .2);
+    }
+
+    .revenue-card {
+      margin-top: 14px;
+      padding: 19px;
+      border-radius: 17px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+    .rev-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 0;
+      color: #8e8a96;
+      font-size: 13px;
+    }
+    .rev-row.total {
+      padding-bottom: 15px;
+      border-bottom: 1px dashed #ddd9e2;
+    }
+    .coin-value {
+      color: #25222a;
+      font-size: 23px;
+      font-weight: 750;
+    }
+    .date-chip {
+      padding: 6px 9px;
+      border-radius: 6px;
+      background: linear-gradient(100deg, #22b873, #50e296);
+      color: white;
+      font-size: 11px;
+    }
+
+    .section-title {
+      margin: 25px 1px 14px;
+      font-size: 18px;
+      font-weight: 760;
+    }
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .tool {
+      position: relative;
+      display: flex;
+      min-width: 0;
+      min-height: 112px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 17px;
+      background: white;
+      box-shadow: var(--shadow);
+      color: #2c2931;
+      transition: .18s ease;
+    }
+    .tool:active { transform: scale(.97); }
+    .tool svg { width: 39px; height: 39px; }
+    .tool span { font-size: 12px; font-weight: 670; }
+    .tool.benefits {
+      border-color: #ebdbff;
+      background:
+        radial-gradient(circle at 50% 27%, rgba(162,87,255,.13), transparent 34%),
+        white;
+    }
+    .new-badge {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      padding: 3px 7px;
+      border-radius: 9px;
+      background: #f04bdc;
+      color: white;
+      font-size: 8px;
+      font-weight: 850;
+      letter-spacing: .5px;
+    }
+
+    /* Benefits page */
+    .benefit-view {
+      background:
+        radial-gradient(circle at 50% -10%, #d6b7ff, transparent 30%),
+        var(--bg);
+    }
+    .benefit-nav {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      padding: max(13px, env(safe-area-inset-top)) 18px 8px;
+      background: rgba(246,246,251,.82);
+      backdrop-filter: blur(16px);
+    }
+    .benefit-nav .nav { color: #25212d; }
+    .benefit-nav .back { color: #4b4554; }
+    .benefit-nav .icon-button { background: rgba(255,255,255,.62); }
+
+    .benefit-content { padding: 8px 18px 0; }
+    .weekly-card {
+      position: relative;
+      overflow: hidden;
+      padding: 21px;
+      border-radius: 23px;
+      color: white;
+      background:
+        radial-gradient(circle at 88% 20%, rgba(255,255,255,.22), transparent 23%),
+        linear-gradient(135deg, #7031e9 0%, #a83cfa 55%, #e450d1 100%);
+      box-shadow: 0 18px 40px rgba(125, 51, 211, .24);
+    }
+    .weekly-card::after {
+      content: "";
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      right: -61px;
+      bottom: -99px;
+      border: 28px solid rgba(255,255,255,.09);
+      border-radius: 50%;
+    }
+    .weekly-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .eyebrow {
+      color: rgba(255,255,255,.7);
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+    .tier {
+      margin-top: 6px;
+      font-size: 22px;
+      font-weight: 820;
+    }
+    .tier-pill {
+      padding: 6px 10px;
+      border: 1px solid rgba(255,255,255,.27);
+      border-radius: 20px;
+      background: rgba(255,255,255,.14);
+      font-size: 11px;
+      font-weight: 730;
+    }
+    .quota-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 21px;
+    }
+    .quota {
+      padding: 13px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 15px;
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(6px);
+    }
+    .quota-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(255,255,255,.72);
+      font-size: 11px;
+    }
+    .quota strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 24px;
+      line-height: 1;
+    }
+    .quota strong small {
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
+      font-weight: 550;
+    }
+    .reset {
+      position: relative;
+      z-index: 1;
+      margin-top: 14px;
+      color: rgba(255,255,255,.65);
+      font-size: 10px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 20px;
+      padding: 4px;
+      border-radius: 15px;
+      background: #ebe9f0;
+    }
+    .tab {
+      height: 39px;
+      border-radius: 12px;
+      background: transparent;
+      color: #918d99;
+      font-size: 12px;
+      font-weight: 720;
+    }
+    .tab.active {
+      background: white;
+      color: #7140d3;
+      box-shadow: 0 4px 13px rgba(77, 60, 112, .10);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fade .2s ease both; }
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+    .form-card, .records-card {
+      margin-top: 14px;
+      padding: 19px;
+      border-radius: 20px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+    .form-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .form-heading h2 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -.2px;
+    }
+    .duration {
+      padding: 5px 9px;
+      border-radius: 12px;
+      background: #f3ebff;
+      color: #7c43dc;
+      font-size: 10px;
+      font-weight: 720;
+    }
+    .form-note {
+      margin: 7px 0 17px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    .field-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #6e6977;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .search-row {
+      display: grid;
+      grid-template-columns: 1fr 78px;
+      gap: 8px;
+    }
+    .input {
+      width: 100%;
+      height: 45px;
+      padding: 0 14px;
+      outline: none;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #faf9fc;
+      color: #2b2830;
+      transition: .18s;
+    }
+    .input:focus {
+      border-color: #b48cf7;
+      box-shadow: 0 0 0 3px rgba(140,69,255,.08);
+    }
+    .search-button {
+      border-radius: 13px;
+      background: #f0e7ff;
+      color: #7a3fdf;
+      font-size: 11px;
+      font-weight: 780;
+    }
+    .error {
+      display: none;
+      margin: 7px 0 0;
+      color: var(--danger);
+      font-size: 10px;
+    }
+    .error.show { display: block; }
+
+    .user-card {
+      display: none;
+      align-items: center;
+      gap: 11px;
+      margin-top: 13px;
+      padding: 12px;
+      border: 1px solid #eee7f8;
+      border-radius: 14px;
+      background: #fcfaff;
+    }
+    .user-card.show { display: flex; }
+    .user-avatar {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #f6c5ff, #a96df6);
+      color: white;
+      font-size: 14px;
+      font-weight: 850;
+    }
+    .user-info { flex: 1; min-width: 0; }
+    .user-name { font-size: 13px; font-weight: 760; }
+    .user-id { margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .verified {
+      display: grid;
+      width: 20px;
+      height: 20px;
+      place-items: center;
+      border-radius: 50%;
+      background: #e3f9f1;
+      color: var(--success);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .benefit-preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 17px;
+      padding: 14px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #f7f1ff, #fff8fc);
+    }
+    .benefit-icon {
+      display: grid;
+      width: 46px;
+      height: 46px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 14px;
+      color: white;
+      background: linear-gradient(145deg, #713be3, #d34ddb);
+      box-shadow: 0 7px 17px rgba(137, 59, 207, .22);
+    }
+    .benefit-icon svg { width: 25px; height: 25px; }
+    .benefit-copy { flex: 1; }
+    .benefit-name { font-size: 13px; font-weight: 800; }
+    .benefit-meta { margin-top: 4px; color: var(--muted); font-size: 10px; }
+
+    .primary {
+      width: 100%;
+      height: 48px;
+      margin-top: 17px;
+      border-radius: 15px;
+      background: linear-gradient(100deg, #7e3eea, #d946d4);
+      box-shadow: 0 10px 20px rgba(152, 58, 213, .22);
+      color: white;
+      font-size: 13px;
+      font-weight: 790;
+    }
+    .primary:disabled {
+      cursor: not-allowed;
+      background: #d8d5dd;
+      box-shadow: none;
+      color: #f8f7f9;
+    }
+
+    .category-strip {
+      display: flex;
+      gap: 8px;
+      margin: 8px -19px 0;
+      padding: 0 19px 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .category-strip::-webkit-scrollbar { display: none; }
+    .category-chip {
+      display: flex;
+      height: 34px;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+      border: 1px solid #ebe7f0;
+      border-radius: 18px;
+      background: #faf9fc;
+      color: #7e7986;
+      font-size: 10px;
+      font-weight: 720;
+      transition: .17s ease;
+    }
+    .category-chip span {
+      display: grid;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 4px;
+      place-items: center;
+      border-radius: 9px;
+      background: #eeeaf3;
+      color: #9993a1;
+      font-size: 8px;
+    }
+    .category-chip.active {
+      border-color: #9253e8;
+      background: linear-gradient(100deg, #8042e6, #be4cdd);
+      box-shadow: 0 5px 12px rgba(139,65,216,.19);
+      color: white;
+    }
+    .category-chip.active span {
+      background: rgba(255,255,255,.2);
+      color: white;
+    }
+    .outfit-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 10px;
+    }
+    .outfit {
+      display: grid;
+      grid-template-columns: 46px 1fr 22px;
+      align-items: center;
+      gap: 11px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: white;
+      text-align: left;
+      transition: .17s;
+    }
+    .outfit.selected {
+      border-color: #a87bf0;
+      background: #fbf7ff;
+      box-shadow: 0 0 0 2px rgba(140,69,255,.06);
+    }
+    .outfit[hidden] { display: none; }
+    .outfit-art {
+      display: grid;
+      width: 46px;
+      height: 46px;
+      place-items: center;
+      border-radius: 13px;
+      background: linear-gradient(145deg, #fff1b2, #df9cf5);
+      font-size: 23px;
+    }
+    .outfit-art.art-blue {
+      background: linear-gradient(145deg, #bdeeff, #c7b4ff);
+    }
+    .outfit-art.art-sunset {
+      background: linear-gradient(145deg, #ffd4e8, #ffb58f);
+    }
+    .outfit-art.art-mint {
+      background: linear-gradient(145deg, #c5f5e6, #93d9d2);
+    }
+    .outfit-art.art-night {
+      background: linear-gradient(145deg, #b9b5ff, #5954b9);
+      color: white;
+    }
+    .outfit-art.art-gold {
+      background: linear-gradient(145deg, #fff1ad, #e8a957);
+    }
+    .outfit-name { font-size: 12px; font-weight: 760; }
+    .outfit-type { margin-top: 4px; color: var(--muted); font-size: 9px; }
+    .radio {
+      display: grid;
+      width: 19px;
+      height: 19px;
+      place-items: center;
+      border: 1.5px solid #d7d2dd;
+      border-radius: 50%;
+    }
+    .outfit.selected .radio {
+      border-color: var(--purple);
+      background: var(--purple);
+      box-shadow: inset 0 0 0 4px white;
+    }
+
+    .empty-records {
+      padding: 34px 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .record-list { display: grid; gap: 11px; }
+    .record {
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 11px;
+      border-bottom: 1px solid #f0eef3;
+    }
+    .record:last-child { padding-bottom: 0; border-bottom: 0; }
+    .record-symbol {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 12px;
+      background: #f2eaff;
+      color: #7a42d9;
+      font-size: 17px;
+    }
+    .record-title { font-size: 11px; font-weight: 750; }
+    .record-meta { margin-top: 4px; color: var(--muted); font-size: 9px; }
+    .record-status { color: var(--success); font-size: 9px; font-weight: 750; }
+
+    .modal-layer {
+      position: fixed;
+      z-index: 100;
+      inset: 0;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(26, 20, 36, .47);
+      backdrop-filter: blur(3px);
+    }
+    .modal-layer.show { display: flex; animation: fade .18s ease both; }
+    .modal {
+      width: min(100%, 394px);
+      padding: 22px;
+      border-radius: 23px;
+      background: white;
+      box-shadow: 0 20px 55px rgba(35, 20, 56, .25);
+      animation: up .22s ease both;
+    }
+    @keyframes up {
+      from { transform: translateY(25px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-icon {
+      display: grid;
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 13px;
+      place-items: center;
+      border-radius: 17px;
+      background: linear-gradient(145deg, #813fe8, #e04bd2);
+      color: white;
+      font-size: 23px;
+    }
+    .modal h3 { margin: 0; text-align: center; font-size: 18px; }
+    .modal p {
+      margin: 9px 5px 18px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .summary {
+      display: grid;
+      gap: 8px;
+      padding: 13px;
+      border-radius: 14px;
+      background: #f7f5fa;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 11px;
+    }
+    .summary-row span { color: var(--muted); }
+    .modal-actions {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 9px;
+      margin-top: 16px;
+    }
+    .secondary, .confirm {
+      height: 47px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 760;
+    }
+    .secondary { background: #f0eef3; color: #736f79; }
+    .confirm {
+      background: linear-gradient(100deg, #7e3eea, #d946d4);
+      color: white;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 200;
+      left: 50%;
+      bottom: calc(26px + env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: max-content;
+      max-width: calc(100% - 40px);
+      padding: 12px 16px;
+      border-radius: 15px;
+      background: rgba(33, 29, 39, .92);
+      box-shadow: 0 12px 28px rgba(0,0,0,.2);
+      color: white;
+      font-size: 11px;
+      transform: translate(-50%, 20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s ease;
+    }
+    .toast.show { transform: translate(-50%, 0); opacity: 1; }
+    .toast-check {
+      display: grid;
+      width: 19px;
+      height: 19px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--success);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .hint {
+      margin: 12px 2px 0;
+      color: #aaa6b1;
+      text-align: center;
+      font-size: 9px;
+    }
+
+    @media (min-width: 700px) {
+      body { padding: 30px 0; }
+      .phone {
+        min-height: 860px;
+        border: 8px solid #25222a;
+        border-radius: 38px;
+      }
+      .view { min-height: 844px; }
+      .modal-layer { align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <section class="view active" id="homeView">
+      <div class="home-hero">
+        <header class="nav">
+          <button class="icon-button back" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+          </button>
+          <div class="nav-title">Manager Center</div>
+          <button class="icon-button" aria-label="Settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.05.05-2.12 2.12-.05-.05a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-3v-.08A1.7 1.7 0 0 0 10.68 18.36a1.7 1.7 0 0 0-1.88.34l-.05.05-2.12-2.12.05-.05A1.7 1.7 0 0 0 7.02 15a1.7 1.7 0 0 0-1.56-1.03H5v-3h.46A1.7 1.7 0 0 0 7.02 9.94a1.7 1.7 0 0 0-.34-1.88l-.05-.05L8.75 5.9l.05.05a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 11.71 4.7V4h3v.7a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.05-.05 2.12 2.12-.05.05a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v3h-.04A1.7 1.7 0 0 0 19.4 15Z"/>
+            </svg>
+          </button>
+        </header>
+
+        <div class="profile">
+          <div class="avatar"></div>
+          <div>
+            <div class="profile-name">
+              Melody
+              <span class="manager-tag">✦ MANAGER</span>
+            </div>
+            <div class="profile-id">ID: 8587</div>
+          </div>
+        </div>
+
+        <article class="team-card">
+          <div class="team-head">
+            <strong>My Team</strong>
+            <button class="team-link">
+              View details <span class="arrow-pill">›</span>
+            </button>
+          </div>
+          <div class="team-body">
+            <div class="updated">Updated: 2026-07-29 09:50:00</div>
+            <div class="team-grid">
+              <div class="team-stat">
+                <span>BD</span><b>1</b><button class="mini-add">Add</button>
+              </div>
+              <div class="team-stat">
+                <span>Agency</span><b>2</b><button class="mini-add">Add</button>
+              </div>
+              <div class="team-stat">
+                <span>Host</span><b>2</b><button class="mini-add">Add</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="home-content">
+        <div class="period-switch">
+          <button class="selected">Today</button>
+          <button>This Week</button>
+        </div>
+
+        <article class="revenue-card">
+          <div class="rev-row total">
+            <span>Total Rev</span><span class="date-chip">2026-07-29 – 2026-07-29</span>
+          </div>
+          <div class="rev-row">
+            <span class="coin-value">🪙 0</span>
+          </div>
+          <div class="rev-row"><span>Regular Rev</span><strong>🪙 0</strong></div>
+          <div class="rev-row"><span>Lucky Rev</span><strong>🪙 0</strong></div>
+        </article>
+
+        <h2 class="section-title">My Tools</h2>
+        <div class="tools">
+          <button class="tool" aria-label="Management">
+            <svg viewBox="0 0 48 48" fill="none">
+              <defs>
+                <linearGradient id="mg" x1="7" y1="7" x2="42" y2="42">
+                  <stop stop-color="#c0a7ff"/><stop offset="1" stop-color="#7846e8"/>
+                </linearGradient>
+              </defs>
+              <circle cx="21" cy="17" r="9" fill="url(#mg)"/>
+              <path d="M6 41c0-9 6.7-15 15-15 4 0 7.6 1.4 10.3 4" fill="url(#mg)"/>
+              <path d="M38 28l1.4 3.1 3.4.4-2.5 2.4.7 3.4-3-1.7-3 1.7.7-3.4-2.5-2.4 3.4-.4L38 28Z" fill="#6536ce"/>
+            </svg>
+            <span>Management</span>
+          </button>
+
+          <button class="tool benefits" id="benefitsEntry" aria-label="Benefits">
+            <span class="new-badge">NEW</span>
+            <svg viewBox="0 0 48 48" fill="none">
+              <defs>
+                <linearGradient id="bg" x1="5" y1="4" x2="43" y2="46">
+                  <stop stop-color="#e16df0"/><stop offset="1" stop-color="#7045e6"/>
+                </linearGradient>
+              </defs>
+              <rect x="8" y="17" width="32" height="25" rx="6" fill="url(#bg)"/>
+              <path d="M5 15.5A4.5 4.5 0 0 1 9.5 11h29a4.5 4.5 0 0 1 0 9h-29A4.5 4.5 0 0 1 5 15.5Z" fill="#b355ed"/>
+              <path d="M24 11v31M24 11c-7.5 0-11.5-2.1-11.5-5.3 0-2.5 2.1-3.7 4.2-3.7C20.8 2 24 11 24 11Zm0 0s3.2-9 7.3-9c2.1 0 4.2 1.2 4.2 3.7C35.5 8.9 31.5 11 24 11Z" stroke="#f5d7ff" stroke-width="2.3" stroke-linejoin="round"/>
+            </svg>
+            <span>Benefits</span>
+          </button>
+
+          <button class="tool" aria-label="Bank">
+            <svg viewBox="0 0 48 48" fill="none">
+              <defs>
+                <linearGradient id="bank" x1="8" y1="5" x2="42" y2="44">
+                  <stop stop-color="#c7adff"/><stop offset="1" stop-color="#7752df"/>
+                </linearGradient>
+              </defs>
+              <path d="m24 4 19 10v5H5v-5L24 4Z" fill="url(#bank)"/>
+              <path d="M9 22h6v17H9V22Zm12 0h6v17h-6V22Zm12 0h6v17h-6V22ZM5 41h38v4H5v-4Z" fill="url(#bank)"/>
+              <circle cx="24" cy="13" r="3" fill="#f4eaff"/>
+            </svg>
+            <span>Bank</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="view benefit-view" id="benefitView">
+      <div class="benefit-nav">
+        <header class="nav">
+          <button class="icon-button back" id="benefitBack" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+          </button>
+          <div class="nav-title">Benefits</div>
+          <button class="icon-button" id="recordsShortcut" aria-label="Records">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M4 5h16M4 12h16M4 19h10"/>
+              <circle cx="3.5" cy="5" r=".5" fill="currentColor"/>
+              <circle cx="3.5" cy="12" r=".5" fill="currentColor"/>
+              <circle cx="3.5" cy="19" r=".5" fill="currentColor"/>
+            </svg>
+          </button>
+        </header>
+      </div>
+
+      <div class="benefit-content">
+        <article class="weekly-card">
+          <div class="weekly-top">
+            <div>
+              <div class="eyebrow">Weekly benefits</div>
+              <div class="tier">Manager Lv.1</div>
+            </div>
+            <div class="tier-pill">Rev ≥ $500</div>
+          </div>
+          <div class="quota-grid">
+            <div class="quota">
+              <div class="quota-label"><span>VIP</span><span>7 days</span></div>
+              <strong><span id="vipRemaining">5</span><small> / 5 left</small></strong>
+            </div>
+            <div class="quota">
+              <div class="quota-label"><span>Decorations</span><span>7 days</span></div>
+              <strong><span id="outfitRemaining">5</span><small> / 5 left</small></strong>
+            </div>
+          </div>
+          <div class="reset">Resets every Monday at 00:00 (UTC+0)</div>
+        </article>
+
+        <nav class="tabs" aria-label="Benefit types">
+          <button class="tab active" data-tab="vipPanel">VIP</button>
+          <button class="tab" data-tab="outfitPanel">Decorations</button>
+          <button class="tab" data-tab="recordsPanel">Records</button>
+        </nav>
+
+        <section class="tab-panel active" id="vipPanel">
+          <article class="form-card">
+            <div class="form-heading">
+              <h2>Grant VIP</h2>
+              <span class="duration">Valid for 7 days</span>
+            </div>
+            <p class="form-note">Enter the recipient’s user ID. One weekly quota will be used after confirmation.</p>
+
+            <label class="field-label" for="vipUserId">Recipient ID</label>
+            <div class="search-row">
+              <input class="input" id="vipUserId" inputmode="numeric" placeholder="e.g. 102488" value="102488">
+              <button class="search-button" data-search="vip">Search</button>
+            </div>
+            <p class="error" id="vipError">Enter a valid user ID.</p>
+
+            <div class="user-card" id="vipUserCard">
+              <div class="user-avatar">L</div>
+              <div class="user-info">
+                <div class="user-name">Luna</div>
+                <div class="user-id">ID: <span>102488</span></div>
+              </div>
+              <span class="verified">✓</span>
+            </div>
+
+            <div class="benefit-preview">
+              <div class="benefit-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="m12 3 2.5 5.1 5.6.8-4.1 4 .9 5.6-4.9-2.6-4.9 2.6.9-5.6-4.1-4 5.6-.8L12 3Z"/>
+                </svg>
+              </div>
+              <div class="benefit-copy">
+                <div class="benefit-name">VIP Membership</div>
+                <div class="benefit-meta">Manager benefit · 7-day validity</div>
+              </div>
+            </div>
+
+            <button class="primary" id="vipGrant" disabled>Grant VIP</button>
+          </article>
+          <p class="hint">Granted benefits cannot be withdrawn by the manager.</p>
+        </section>
+
+        <section class="tab-panel" id="outfitPanel">
+          <article class="form-card">
+            <div class="form-heading">
+              <h2>Grant Decoration</h2>
+              <span class="duration">Valid for 7 days</span>
+            </div>
+            <p class="form-note">Search for a user, then select one item from the manager decoration pool.</p>
+
+            <label class="field-label" for="outfitUserId">Recipient ID</label>
+            <div class="search-row">
+              <input class="input" id="outfitUserId" inputmode="numeric" placeholder="e.g. 102488">
+              <button class="search-button" data-search="outfit">Search</button>
+            </div>
+            <p class="error" id="outfitError">Enter a valid user ID.</p>
+
+            <div class="user-card" id="outfitUserCard">
+              <div class="user-avatar">L</div>
+              <div class="user-info">
+                <div class="user-name">Luna</div>
+                <div class="user-id">ID: <span>102488</span></div>
+              </div>
+              <span class="verified">✓</span>
+            </div>
+
+            <label class="field-label" style="margin-top:17px">Decoration category</label>
+            <div class="category-strip" aria-label="Decoration categories">
+              <button class="category-chip active" data-category="frame">Avatar Frames <span>4</span></button>
+              <button class="category-chip" data-category="bubble">Chat Bubbles <span>3</span></button>
+              <button class="category-chip" data-category="entrance">Entrance Effects <span>3</span></button>
+              <button class="category-chip" data-category="badge">Badges <span>2</span></button>
+            </div>
+
+            <label class="field-label" id="outfitCategoryLabel" style="margin-top:14px">Avatar Frames · 4 items</label>
+            <div class="outfit-list">
+              <button class="outfit selected" data-category-item="frame" data-outfit="Starry Halo">
+                <span class="outfit-art">✦</span>
+                <span><span class="outfit-name">Starry Halo</span><span class="outfit-type">Avatar frame · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+              <button class="outfit" data-category-item="frame" data-outfit="Moonlight Crown">
+                <span class="outfit-art art-blue">☾</span>
+                <span><span class="outfit-name">Moonlight Crown</span><span class="outfit-type">Avatar frame · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+              <button class="outfit" data-category-item="frame" data-outfit="Peach Blossom">
+                <span class="outfit-art art-sunset">❀</span>
+                <span><span class="outfit-name">Peach Blossom</span><span class="outfit-type">Avatar frame · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+              <button class="outfit" data-category-item="frame" data-outfit="Emerald Leaf">
+                <span class="outfit-art art-mint">❧</span>
+                <span><span class="outfit-name">Emerald Leaf</span><span class="outfit-type">Avatar frame · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+
+              <button class="outfit" data-category-item="bubble" data-outfit="Crystal Bubble" hidden>
+                <span class="outfit-art art-blue">◈</span>
+                <span><span class="outfit-name">Crystal Bubble</span><span class="outfit-type">Chat bubble · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+              <button class="outfit" data-category-item="bubble" data-outfit="Sweet Whisper" hidden>
+                <span class="outfit-art art-sunset">♡</span>
+                <span><span class="outfit-name">Sweet Whisper</span><span class="outfit-type">Chat bubble · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+              <button class="outfit" data-category-item="bubble" data-outfit="Neon Message" hidden>
+                <span class="outfit-art art-night">⌁</span>
+                <span><span class="outfit-name">Neon Message</span><span class="outfit-type">Chat bubble · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+
+              <button class="outfit" data-category-item="entrance" data-outfit="Sunset Entrance" hidden>
+                <span class="outfit-art art-sunset">☼</span>
+                <span><span class="outfit-name">Sunset Entrance</span><span class="outfit-type">Entrance effect · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+              <button class="outfit" data-category-item="entrance" data-outfit="Galaxy Arrival" hidden>
+                <span class="outfit-art art-night">✧</span>
+                <span><span class="outfit-name">Galaxy Arrival</span><span class="outfit-type">Entrance effect · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+              <button class="outfit" data-category-item="entrance" data-outfit="Golden Spotlight" hidden>
+                <span class="outfit-art art-gold">✺</span>
+                <span><span class="outfit-name">Golden Spotlight</span><span class="outfit-type">Entrance effect · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+
+              <button class="outfit" data-category-item="badge" data-outfit="Manager's Choice" hidden>
+                <span class="outfit-art art-gold">♛</span>
+                <span><span class="outfit-name">Manager's Choice</span><span class="outfit-type">Profile badge · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+              <button class="outfit" data-category-item="badge" data-outfit="Rising Star" hidden>
+                <span class="outfit-art art-mint">★</span>
+                <span><span class="outfit-name">Rising Star</span><span class="outfit-type">Profile badge · 7 days</span></span>
+                <span class="radio"></span>
+              </button>
+            </div>
+
+            <button class="primary" id="outfitGrant" disabled>Grant Decoration</button>
+          </article>
+          <p class="hint">Available items are configured in the manager decoration pool.</p>
+        </section>
+
+        <section class="tab-panel" id="recordsPanel">
+          <article class="records-card">
+            <div class="form-heading">
+              <h2>Grant Records</h2>
+              <span class="duration">This week</span>
+            </div>
+            <div id="recordContainer">
+              <div class="empty-records">
+                No benefits granted yet.<br>
+                Successful grants will appear here.
+              </div>
+            </div>
+          </article>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-layer" id="modalLayer" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-icon" id="modalIcon">✦</div>
+      <h3 id="modalTitle">Confirm Grant</h3>
+      <p>Once granted, this benefit cannot be withdrawn by the manager.</p>
+      <div class="summary">
+        <div class="summary-row"><span>Recipient</span><strong id="summaryUser">Luna (102488)</strong></div>
+        <div class="summary-row"><span>Benefit</span><strong id="summaryBenefit">VIP Membership</strong></div>
+        <div class="summary-row"><span>Validity</span><strong>7 days</strong></div>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary" id="modalCancel">Cancel</button>
+        <button class="confirm" id="modalConfirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <span class="toast-check">✓</span>
+    <span id="toastText">VIP granted successfully.</span>
+  </div>
+
+  <script>
+    const state = {
+      vipRemaining: 5,
+      outfitRemaining: 5,
+      vipUser: null,
+      outfitUser: null,
+      selectedCategory: "frame",
+      selectedOutfit: "Starry Halo",
+      pendingType: null,
+      records: []
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+    function setView(name) {
+      $$(".view").forEach(view => view.classList.remove("active"));
+      $(name).classList.add("active");
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    $("#benefitsEntry").addEventListener("click", () => setView("#benefitView"));
+    $("#benefitBack").addEventListener("click", () => setView("#homeView"));
+
+    function activateTab(panelId) {
+      $$(".tab").forEach(tab => tab.classList.toggle("active", tab.dataset.tab === panelId));
+      $$(".tab-panel").forEach(panel => panel.classList.toggle("active", panel.id === panelId));
+    }
+
+    $$(".tab").forEach(tab => {
+      tab.addEventListener("click", () => activateTab(tab.dataset.tab));
+    });
+    $("#recordsShortcut").addEventListener("click", () => activateTab("recordsPanel"));
+
+    function lookupUser(type) {
+      const input = $(`#${type}UserId`);
+      const error = $(`#${type}Error`);
+      const card = $(`#${type}UserCard`);
+      const id = input.value.trim();
+      if (!/^\d{4,12}$/.test(id)) {
+        error.classList.add("show");
+        card.classList.remove("show");
+        state[`${type}User`] = null;
+        updateButtons();
+        return;
+      }
+      error.classList.remove("show");
+      card.querySelector(".user-id span").textContent = id;
+      card.classList.add("show");
+      state[`${type}User`] = { name: "Luna", id };
+      updateButtons();
+    }
+
+    $$("[data-search]").forEach(button => {
+      button.addEventListener("click", () => lookupUser(button.dataset.search));
+    });
+    ["vip", "outfit"].forEach(type => {
+      $(`#${type}UserId`).addEventListener("keydown", event => {
+        if (event.key === "Enter") lookupUser(type);
+      });
+    });
+
+    const categoryMeta = {
+      frame: { label: "Avatar Frames", count: 4 },
+      bubble: { label: "Chat Bubbles", count: 3 },
+      entrance: { label: "Entrance Effects", count: 3 },
+      badge: { label: "Badges", count: 2 }
+    };
+
+    $$(".category-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        const category = chip.dataset.category;
+        state.selectedCategory = category;
+        state.selectedOutfit = null;
+        $$(".category-chip").forEach(item => item.classList.toggle("active", item === chip));
+        $$(".outfit").forEach(item => {
+          item.hidden = item.dataset.categoryItem !== category;
+          item.classList.remove("selected");
+        });
+        const meta = categoryMeta[category];
+        $("#outfitCategoryLabel").textContent = `${meta.label} · ${meta.count} items`;
+        updateButtons();
+      });
+    });
+
+    $$(".outfit").forEach(item => {
+      item.addEventListener("click", () => {
+        $$(".outfit").forEach(option => option.classList.remove("selected"));
+        item.classList.add("selected");
+        state.selectedOutfit = item.dataset.outfit;
+        updateButtons();
+      });
+    });
+
+    function updateButtons() {
+      $("#vipGrant").disabled = !state.vipUser || state.vipRemaining <= 0;
+      $("#outfitGrant").disabled = !state.outfitUser || !state.selectedOutfit || state.outfitRemaining <= 0;
+      $("#vipRemaining").textContent = state.vipRemaining;
+      $("#outfitRemaining").textContent = state.outfitRemaining;
+    }
+
+    function openConfirm(type) {
+      state.pendingType = type;
+      const user = state[`${type}User`];
+      const benefit = type === "vip" ? "VIP Membership" : state.selectedOutfit;
+      $("#modalIcon").textContent = type === "vip" ? "✦" : "◈";
+      $("#summaryUser").textContent = `${user.name} (${user.id})`;
+      $("#summaryBenefit").textContent = benefit;
+      $("#modalLayer").classList.add("show");
+    }
+
+    $("#vipGrant").addEventListener("click", () => openConfirm("vip"));
+    $("#outfitGrant").addEventListener("click", () => openConfirm("outfit"));
+    $("#modalCancel").addEventListener("click", () => $("#modalLayer").classList.remove("show"));
+    $("#modalLayer").addEventListener("click", event => {
+      if (event.target === $("#modalLayer")) $("#modalLayer").classList.remove("show");
+    });
+
+    $("#modalConfirm").addEventListener("click", () => {
+      const type = state.pendingType;
+      if (!type) return;
+      const user = state[`${type}User`];
+      const benefit = type === "vip" ? "VIP Membership" : state.selectedOutfit;
+
+      if (type === "vip") state.vipRemaining -= 1;
+      else state.outfitRemaining -= 1;
+
+      state.records.unshift({
+        type,
+        benefit,
+        user,
+        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      });
+
+      $("#modalLayer").classList.remove("show");
+      updateButtons();
+      renderRecords();
+      showToast(`${type === "vip" ? "VIP" : "Decoration"} granted successfully.`);
+    });
+
+    function showToast(message) {
+      $("#toastText").textContent = message;
+      $("#toast").classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => $("#toast").classList.remove("show"), 2200);
+    }
+
+    function renderRecords() {
+      if (!state.records.length) return;
+      $("#recordContainer").innerHTML = `
+        <div class="record-list">
+          ${state.records.map(record => `
+            <div class="record">
+              <div class="record-symbol">${record.type === "vip" ? "✦" : "◈"}</div>
+              <div>
+                <div class="record-title">${record.benefit} → ${record.user.name}</div>
+                <div class="record-meta">ID: ${record.user.id} · Today ${record.time} · 7 days</div>
+              </div>
+              <div class="record-status">Granted</div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    // Prefill one successful lookup so the primary flow is visible immediately.
+    lookupUser("vip");
+  </script>
+</body>
+</html>
