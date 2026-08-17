@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Management Role Center · Full Demo V25</title>
+<style>
+:root{
+  --p1:#8450ff;--p2:#d84ef1;--p3:#ff68d4;--ink:#22232b;--muted:#8e8996;
+  --page:#eef3f8;--card:#fff;--line:#ebe4f2;--soft:#fbf1ff;--soft2:#f7f9fc;
+  --green:#16b87c;--amber:#f4a72a;--red:#ea5d68;--shadow:0 14px 42px rgba(75,48,111,.12);
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:#e9eef5}button,input,select{font:inherit}button{cursor:pointer}
+body{padding:18px;background:radial-gradient(circle at 10% 0,rgba(151,99,255,.22),transparent 28%),radial-gradient(circle at 95% 10%,rgba(236,79,211,.16),transparent 26%),#e9eef5}
+.demo{width:min(100%,455px);margin:auto}.role-switch{position:sticky;top:8px;z-index:90;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:6px;margin-bottom:12px;border-radius:18px;background:rgba(255,255,255,.94);box-shadow:0 10px 30px rgba(57,41,83,.12);backdrop-filter:blur(14px)}
+.role-switch button{border:0;border-radius:13px;padding:10px 3px;background:transparent;color:#79727f;font-size:11px;font-weight:850}.role-switch button.active{background:linear-gradient(135deg,var(--p1),var(--p3));color:#fff;box-shadow:0 7px 18px rgba(137,69,224,.27)}
+.phone{position:relative;min-height:920px;overflow:hidden;border-radius:32px;background:var(--page);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.9)}
+.hero{position:relative;padding:21px 20px 58px;color:#fff;background:radial-gradient(circle at 20% 0,rgba(255,255,255,.22),transparent 25%),radial-gradient(circle at 90% 70%,rgba(255,255,255,.12),transparent 28%),linear-gradient(145deg,#8a72ef 0%,#a34eff 48%,#ec69d7 100%)}
+.hero:after{content:"";position:absolute;left:-80px;right:-80px;bottom:-154px;height:220px;border-radius:50%;background:rgba(255,255,255,.10)}
+.appbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;min-height:42px;margin-bottom:23px}.app-title{text-align:center;font-size:21px;font-weight:830}.round{position:absolute;left:0;top:0;width:42px;height:42px;border:0;border-radius:15px;background:rgba(73,26,121,.25);color:#fff;display:grid;place-items:center;font-size:24px}.round.ghost{background:rgba(255,255,255,.13)}
+.profile{position:relative;z-index:2;display:grid;grid-template-columns:76px 1fr;gap:15px;align-items:center}.avatar{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;font-size:40px;background:linear-gradient(145deg,#ffe0ef,#fff4d7);border:3px solid rgba(255,255,255,.7)}.name{font-size:20px;font-weight:900}.badge{display:inline-flex;margin-left:7px;vertical-align:middle;padding:4px 9px;border-radius:999px;background:linear-gradient(135deg,#167b5c,#19b879);font-size:11px;font-weight:900;border:1px solid rgba(255,255,255,.5)}.uid{margin-top:6px;color:rgba(255,255,255,.82);font-size:14px}
+main{position:relative;z-index:4;margin-top:-31px;padding:0 16px 30px}.card{background:#fff;border-radius:22px;box-shadow:0 8px 23px rgba(70,44,102,.055)}.identity{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px;margin-bottom:12px}.idbox{padding:9px 8px;border-radius:14px;background:#faf7ff;min-width:0}.idlabel{font-size:10px;color:#9b94a3;font-weight:800}.idvalue{margin-top:4px;font-size:12px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px}
+.team{overflow:hidden}.team-head{display:flex;align-items:center;justify-content:space-between;padding:15px 17px;color:#fff;background:linear-gradient(105deg,#d62df0,#9000ff 65%,#6c00ff)}.team-head h2{margin:0;font-size:20px}.team-head button{border:0;background:transparent;color:#fff;font-weight:850;display:flex;align-items:center;gap:7px}.chev{width:29px;height:24px;border-radius:999px;background:#fff;color:#7e25f1;display:grid;place-items:center;font-size:20px}.team-body{padding:15px}.updated{font-size:11px;color:#8f8997;margin-bottom:12px}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.metric{min-height:108px;border:1px solid #eadff3;border-radius:17px;padding:12px 10px;background:linear-gradient(145deg,#fbf6ff,#fffafd);display:flex;flex-direction:column;justify-content:space-between;text-align:left;color:var(--ink)}.metric:hover{border-color:#d8c6eb}.metric-top{pointer-events:none}.metric-label{font-size:11px;color:#9b75bb;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.metric-value{font-size:27px;font-weight:950;margin:6px 0 0}.metric-add{align-self:flex-start;border:0;border-radius:999px;padding:6px 11px;color:#fff;background:linear-gradient(135deg,#9d4cff,#ef58df);font-size:10px;font-weight:900;box-shadow:0 5px 12px rgba(173,69,231,.20)}.scope{margin-top:12px;padding:10px 11px;border-radius:13px;background:#faf7ff;color:#77707f;font-size:10.5px;line-height:1.5}
+.team-divider{height:1px;background:#eee7f3;margin:16px -15px 14px}.period{margin:0 0 14px;padding:5px;background:#f4f1f8;border-radius:999px;display:grid;grid-template-columns:1fr 1fr;gap:5px}.period button{border:0;border-radius:999px;background:transparent;color:#8f8995;font-weight:850;padding:9px}.period button.active{color:#fff;background:linear-gradient(105deg,#894dff,#ec63df);box-shadow:0 5px 12px rgba(141,75,236,.18)}.team-revenue{padding:1px 1px 2px}.rev-top{display:flex;justify-content:space-between;align-items:center}.rev-title{font-size:13px;color:#8c8793;font-weight:850}.date-pill{font-size:10px;padding:5px 9px;background:#1ab978;color:#fff;border-radius:8px;font-weight:900}.total{font-size:28px;font-weight:950;margin:7px 0 13px}.rev-row{display:flex;justify-content:space-between;border-top:1px dashed #ddd6e5;padding-top:11px;margin-top:8px;color:#85808e;font-size:12px}.rev-row strong{color:#27242d}.section-title{font-size:21px;margin:21px 2px 12px}.tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.tool{min-height:92px;border:0;border-radius:19px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 18px rgba(70,42,106,.05);font-weight:850;color:#28242d}.tool-icon{font-size:27px}.principle{margin-top:16px;padding:13px 14px;border-radius:17px;background:#fff;color:#746e79;font-size:11px;line-height:1.55}.principle strong{color:#302a37}
+
+.management-entry-grid{display:grid;gap:12px}.management-entry{width:100%;border:1px solid #eadff3;border-radius:19px;padding:16px;background:linear-gradient(145deg,#fff7fe,#fff);text-align:left;color:var(--ink);box-shadow:0 5px 15px rgba(91,55,126,.05)}.management-entry:active{transform:scale(.99)}.management-entry-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.management-entry-title{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:950}.management-entry-title .ico{font-size:24px}.management-entry-arrow{color:#a34eef;font-size:24px}.management-entry-desc{margin-top:6px;color:#918a97;font-size:10.5px;line-height:1.5}.management-entry-counts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}.management-entry-counts.two{grid-template-columns:repeat(2,1fr)}.management-entry-counts div{padding:10px 8px;border-radius:13px;background:#faf6ff;color:#9872b2;font-size:10px}.management-entry-counts strong{display:block;margin-top:4px;color:#28242d;font-size:20px}.management-section-note{margin:0 0 12px;padding:10px 12px;border-radius:13px;background:#faf7ff;color:#77707f;font-size:10.5px;line-height:1.5}
+/* full internal pages */
+.page{display:none;min-height:920px;background:var(--page)}.page.active{display:block}.subhero{padding-bottom:34px}.submain{margin-top:-18px}.subcard{padding:16px}.seg{display:grid;gap:8px;padding:6px;border-radius:999px;background:#f2f5f8}.seg.three{grid-template-columns:repeat(3,1fr)}.seg.two{grid-template-columns:repeat(2,1fr)}.seg button{border:0;border-radius:999px;padding:11px 8px;background:transparent;font-weight:850}.seg button.active{color:#fff;background:linear-gradient(105deg,#994cff,#ee66df)}.datebar{margin-top:12px;padding:12px 14px;border-radius:17px;background:#f3f6f9;display:flex;align-items:center;justify-content:space-between;color:#92909a;font-size:11px}.datebar strong{color:#2c2931;font-size:12px}.filter-row{display:grid;grid-template-columns:145px 1fr;gap:9px;margin-top:13px}.fake-select,.search{height:48px;border:0;border-radius:24px;background:#f2f5f8;padding:0 14px;color:#9a78b7;font-weight:850}.search{width:100%;outline:none;color:#6e6873}.list{display:grid;gap:12px;margin-top:16px}.data-card{position:relative;padding:16px;border-radius:18px;border:1px solid #eddff1;background:linear-gradient(145deg,#fff2fd,#fff);box-shadow:0 4px 14px rgba(103,64,132,.035)}.data-card .go{position:absolute;right:0;top:0;width:59px;height:38px;border:0;border-radius:0 18px 0 18px;background:linear-gradient(135deg,#c04cff,#f179df);color:#fff;font-size:27px}.member-head{display:grid;grid-template-columns:70px 1fr;gap:13px;align-items:center}.mini-avatar{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;font-size:34px;background:linear-gradient(145deg,#ffd8ec,#fff0c8)}.member-name{font-size:17px;font-weight:900}.member-id{font-weight:600;color:#7f7884;font-size:12px}.tags{display:flex;gap:6px;margin-top:8px}.tag{padding:5px 10px;border-radius:8px;font-size:10px;font-weight:850;background:#d8dce7;color:#fff}.tag.new{background:#17c98d}.tag.normal{background:#eafaf3;color:#18a56d;border:1px solid #33c990}.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;margin-top:17px;color:#918a97;font-size:12px}.statgrid strong{color:#29262d}.dash{border-top:1px dashed #d9d0df;margin:13px 0 9px}.summary-strip{display:flex;justify-content:space-between;align-items:center;margin:14px 0 4px;font-size:12px}.summary-strip strong{font-size:13px}.empty-end{text-align:center;color:#96909a;font-size:12px;margin:19px 0 4px}
+.management-card .member-head{grid-template-columns:90px 1fr}.management-card .mini-avatar{width:78px;height:78px}.more-btn{position:absolute;right:15px;top:17px;border:0;background:transparent;font-size:22px}.bound{margin-top:8px;color:#9b949f;font-size:10px}.countbox{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;padding-top:14px;border-top:1px dashed #d9d0df}.countbox div{background:rgba(255,255,255,.7);padding:12px;border-radius:13px;color:#9470ad;font-size:11px}.countbox strong{display:block;margin-top:6px;font-size:23px;color:#24212a}.owner-line{margin-top:9px;padding:8px 10px;border-radius:11px;background:#fbf7ff;color:#766d7b;font-size:10px}.owner-line strong{color:#68409c}
+.role-list-card{padding:14px;border:1px solid #eadff3;border-radius:17px;background:linear-gradient(145deg,#fff6fd,#fff);position:relative}.role-list-head{display:grid;grid-template-columns:58px 1fr;gap:11px;align-items:center;padding-right:34px}.role-avatar{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#f1e8ff;font-size:28px}.role-list-card h3{margin:0;font-size:14px}.role-meta{margin-top:5px;color:#918b97;font-size:10.5px;line-height:1.5}.role-rev{text-align:right;font-size:12px;font-weight:900}.role-rev small{display:block;color:#a099a4;font-weight:600;margin-top:3px}.role-counts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.role-counts div{padding:9px;border-radius:12px;background:#fff;color:#9371ad;font-size:10px}.role-counts strong{display:block;margin-top:4px;color:#24212a;font-size:18px}.role-actions{display:flex;gap:7px;margin-top:11px}.mini-btn{border:0;border-radius:999px;padding:7px 10px;background:#eee7ff;color:#7942db;font-size:10px;font-weight:850}.mini-btn.primary-mini{background:linear-gradient(135deg,#8f4cff,#e85edb);color:#fff}
+.host-kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}.kpi{padding:15px;border-radius:16px;background:linear-gradient(145deg,#fff1fc,#fff);border:1px solid #eadff2}.kpi span{display:block;color:#9a72b3;font-size:12px}.kpi strong{display:block;margin-top:9px;font-size:21px}.kpi.wide{grid-column:1/-1}.kpi.wide .rows{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:11px;padding-top:11px;border-top:1px solid #d9d0de;color:#8e8795;font-size:11px}.kpi.wide .rows b{color:#2c2831}.help{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#a84cf2;color:#fff;font-size:10px;margin-left:4px}
+.form-card{padding:17px}.form{display:grid;gap:13px}.field label{display:block;margin-bottom:6px;font-size:11px;font-weight:850;color:#6f6977}.field input,.field select{width:100%;border:1px solid #dfd7e7;border-radius:14px;padding:12px;background:#fff;outline:none}.helper{font-size:10px;color:#96909b;line-height:1.45;margin-top:6px}.primary-btn{width:100%;border:0;border-radius:15px;padding:13px;color:#fff;background:linear-gradient(135deg,#8247ff,#e35fda);font-weight:900}.secondary-btn{width:100%;border:1px solid #d9d0e5;border-radius:15px;padding:12px;background:#fff;color:#5f5767;font-weight:850}
+.notice{padding:12px;border-radius:14px;background:#faf6ff;color:#766d7a;font-size:10.5px;line-height:1.55}.review-card{padding:15px;border-radius:17px;border:1px solid #eadff2;background:#fff}.review-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed #e1dae7;font-size:11px}.review-row:last-child{border-bottom:0}.review-row span{color:#8e8794}.review-row strong{text-align:right}.impact{margin-top:12px;padding:13px;border-radius:14px;background:#fff6e7;color:#7d5a23;font-size:10.5px;line-height:1.55}.impact strong{display:block;color:#5e4217;margin-bottom:5px}.rights-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.right{padding:14px;border-radius:17px;border:1px solid #eadff2;background:linear-gradient(145deg,#fff,#fcf7ff)}.right .ico{font-size:28px}.right h3{font-size:14px;margin:8px 0 4px}.right p{margin:0;color:#928b97;font-size:10.5px;line-height:1.45}.right button{margin-top:11px;border:0;border-radius:999px;padding:7px 11px;background:#8848ff;color:#fff;font-size:10px;font-weight:850}
+
+/* Invite / Add flow — follows the existing BD / Agency / Host mobile pattern */
+.invite-page{min-height:920px;background:linear-gradient(180deg,#af70f8 0,#d79df7 20%,#eef3f8 42%,#eef3f8 100%)}
+.invite-hero{position:relative;padding:22px 20px 76px;color:#fff;background:radial-gradient(circle at 15% 0,rgba(255,255,255,.20),transparent 28%),linear-gradient(145deg,#8c78ef 0%,#9851ff 48%,#da69df 100%)}
+.invite-hero .appbar{margin-bottom:0;min-height:44px}.invite-hero .app-title{font-size:20px}.invite-hero .invite-setting{position:absolute;right:0;top:0;width:44px;height:44px;border:0;border-radius:15px;background:rgba(82,24,132,.28);color:#fff;font-size:21px;display:grid;place-items:center}
+.invite-main{position:relative;z-index:3;margin:-48px 0 0;padding:0 16px 30px}
+.invite-card{padding:22px 18px 24px;border-radius:22px;background:#fff;box-shadow:0 8px 22px rgba(71,43,103,.06)}
+.invite-field{margin-bottom:19px}.invite-field:last-child{margin-bottom:0}.invite-label{display:block;margin-bottom:10px;font-size:16px;font-weight:900;color:#25242b}.invite-control{width:100%;height:58px;border:0;border-radius:29px;background:#f0f4f8;padding:0 20px;outline:none;color:#4d4c55;font-size:15px;font-weight:700}.invite-control::placeholder{color:#c3c8d0;font-weight:600}.invite-select{appearance:none;-webkit-appearance:none;padding-right:48px;background:#f0f4f8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2325222a' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 18px center}.invite-select:invalid{color:#969eaa}.invite-confirm{width:100%;height:58px;margin:26px 0 0;border:0;border-radius:29px;color:#fff;background:linear-gradient(100deg,#c598ff,#eda0eb);font-size:17px;font-weight:900;letter-spacing:.3px;box-shadow:0 7px 17px rgba(177,100,226,.15)}.invite-confirm:active{transform:scale(.995)}
+.invite-guidelines{margin-top:58px;padding:22px 19px;border-radius:20px;background:#fff;box-shadow:0 7px 20px rgba(71,43,103,.04)}.invite-guidelines h3{margin:0 0 14px;font-size:14px;font-weight:950;letter-spacing:.2px}.invite-guidelines ul{margin:0;padding-left:20px;color:#91909a;font-size:12px;line-height:1.55}.invite-guidelines li{margin:9px 0;padding-left:1px}.invite-guidelines li::marker{color:#ad5cf0}.invite-context{margin:-6px 0 15px;padding:9px 11px;border-radius:12px;background:#faf7ff;color:#8b7d94;font-size:10.5px;line-height:1.45}.invite-context strong{color:#633d91}.invite-cascade-note{margin-top:7px;color:#aaa3ad;font-size:10.5px;line-height:1.4}
+
+.toast{position:fixed;left:50%;bottom:26px;z-index:200;transform:translate(-50%,15px);opacity:0;pointer-events:none;padding:10px 15px;border-radius:999px;background:#25212a;color:#fff;font-size:11px;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:520px){body{padding:0}.demo{width:100%}.role-switch{position:fixed;left:9px;right:9px;top:7px;z-index:120}.phone{border-radius:0;min-height:100vh;padding-top:58px}.page{min-height:calc(100vh - 58px)}.metrics{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="demo">
+  <div class="role-switch">
+    <button data-role="country">Country Mgr</button>
+    <button data-role="manager" class="active">Manager</button>
+    <button data-role="super">Super Admin</button>
+    <button data-role="admin">Admin</button>
+  </div>
+  <div class="phone" id="phone"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const roleData={
+ country:{title:'Country Manager Center',badge:'👑 Country Manager',level:'L4 · Country Manager',parent:'Platform',status:'Active',metrics:[['Manager',4],['Super Admin',11],['Admin',18],['BD',63],['Agency',104],['Host',528]],scope:'Includes Managers and all business teams within the authorized country / region.',today:[1268420,1189900,78520],week:[6945180,6512630,432550],tools:[['🗂️','Management','management'],['🎁','Benefits','benefits'],['✅','Review','review'],['🏦','Bank','placeholder']]},
+ manager:{title:'Manager Center',badge:'🏅 Manager',level:'L3 · Manager',parent:'Platform',status:'Active',metrics:[['Super Admin',3],['Admin',6],['BD',19],['Agency',31],['Host',148]],scope:'BD / Agency / Host numbers include the complete business teams under this Manager, including Super Admin and Admin teams.',today:[186420,172900,13520],week:[984760,916300,68460],tools:[['🗂️','Management','management'],['🎁','Benefits','benefits'],['✅','Review','review'],['🏦','Bank','placeholder']]},
+ super:{title:'Super Admin Center',badge:'⭐ Super Admin',level:'L2 · Super Admin',parent:'Manager Mia',status:'Active',metrics:[['BD',11],['Agency',18],['Host',86]],scope:'Only this Super Admin’s own BD → Agency → Host team is included.',today:[102640,95120,7520],week:[548920,509760,39160],tools:[['🗂️','Management','management'],['🎁','Benefits','benefits'],['✅','Review','review'],['🏦','Bank','placeholder']]},
+ admin:{title:'Admin Center',badge:'🛡️ Admin',level:'L1 · Admin',parent:'Manager Mia',status:'Active',metrics:[['BD',5],['Agency',9],['Host',41]],scope:'Only this Admin’s own BD → Agency → Host team is included.',today:[42860,39720,3140],week:[218430,202810,15620],tools:[['🗂️','Management','management'],['🎁','Benefits','benefits'],['✅','Review','review'],['🏦','Bank','placeholder']]}
+};
+const business={
+ BD:[
+  {id:'8546',name:'暴躁臭豆腐',owner:'Super Admin Amy',agency:2,host:12,rev:82400,regular:78100,lucky:4300,bound:'2026-07-17 10:05:13'},
+  {id:'8361',name:'帅气花卷',owner:'Admin Joy',agency:1,host:8,rev:61700,regular:57900,lucky:3800,bound:'2026-06-18 17:13:43'},
+  {id:'8365',name:'Jolly Chef',owner:'Manager Mia',agency:3,host:17,rev:39500,regular:36100,lucky:3400,bound:'2026-06-18 17:13:28'},
+   {id:'8399',name:'Country Direct BD',owner:'爱唱歌的御姐',agency:1,host:5,rev:22600,regular:21100,lucky:1500,bound:'2026-04-12 14:20:08'},
+  {id:'8372',name:'Chill Max',owner:'Super Admin Nina',agency:2,host:10,rev:28100,regular:26100,lucky:2000,bound:'2026-05-25 09:32:11'}
+ ],
+ Agency:[
+  {id:'8539',name:'没事哒~超嗲草莓大福',bd:'暴躁臭豆腐',owner:'Super Admin Amy',host:8,rev:48600,regular:45100,lucky:3500,base:120,commission:22.5,signed:'2026-07-17 10:06:11'},
+  {id:'8612',name:'Moon Agency',bd:'暴躁臭豆腐',owner:'Super Admin Amy',host:4,rev:33800,regular:33000,lucky:800,base:80,commission:14.2,signed:'2026-07-17 10:05:13'},
+  {id:'8740',name:'Royal Voice',bd:'帅气花卷',owner:'Admin Joy',host:8,rev:41200,regular:38200,lucky:3000,base:100,commission:19.6,signed:'2026-06-18 17:16:20'}
+ ],
+ Host:[
+  {id:'8539',name:'没事哒~超嗲草莓大福',agency:'Moon Agency',bd:'暴躁臭豆腐',owner:'Super Admin Amy',regular:16400,lucky:1200,valid:'12/14h',live:'16:42:18',gifters:38,viewers:417,fans:26,active:79,rate:2.5,signed:'2026-07-17 10:06:11'},
+  {id:'88201',name:'Lina',agency:'Royal Voice',bd:'帅气花卷',owner:'Admin Joy',regular:12100,lucky:700,valid:'14/14h',live:'18:09:44',gifters:29,viewers:302,fans:19,active:55,rate:2.0,signed:'2026-06-18 17:16:20'},
+  {id:'88417',name:'Riya',agency:'没事哒~超嗲草莓大福',bd:'暴躁臭豆腐',owner:'Super Admin Amy',regular:9800,lucky:500,valid:'10/14h',live:'13:22:10',gifters:21,viewers:244,fans:14,active:43,rate:1.8,signed:'2026-06-18 17:13:43'}
+ ]
+};
+const managementRoles={
+ 'Super Admin':[
+  {name:'Super Admin Amy',id:'7101',status:'Promotion ready',managedBy:'Manager Luna',bd:6,agency:12,host:41,rev:82400,review:'superUp'},
+  {name:'Super Admin Leo',id:'7102',status:'Observation 2/2',managedBy:'Manager Noah',bd:4,agency:8,host:33,rev:61700,review:'superDown'},
+  {name:'Super Admin Nina',id:'7103',status:'Active',managedBy:'Manager Ava',bd:3,agency:5,host:21,rev:39500}
+ ],
+ Admin:[
+  {name:'Admin Joy',id:'7201',status:'Promotion ready',managedBy:'Manager Luna',bd:3,agency:6,host:18,rev:28600,review:'adminUp'},
+  {name:'Admin Ava',id:'7202',status:'Active',managedBy:'Manager Noah',bd:2,agency:4,host:13,rev:19400},
+  {name:'Admin Zoe',id:'7203',status:'Active',managedBy:'Manager Ava',bd:4,agency:7,host:26,rev:36200}
+ ],
+ Manager:[
+  {name:'Manager Luna',id:'7001',status:'Observation 1/2',managedBy:'Current Country Manager',superAdmin:2,admin:3,bd:14,agency:26,host:118,rev:428900,regular:398200,lucky:30700,review:'managerDown'},
+  {name:'Manager Noah',id:'7002',status:'Active',managedBy:'Current Country Manager',superAdmin:3,admin:4,bd:18,agency:33,host:151,rev:521700,regular:486100,lucky:35600},
+  {name:'Manager Ava',id:'7003',status:'Active',managedBy:'Current Country Manager',superAdmin:1,admin:2,bd:9,agency:17,host:79,rev:238400,regular:221900,lucky:16500}
+ ]
+};
+let currentRole='manager',period='today',route={name:'home'};
+const phone=document.getElementById('phone');
+const fmt=n=>Number(n).toLocaleString('en-US');
+const profile={name:'爱唱歌的御姐',id:'8587',avatar:'🐱'};
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),1700)}
+function avatarEmoji(i=0){return ['🐱','👩🏻','🧑🏽','👩🏽‍🎤','🧑🏻‍💼'][i%5]}
+function header(title,{back=true,badge=null,name=null,id=null,avatar='🐱'}={}){
+ return `<header class="hero ${route.name==='home'?'':'subhero'}"><div class="appbar">${back?`<button class="round ghost" data-back>‹</button>`:''}<div class="app-title">${title}</div></div><div class="profile"><div class="avatar">${avatar}</div><div><div class="name">${name||profile.name}${badge?` <span class="badge">${badge}</span>`:''}</div><div class="uid">ID:${id||profile.id}</div></div></div></header>`;
+}
+function home(){
+ const d=roleData[currentRole], [t,r,l]=d[period];
+ phone.innerHTML=`<section class="page active">${header(d.title,{back:false,badge:d.badge})}<main>
+ <section class="card team"><div class="team-head"><h2>My Team</h2><button data-view-details>View details <span class="chev">›</span></button></div><div class="team-body"><div class="updated">Update: 2026-08-07 18:44:00 (UTC+8)</div><div class="metrics">${d.metrics.map(([label,value])=>`<button class="metric" data-open-metric="${label}"><div class="metric-top"><div class="metric-label">${label}</div><div class="metric-value">${value}</div></div><span class="metric-add" data-add="${label}">Add</span></button>`).join('')}</div><div class="team-divider"></div><div class="period"><button data-period="today" class="${period==='today'?'active':''}">Today</button><button data-period="week" class="${period==='week'?'active':''}">This Week</button></div><div class="team-revenue"><div class="rev-top"><span class="rev-title">Team Revenue</span><span class="date-pill">${period==='today'?'2026-08-07':'2026-08-03 ~ 2026-08-09'}</span></div><div class="total">🪙 ${fmt(t)}</div><div class="rev-row"><span>Regular Gift Revenue</span><strong>🪙 ${fmt(r)}</strong></div><div class="rev-row"><span>Lucky Gift Revenue</span><strong>🪙 ${fmt(l)}</strong></div></div></div></section>
+ <h2 class="section-title">My Tools</h2><section class="tools">${d.tools.map(([ico,label,action])=>`<button class="tool" data-tool="${action}"><span class="tool-icon">${ico}</span><span>${label}</span></button>`).join('')}</section>
+ </main></section>`;
+ bindHome();
+}
+function bindHome(){
+ document.querySelectorAll('[data-period]').forEach(b=>b.onclick=()=>{period=b.dataset.period;home()});
+ document.querySelectorAll('[data-add]').forEach(b=>b.onclick=e=>{e.stopPropagation();openRecruit(b.dataset.add)});
+ document.querySelectorAll('[data-open-metric]').forEach(b=>b.onclick=()=>openMetric(b.dataset.openMetric));
+ document.querySelector('[data-view-details]').onclick=()=>{ if(currentRole==='country') openManagerDetailsData(); else if(currentRole==='manager') openTeamLeaderDetails({managerName:'Manager Mia',displayName:profile.name,managerId:profile.id}); else openBDDetails(); };
+ document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{const a=b.dataset.tool;if(a==='management')openManagementHub();else if(a==='benefits')openBenefits();else if(a==='review')openContentReview();else toast('Demo placeholder');});
+}
+function openMetric(label){
+ // Team-size cards are shortcuts to the corresponding management list.
+ // Revenue drill-down is available only through My Team > View details.
+ if(['Manager','Super Admin','Admin'].includes(label)){
+  if(currentRole==='country'||currentRole==='manager')openRoleManagement(label,home);
+  return;
+ }
+ if(['BD','Agency','Host'].includes(label)){openBusinessManagement(label,home);return}
+}
+function mount(content,backFn=home){phone.innerHTML=`<section class="page active">${content}</section>`;bindBack(backFn)}
+function bindBack(backFn=home){document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>backFn())}
+function openManagementHub(backFn=home){
+ route={name:'managementHub'};
+ if(currentRole==='super'||currentRole==='admin'){openBusinessManagement('BD',backFn);return}
+ const d=roleData[currentRole], counts=Object.fromEntries(d.metrics);
+ const roleCounts=currentRole==='country'
+  ? `<div class="management-entry-counts"><div>Manager<strong>${counts.Manager||0}</strong></div><div>Super Admin<strong>${counts['Super Admin']||0}</strong></div><div>Admin<strong>${counts.Admin||0}</strong></div></div>`
+  : `<div class="management-entry-counts two"><div>Super Admin<strong>${counts['Super Admin']||0}</strong></div><div>Admin<strong>${counts.Admin||0}</strong></div></div>`;
+ mount(`${header('Management',{badge:d.badge})}<main class="submain"><section class="card subcard"><div class="management-entry-grid">
+ <button class="management-entry" data-management-entry="roles"><div class="management-entry-top"><div class="management-entry-title"><span class="ico">🧭</span><span>Team Leaders</span></div><span class="management-entry-arrow">›</span></div>${roleCounts}</button>
+ <button class="management-entry" data-management-entry="business"><div class="management-entry-top"><div class="management-entry-title"><span class="ico">🗂️</span><span>Business Members</span></div><span class="management-entry-arrow">›</span></div><div class="management-entry-counts"><div>BD<strong>${counts.BD||0}</strong></div><div>Agency<strong>${counts.Agency||0}</strong></div><div>Host<strong>${counts.Host||0}</strong></div></div></button>
+ </div></section></main>`,backFn);
+ document.querySelector('[data-management-entry="roles"]').onclick=()=>openRoleManagement(currentRole==='country'?'Manager':'Super Admin',()=>openManagementHub(backFn));
+ document.querySelector('[data-management-entry="business"]').onclick=()=>openBusinessManagement('BD',()=>openManagementHub(backFn));
+}
+function openRoleManagement(tab=null,backFn=home){
+ route={name:'roleManagement',tab};
+ const tabs=currentRole==='country'?['Manager','Super Admin','Admin']:['Super Admin','Admin'];
+ tab=tabs.includes(tab)?tab:tabs[0];
+ const rows=managementRoles[tab]||[];
+ const segClass=tabs.length===3?'three':'two';
+ mount(`${header('Team Leaders',{badge:roleData[currentRole].badge})}<main class="submain"><section class="card subcard"><div class="seg ${segClass}">${tabs.map(x=>`<button class="${x===tab?'active':''}" data-rmtab="${x}">${x}</button>`).join('')}</div><div class="filter-row"><button class="fake-select">Total ▾</button><input class="search" placeholder="Search by UID / Nickname" /></div><div class="list">${rows.map((m,i)=>`<div class="role-list-card"><button class="more-btn" data-leader-more>•••</button><div class="role-list-head"><div class="role-avatar">${avatarEmoji(i+1)}</div><div><h3>${m.name} <span class="member-id">(ID:${m.id})</span></h3><div class="role-meta">${m.status}<br>${currentRole==='country'&&tab!=='Manager'?`Managed by ${m.managedBy}<br>`:''}Joined 2026-06-${18+i}</div></div></div><div class="role-counts">${tab==='Manager'?`<div>Super Admin<strong>${m.superAdmin||0}</strong></div><div>Admin<strong>${m.admin||0}</strong></div>`:''}<div>BD<strong>${m.bd}</strong></div><div>Agency<strong>${m.agency}</strong></div><div>Host<strong>${m.host}</strong></div></div></div>`).join('')}</div></section></main>`,backFn);
+ document.querySelectorAll('[data-rmtab]').forEach(b=>b.onclick=()=>openRoleManagement(b.dataset.rmtab,backFn));
+ document.querySelectorAll('[data-leader-more]').forEach(b=>b.onclick=()=>toast('Leader actions opened'));
+}
+function openBusinessManagement(tab='BD',backFn=home){
+ route={name:'businessManagement',tab}; const tabs=['BD','Agency','Host']; const rows=business[tab];
+ mount(`${header('Business Members',{badge:roleData[currentRole].badge})}<main class="submain"><section class="card subcard"><div class="seg three">${tabs.map(x=>`<button class="${x===tab?'active':''}" data-mtab="${x}">${x}</button>`).join('')}</div><div class="filter-row"><button class="fake-select">Total ▾</button><input class="search" placeholder="Search by UID / Nickname" /></div><div class="list">${rows.map((m,i)=>managementBusinessCard(tab,m,i)).join('')}</div><div class="empty-end">All Loaded</div></section></main>`,backFn);
+ document.querySelectorAll('[data-mtab]').forEach(b=>b.onclick=()=>openBusinessManagement(b.dataset.mtab,backFn));
+ document.querySelectorAll('[data-more]').forEach(b=>b.onclick=()=>toast('Member actions opened'));
+}
+function managementBusinessCard(type,m,i){
+ if(type==='BD')return `<div class="data-card management-card"><button class="more-btn" data-more>•••</button><div class="member-head"><div class="mini-avatar">${avatarEmoji(i)}</div><div><div class="member-name">${m.name} <span class="member-id">(ID:${m.id})</span></div><div class="tags"><span class="tag normal">Normal</span></div><div class="bound">Team Leader: ${m.owner}</div><div class="bound">Bound at ${m.bound}</div></div></div><div class="countbox"><div>Agency<strong>${m.agency}</strong></div><div>Host<strong>${m.host}</strong></div></div></div>`;
+ if(type==='Agency')return `<div class="data-card management-card"><button class="more-btn" data-more>•••</button><div class="member-head"><div class="mini-avatar">${avatarEmoji(i+1)}</div><div><div class="member-name">${m.name} <span class="member-id">(ID:${m.id})</span></div><div class="tags"><span class="tag normal">Normal</span></div><div class="bound">BD: ${m.bd}</div><div class="bound">Signed BD at ${m.signed}</div></div></div><div class="countbox" style="grid-template-columns:1fr"><div>Host<strong>${m.host}</strong></div></div></div>`;
+ return `<div class="data-card management-card"><button class="more-btn" data-more>•••</button><div class="member-head"><div class="mini-avatar">${avatarEmoji(i+2)}</div><div><div class="member-name">${m.name} <span class="member-id">(ID:${m.id})</span></div><div class="tags"><span class="tag normal">Normal</span></div><div class="bound">Agency: ${m.agency}</div><div class="bound">Signed Agency at ${m.signed}</div></div></div></div>`;
+}
+function openManagerDetailsData(backFn=home){
+ route={name:'managerDetailsData'};
+ const managerRows=managementRoles.Manager||[];
+ const directBD=business.BD.filter(x=>x.owner===profile.name);
+ const renderManager=()=>managerRows.map((m,i)=>`<div class="data-card"><button class="go" data-manager-data="${i}">›</button><div class="member-head"><div class="mini-avatar">${avatarEmoji(i+1)}</div><div><div class="member-name">${m.name} <span class="member-id">(ID:${m.id})</span></div></div></div><div class="statgrid"><span>Rev: <strong>🪙 ${fmt(m.rev)}</strong></span><span></span><span>Regular Rev: <strong>🪙 ${fmt(m.regular||Math.round(m.rev*.93))}</strong></span><span>Lucky Rev: <strong>🪙 ${fmt(m.lucky||Math.round(m.rev*.07))}</strong></span></div></div>`).join('');
+ const renderDirect=()=>directBD.length?directBD.map((m,i)=>`<div class="data-card"><button class="go" data-country-direct-bd="${i}">›</button><div class="member-head"><div class="mini-avatar">${avatarEmoji(i)}</div><div><div class="member-name">${m.name} <span class="member-id">(ID:${m.id})</span></div></div></div><div class="statgrid"><span>Rev: <strong>🪙 ${fmt(m.rev)}</strong></span><span></span><span>Regular Rev: <strong>🪙 ${fmt(m.regular)}</strong></span><span>Lucky Rev: <strong>🪙 ${fmt(m.lucky)}</strong></span></div></div>`).join(''):'<div class="empty-end">No my direct BD data</div>';
+ mount(`${header('Team details',{badge:roleData[currentRole].badge})}<main class="submain"><section class="card subcard"><div class="seg two"><button class="active" data-country-team-tab="Manager">Manager</button><button data-country-team-tab="Direct BD">My Direct BD</button></div><div class="datebar"><div>Date:<br><strong>2026.08.03–2026.08.09</strong></div><span>This Week</span></div><div class="list" id="countryTeamList">${renderManager()}</div><div class="empty-end">All Loaded</div></section></main>`,backFn);
+ const renderTab=(tab)=>{
+   document.querySelectorAll('[data-country-team-tab]').forEach(x=>x.classList.toggle('active',x.dataset.countryTeamTab===tab));
+   document.getElementById('countryTeamList').innerHTML=tab==='Manager'?renderManager():renderDirect();
+   document.querySelectorAll('[data-manager-data]').forEach(b=>b.onclick=()=>{const m=managerRows[+b.dataset.managerData];openTeamLeaderDetails({managerName:m.name,displayName:m.name,managerId:m.id},'Super Admin',()=>openManagerDetailsData(backFn))});
+   document.querySelectorAll('[data-country-direct-bd]').forEach(b=>b.onclick=()=>{const bd=directBD[+b.dataset.countryDirectBd];openAgencyDetails(bd,()=>openManagerDetailsData(backFn))});
+ };
+ document.querySelectorAll('[data-country-team-tab]').forEach(b=>b.onclick=()=>renderTab(b.dataset.countryTeamTab));
+ renderTab('Manager');
+}
+function getTeamLeaderRows(type,managerName){
+ const all=managementRoles[type]||[];
+ const matched=all.filter(x=>x.managedBy===managerName);
+ // The current Manager demo uses shared sample members when no exact sample ownership exists.
+ if(matched.length)return matched;
+ if(managerName==='Manager Mia')return all.slice(0,3);
+ return all;
+}
+function getManagerScopeBDRows(managerName){
+ const leaderNames=[];
+ ['Super Admin','Admin'].forEach(type=>{
+  const matched=getTeamLeaderRows(type,managerName);
+  matched.forEach(x=>leaderNames.push(x.name));
+ });
+ const owners=new Set([managerName,...leaderNames]);
+ return business.BD.filter(x=>owners.has(x.owner));
+}
+function openTeamLeaderDetails(scope={},tab='Super Admin',backFn=home){
+ route={name:'teamLeaderDetails',tab};
+ const managerName=scope.managerName||'Manager Mia';
+ const displayName=scope.displayName||profile.name;
+ const managerId=scope.managerId||profile.id;
+ const tabs=['Super Admin','Admin','Direct BD'];
+ tab=tabs.includes(tab)?tab:'Super Admin';
+ const isDirectBD=tab==='Direct BD';
+ const isSelfManager=currentRole==='manager'&&managerName==='Manager Mia';
+ const rows=isDirectBD?business.BD.filter(x=>x.owner===managerName):getTeamLeaderRows(tab,managerName);
+ mount(`${header('Team details',{badge:'Manager',name:displayName,id:managerId})}<main class="submain"><section class="card subcard"><div class="seg three">${tabs.map(x=>`<button class="${x===tab?'active':''}" data-tld-tab="${x}">${x==='Direct BD'&&isSelfManager?'My Direct BD':x}</button>`).join('')}</div><div class="datebar"><div>Date:<br><strong>2026.08.03–2026.08.09</strong></div><span>This Week</span></div><div class="list">${rows.length?rows.map((m,i)=>{
+  if(isDirectBD)return `<div class="data-card"><button class="go" data-tld-bd="${i}">›</button><div class="member-head"><div class="mini-avatar">${avatarEmoji(i)}</div><div><div class="member-name">${m.name} <span class="member-id">(ID:${m.id})</span></div></div></div><div class="statgrid"><span>Rev: <strong>🪙 ${fmt(m.rev)}</strong></span><span></span><span>Regular Rev: <strong>🪙 ${fmt(m.regular)}</strong></span><span>Lucky Rev: <strong>🪙 ${fmt(m.lucky)}</strong></span></div></div>`;
+  const regular=m.regular??Math.round((m.rev||0)*.93),lucky=m.lucky??Math.max(0,(m.rev||0)-regular);
+  return `<div class="data-card"><button class="go" data-tld-row="${i}">›</button><div class="member-head"><div class="mini-avatar">${avatarEmoji(i+1)}</div><div><div class="member-name">${m.name} <span class="member-id">(ID:${m.id})</span></div></div></div><div class="statgrid"><span>Rev: <strong>🪙 ${fmt(m.rev||0)}</strong></span><span></span><span>Regular Rev: <strong>🪙 ${fmt(regular)}</strong></span><span>Lucky Rev: <strong>🪙 ${fmt(lucky)}</strong></span></div></div>`
+ }).join(''):'<div class="empty-end">No data</div>'}</div><div class="empty-end">All Loaded</div></section></main>`,backFn);
+ document.querySelectorAll('[data-tld-tab]').forEach(b=>b.onclick=()=>openTeamLeaderDetails(scope,b.dataset.tldTab,backFn));
+ document.querySelectorAll('[data-tld-row]').forEach(b=>b.onclick=()=>{const m=rows[+b.dataset.tldRow];openBDDetails({scopeName:m.name,scopeBadge:tab,scopeId:m.id,ownerName:m.name},()=>openTeamLeaderDetails(scope,tab,backFn))});
+ document.querySelectorAll('[data-tld-bd]').forEach(b=>b.onclick=()=>openAgencyDetails(rows[+b.dataset.tldBd],()=>openTeamLeaderDetails(scope,'Direct BD',backFn)));
+}
+function openBDDetails(scope={},backFn=home){
+ route={name:'bdDetails'}; const rows=scope.ownerName?business.BD.filter(x=>x.owner===scope.ownerName):business.BD;
+ const scopeName=scope.scopeName||profile.name, scopeBadge=scope.scopeBadge||roleData[currentRole].badge, scopeId=scope.scopeId||profile.id;
+ mount(`${header('BD details',{badge:scopeBadge,name:scopeName,id:scopeId})}<main class="submain"><section class="card subcard"><div class="seg two"><button>Today</button><button class="active">This Week</button></div><div class="datebar"><div>Date:<br><strong>2026.08.03–2026.08.09</strong></div><span>Please choose the date ›</span></div><div class="list">${rows.length?rows.map((m,i)=>`<div class="data-card"><button class="go" data-bd="${i}">›</button><div class="member-head"><div class="mini-avatar">${avatarEmoji(i)}</div><div><div class="member-name">${m.name} <span class="member-id">(ID:${m.id})</span></div></div></div><div class="statgrid"><span>Rev: <strong>🪙 ${fmt(m.rev)}</strong></span><span></span><span>Regular Rev: <strong>🪙 ${fmt(m.regular)}</strong></span><span>Lucky Rev: <strong>🪙 ${fmt(m.lucky)}</strong></span></div></div>`).join(''):'<div class="empty-end">No BD data</div>'}</div></section></main>`,backFn);
+ document.querySelectorAll('[data-bd]').forEach(b=>b.onclick=()=>openAgencyDetails(rows[+b.dataset.bd],()=>openBDDetails(scope,backFn)));
+}
+function openAgencyDetails(bd,backFn=home){
+ route={name:'agencyDetails'}; const rows=business.Agency.filter(x=>x.bd===bd.name); const show=rows.length?rows:business.Agency.slice(0,2);
+ mount(`${header('Agency Details',{badge:'BD',name:bd.name,id:bd.id,avatar:'🐱'})}<main class="submain"><section class="card subcard"><div class="datebar" style="margin-top:0"><span class="tag" style="background:linear-gradient(135deg,#9850ff,#e75dde)">This Week</span><strong>2026-08-03 ~ 2026-08-09 (W32)</strong><span>▼</span></div><div class="filter-row"><button class="fake-select">Total / New / Regular</button><input class="search" placeholder="search id / name" /></div><div class="summary-strip"><strong>AGENCY TOTAL (Base)</strong><span>$ ${show.reduce((a,x)=>a+x.base,0)}</span></div><div class="list">${show.map((m,i)=>`<div class="data-card"><button class="go" data-agency="${business.Agency.indexOf(m)}">›</button><div class="member-head"><div class="mini-avatar">${avatarEmoji(i)}</div><div><div class="member-name">${m.name} <span class="member-id">(ID:${m.id})</span></div><div class="tags"><span class="tag new">New</span><span class="tag">Qualified</span></div></div></div><div class="statgrid"><span>Regular Rev: <strong>🪙 ${fmt(m.regular)}</strong></span><span>Lucky Rev: <strong>🪙 ${fmt(m.lucky)}</strong></span><span>Live Host: <strong>${m.host}</strong></span><span>Agency Base Salary: <strong>$ ${m.base}</strong></span></div><div class="dash"></div><div class="summary-strip"><span>My Commission:</span><strong>$ ${m.commission.toFixed(2)}</strong></div></div>`).join('')}</div><div class="empty-end">All Loaded</div></section></main>`,backFn);
+ document.querySelectorAll('[data-agency]').forEach(b=>b.onclick=()=>openHostDetails(business.Agency[+b.dataset.agency],()=>openAgencyDetails(bd,backFn)));
+}
+function openHostDetails(agency,backFn=home){
+ route={name:'hostDetails'}; const rows=business.Host.filter(x=>x.agency===agency.name); const show=rows.length?rows:business.Host.slice(0,2);
+ mount(`${header('Host details',{badge:'Agency',name:agency.name,id:agency.id,avatar:'🐱'})}<main class="submain"><div style="color:#fff;margin:-12px 0 12px;font-size:12px">2026.08.03 - 2026.08.09 (W32)</div><section class="card subcard"><div class="filter-row" style="margin-top:0"><button class="fake-select">Total / New / Qualified</button><input class="search" placeholder="search id / name" /></div><div class="list">${show.map((m,i)=>`<div class="data-card"><button class="go" data-host="${business.Host.indexOf(m)}">›</button><div class="member-head"><div class="mini-avatar">${avatarEmoji(i)}</div><div><div class="member-name">${m.name} <span class="member-id">(ID:${m.id})</span></div><div class="tags"><span class="tag new">New</span></div></div></div><div class="statgrid"><span>Regular Rev: <strong>🪙 ${fmt(m.regular)}</strong></span><span>Lucky Rev: <strong>🪙 ${fmt(m.lucky)}</strong></span><span>Valid Duration: <strong>${m.valid}</strong></span><span>Hourly Rate: <strong>$${m.rate}/h</strong></span></div><div class="dash"></div><div class="summary-strip"><span>Agency Base Salary: $0.00</span><strong>Agency Commission: $0.00</strong></div></div>`).join('')}</div><div class="empty-end">All Loaded</div></section></main>`,backFn);
+ document.querySelectorAll('[data-host]').forEach(b=>b.onclick=()=>openHostData(business.Host[+b.dataset.host],()=>openHostDetails(agency,backFn)));
+}
+function openHostData(host,backFn=home){
+ route={name:'hostData'};
+ mount(`${header('Host data',{name:host.name,id:host.id,avatar:'🐱'})}<main class="submain"><section class="card subcard"><div class="seg three"><button>Today</button><button class="active">This Week</button><button>This Month</button></div><div class="datebar"><div>Date:<br><strong>2026.08.03–2026.08.09</strong></div><span>Please choose the date ›</span></div><div class="host-kpis"><div class="kpi wide"><span>Total Rev <i class="help">?</i></span><strong>🪙 ${fmt(host.regular+host.lucky)}</strong><div class="rows"><span>Regular Rev <i class="help">?</i></span><b>🪙 ${fmt(host.regular)}</b><span>Lucky Rev <i class="help">?</i></span><b>🪙 ${fmt(host.lucky)}</b></div></div><div class="kpi"><span>Valid Duration</span><strong>${host.valid.split('/')[0]}</strong></div><div class="kpi"><span>Live Duration</span><strong>${host.live}</strong></div><div class="kpi"><span>Gifters</span><strong>${host.gifters}</strong></div><div class="kpi"><span>Viewers</span><strong>${host.viewers}</strong></div><div class="kpi"><span>New Fans</span><strong>${host.fans}</strong></div><div class="kpi"><span>Active Users</span><strong>${host.active}</strong></div></div></section></main>`,backFn);
+}
+function inviteHeader(){
+ return `<header class="invite-hero"><div class="appbar"><button class="round ghost" data-back>‹</button><div class="app-title">Invite</div><button class="invite-setting" type="button">⚙</button></div></header>`;
+}
+function directRoleLabel(role=currentRole){
+ return role==='country'?'Country Manager':role==='manager'?'Manager':role==='super'?'Super Admin':'Admin';
+}
+function managerChoices(){
+ return (managementRoles.Manager||[]).map(x=>({value:x.id,label:`${x.name} · ID:${x.id}`}));
+}
+function teamLeaderChoices(managerId=''){
+ const manager=(managementRoles.Manager||[]).find(x=>x.id===managerId);
+ const managerName=manager?manager.name:'';
+ const out=[];
+ (managementRoles['Super Admin']||[]).filter(x=>!managerName||x.managedBy===managerName).forEach(x=>out.push({value:`Super Admin|${x.id}`,label:`${x.name} · Super Admin · ID:${x.id}`}));
+ (managementRoles.Admin||[]).filter(x=>!managerName||x.managedBy===managerName).forEach(x=>out.push({value:`Admin|${x.id}`,label:`${x.name} · Admin · ID:${x.id}`}));
+ return out;
+}
+function currentManagerTeamLeaderChoices(){
+ const managerName='Manager Mia';
+ const out=[];
+ getTeamLeaderRows('Super Admin',managerName).forEach(x=>out.push({value:`Super Admin|${x.id}`,label:`${x.name} · Super Admin · ID:${x.id}`}));
+ getTeamLeaderRows('Admin',managerName).forEach(x=>out.push({value:`Admin|${x.id}`,label:`${x.name} · Admin · ID:${x.id}`}));
+ return out;
+}
+function bdChoices(){
+ return business.BD.map(x=>({value:x.id,label:`${x.name} · ID:${x.id}`}));
+}
+function teamLeaderFromValue(value=''){
+ const [role,id]=String(value).split('|');
+ const rows=role==='Super Admin'?(managementRoles['Super Admin']||[]):role==='Admin'?(managementRoles.Admin||[]):[];
+ return rows.find(x=>x.id===id)||null;
+}
+function bdChoicesByTeamLeader(value=''){
+ const leader=teamLeaderFromValue(value);
+ if(!leader)return [];
+ return business.BD.filter(x=>x.owner===leader.name).map(x=>({value:x.id,label:`${x.name} · ID:${x.id}`}));
+}
+function agencyChoices(bdId=''){
+ const bd=business.BD.find(x=>x.id===bdId);
+ const rows=bd?business.Agency.filter(x=>x.bd===bd.name):business.Agency;
+ return rows.map(x=>({value:x.id,label:`${x.name} · ID:${x.id}`}));
+}
+function inviteAffiliations(type){
+ // Mobile Invite follows the real organization path.
+ // Direct child = enter Target Account ID only.
+ // Cross-level recruitment = select every required intermediate affiliation in order.
+ if(currentRole==='country'){
+  if(type==='Manager')return [];
+  if(type==='Super Admin'||type==='Admin')return [
+   {key:'manager',label:'Affiliated Manager',values:managerChoices()}
+  ];
+  if(type==='BD')return [
+   {key:'manager',label:'Affiliated Manager',values:managerChoices()},
+   {key:'teamLeader',label:'Affiliated Super Admin / Admin',values:[]}
+  ];
+  if(type==='Agency')return [
+   {key:'manager',label:'Affiliated Manager',values:managerChoices()},
+   {key:'teamLeader',label:'Affiliated Super Admin / Admin',values:[]},
+   {key:'bd',label:'Affiliated BD',values:[]}
+  ];
+  if(type==='Host')return [
+   {key:'manager',label:'Affiliated Manager',values:managerChoices()},
+   {key:'teamLeader',label:'Affiliated Super Admin / Admin',values:[]},
+   {key:'bd',label:'Affiliated BD',values:[]},
+   {key:'agency',label:'Affiliated Agency',values:[]}
+  ];
+ }
+ // Manager can directly invite Super Admin / Admin only.
+ // A new BD must be placed under a Super Admin / Admin; Manager Direct BD is retained only as legacy / role-change data.
+ // Agency and Host continue to use the existing BD → Agency chain.
+ if(currentRole==='manager'){
+  if(type==='Super Admin'||type==='Admin')return [];
+  if(type==='BD')return [
+   {key:'teamLeader',label:'Affiliated Super Admin / Admin',values:currentManagerTeamLeaderChoices()}
+  ];
+  if(type==='Agency')return [{key:'bd',label:'Affiliated BD',values:bdChoices()}];
+  if(type==='Host')return [
+   {key:'bd',label:'Affiliated BD',values:bdChoices()},
+   {key:'agency',label:'Affiliated Agency',values:[]}
+  ];
+ }
+ // Super Admin / Admin can directly invite BD; lower business members follow the existing chain.
+ if(currentRole==='super'||currentRole==='admin'){
+  if(type==='BD')return [];
+  if(type==='Agency')return [{key:'bd',label:'Affiliated BD',values:bdChoices()}];
+  if(type==='Host')return [
+   {key:'bd',label:'Affiliated BD',values:bdChoices()},
+   {key:'agency',label:'Affiliated Agency',values:[]}
+  ];
+ }
+ return [];
+}
+function inviteSelect(field){
+ return `<div class="invite-field"><label class="invite-label">${field.label}</label><select class="invite-control invite-select" id="invite-${field.key}" required><option value="" selected disabled>Please select</option>${field.values.map(x=>`<option value="${x.value}">${x.label}</option>`).join('')}</select>${field.key==='agency'?'<div class="invite-cascade-note">Select an affiliated BD first to narrow the Agency list.</div>':''}</div>`;
+}
+function openRecruit(type,backFn=home){
+ route={name:'recruit',type};
+ const fields=inviteAffiliations(type);
+ const direct=!fields.length;
+ const context=direct
+  ? `${type} will be directly affiliated with the current <strong>${directRoleLabel()}</strong>.`
+  : currentRole==='country'
+    ? `Select the affiliation path in order before inviting this <strong>${type}</strong>.`
+    : currentRole==='manager'&&type==='BD'
+      ? 'A new BD must be affiliated with a <strong>Super Admin / Admin</strong>. Manager Direct BD is not created through Invite.'
+      : type==='Host'
+        ? 'Affiliation follows the existing business chain: <strong>BD → Agency → Host</strong>.'
+        : 'Select the required affiliation before sending the invitation.';
+ mount(`${inviteHeader()}<main class="invite-main"><section class="invite-card"><div class="invite-context">${context}</div><div class="invite-field"><label class="invite-label">Target Account ID</label><input class="invite-control" id="recruitUid" inputmode="numeric" placeholder="Enter ${type} ID"></div>${fields.map(inviteSelect).join('')}</section><button class="invite-confirm" id="confirmRecruit">CONFIRM</button><section class="invite-guidelines"><h3>INVITATION GUIDELINES</h3><ul><li>Verify the MeMe ID to ensure you are inviting the correct user.</li><li>Only users with no valid active contract can be invited.</li><li>After the invitation is sent, the recipient needs to accept it in the MeMe App to complete the binding.</li><li>Earnings calculation takes effect immediately after the binding is confirmed.</li></ul></section></main>`,backFn);
+
+ const managerSelect=document.getElementById('invite-manager');
+ const teamLeaderSelect=document.getElementById('invite-teamLeader');
+ const bdSelect=document.getElementById('invite-bd');
+ const agencySelect=document.getElementById('invite-agency');
+
+ const fillSelect=(el,values,placeholder='Please select')=>{
+  if(!el)return;
+  el.innerHTML=`<option value="" selected disabled>${placeholder}</option>${values.map(x=>`<option value="${x.value}">${x.label}</option>`).join('')}`;
+ };
+ const disableSelect=(el,placeholder)=>{
+  if(!el)return;
+  el.disabled=true;
+  el.innerHTML=`<option value="" selected disabled>${placeholder}</option>`;
+ };
+
+ // Country Manager: Manager → Super Admin/Admin → BD → Agency cascades by target type.
+ if(currentRole==='country'&&managerSelect&&teamLeaderSelect){
+  disableSelect(teamLeaderSelect,'Please select Manager first');
+  if(bdSelect)disableSelect(bdSelect,'Please select Super Admin / Admin first');
+  if(agencySelect)disableSelect(agencySelect,'Please select BD first');
+  managerSelect.onchange=()=>{
+   const leaders=teamLeaderChoices(managerSelect.value);
+   teamLeaderSelect.disabled=false;
+   fillSelect(teamLeaderSelect,leaders);
+   if(bdSelect)disableSelect(bdSelect,'Please select Super Admin / Admin first');
+   if(agencySelect)disableSelect(agencySelect,'Please select BD first');
+  };
+  teamLeaderSelect.onchange=()=>{
+   if(bdSelect){
+    const bds=bdChoicesByTeamLeader(teamLeaderSelect.value);
+    bdSelect.disabled=false;
+    fillSelect(bdSelect,bds,bds.length?'Please select':'No BD available');
+   }
+   if(agencySelect)disableSelect(agencySelect,'Please select BD first');
+  };
+ }
+
+ // Existing business chain: BD → Agency.
+ if(bdSelect&&agencySelect){
+  if(!(currentRole==='country'&&teamLeaderSelect))disableSelect(agencySelect,'Please select BD first');
+  bdSelect.onchange=()=>{
+   const values=agencyChoices(bdSelect.value);
+   agencySelect.disabled=false;
+   fillSelect(agencySelect,values,values.length?'Please select':'No Agency available');
+  };
+ }
+
+ document.getElementById('confirmRecruit').onclick=()=>{
+  const uid=document.getElementById('recruitUid').value.trim();
+  if(!uid)return toast(`Please enter ${type} ID`);
+  for(const f of fields){
+   const el=document.getElementById(`invite-${f.key}`);
+   if(!el||!el.value)return toast(`Please select ${f.label.replace('Affiliated ','')}`);
+  }
+  toast(`${type} invitation sent`);
+  setTimeout(backFn,550);
+ };
+}
+
+function openContentReview(backFn=home){
+ route={name:'contentReview'};
+ const items=[
+  {type:'Profile',name:'Lina',id:'88201',item:'Nickname / Avatar',time:'10 min ago'},
+  {type:'Room',name:'Royal Voice',id:'8740',item:'Room cover / Announcement',time:'24 min ago'}
+ ];
+ mount(`${header('Review',{badge:roleData[currentRole].badge})}<main class="submain"><section class="card subcard"><div class="seg three"><button class="active">Pending</button><button>Approved</button><button>Rejected</button></div><div class="notice" style="margin-top:12px">Review profile and room content submissions. Role promotion / demotion is handled by platform rules or operations and is not reviewed here.</div><div class="list">${items.map((x,i)=>`<div class="role-list-card"><div class="role-list-head"><div class="role-avatar">${x.type==='Profile'?'👤':'🏠'}</div><div><h3>${x.type} · ${x.name}</h3><div class="role-meta">ID:${x.id}<br>${x.item} · ${x.time}</div></div></div><div class="role-actions"><button class="mini-btn" data-reject-review>Reject</button><button class="mini-btn primary-mini" data-approve-review>Approve</button></div></div>`).join('')}</div></section></main>`,backFn);
+ document.querySelectorAll('[data-approve-review]').forEach(b=>b.onclick=()=>toast('Review approved.'));
+ document.querySelectorAll('[data-reject-review]').forEach(b=>b.onclick=()=>toast('Review rejected.'));
+}
+function openBenefits(backFn=home){
+ route={name:'rights'};
+ mount(`${header('Benefits',{badge:roleData[currentRole].badge})}<main class="submain"><section class="card subcard"><div class="notice" style="margin-bottom:12px">Benefits are business perks and rewards. They do not configure system role permissions.</div><div class="rights-grid"><div class="right"><div class="ico">🎁</div><h3>Welcome Gift</h3><p>Avatar Frame, Theme, Chat Bubble, Vehicle and other configured items.</p><button data-right="Welcome Gift">Issue</button></div><div class="right"><div class="ico">💎</div><h3>Unique ID</h3><p>Issue an eligible unique ID after quota and availability validation.</p><button data-right="Unique ID">Issue</button></div></div></section></main>`,backFn);document.querySelectorAll('[data-right]').forEach(b=>b.onclick=()=>toast(`${b.dataset.right} flow opened`));
+}
+function setRole(role){currentRole=role;period='today';route={name:'home'};document.querySelectorAll('.role-switch button').forEach(b=>b.classList.toggle('active',b.dataset.role===role));home()}
+document.querySelectorAll('.role-switch button').forEach(b=>b.onclick=()=>setRole(b.dataset.role));
+home();
+</script>
+</body>
+</html>

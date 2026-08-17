@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>管理角色列表 Demo V19</title>
+<style>
+  :root{
+    --bg:#f3f5f7;--card:#fff;--line:#e4e8ee;--text:#2b2f36;--muted:#8d96a3;
+    --primary:#409eff;--primary2:#66b1ff;--success:#67c23a;--warning:#e6a23c;--danger:#f56c6c;
+    --header:#f7f8fa;--shadow:0 1px 5px rgba(0,0,0,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;font-size:14px}
+  button,input,select{font:inherit}
+  .topbar{height:52px;background:#fff;border-bottom:1px solid #e8ebef;display:flex;align-items:center;justify-content:space-between;padding:0 22px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+  .crumb{font-weight:700;color:#4a515c}.crumb span{font-weight:400;color:#8a94a2;margin-left:7px}.operator{color:#606874}
+  .wrap{padding:10px 6px 24px}
+  .panel{background:#fff;border:1px solid #dfe4ea;border-radius:8px;box-shadow:var(--shadow);margin-bottom:10px}
+  .filters{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:14px 12px;min-height:76px}
+  .field{display:flex;align-items:center;gap:8px}.field label{white-space:nowrap;color:#4e5661}
+  .input,.select{height:34px;border:1px solid #d8dee7;border-radius:4px;background:#fff;color:#444;padding:0 11px;outline:none;min-width:190px}
+  .input:focus,.select:focus{border-color:#66b1ff;box-shadow:0 0 0 2px rgba(64,158,255,.12)}
+  .select.role{min-width:170px}.select.status{min-width:160px}
+  .btn{height:34px;padding:0 15px;border:0;border-radius:4px;color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+  .btn.primary{background:var(--primary)}.btn.primary:hover{background:var(--primary2)}
+  .btn.success{background:#5fbd36}.btn.ghost{background:#fff;color:#606874;border:1px solid #d8dee7}.btn:disabled{opacity:.5;cursor:not-allowed}
+  .main{padding:12px}
+  .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .toolbar-left{display:flex;align-items:center;gap:10px}.toolbar-note{color:#8c96a3;font-size:12px}
+  .table-wrap{overflow:auto;border:1px solid #e1e6ec}
+  table{border-collapse:collapse;width:100%;min-width:1180px;background:#fff}
+  th,td{border-right:1px solid #e3e8ee;border-bottom:1px solid #e3e8ee;padding:9px 10px;text-align:center;vertical-align:middle}
+  th{background:#f5f7fa;color:#303844;font-weight:700;white-space:nowrap}
+  tr:last-child td{border-bottom:0} th:last-child,td:last-child{border-right:0}
+  tbody tr:hover{background:#fafcff}
+  .user{text-align:left;min-width:210px}.userbox{display:flex;gap:10px;align-items:center}.avatar{width:36px;height:36px;border-radius:4px;background:linear-gradient(135deg,#ffd8b6,#ff9f60);display:grid;place-items:center;font-size:22px;flex:none}
+  .uinfo{line-height:1.55}.uid{color:#37404c}.nick{color:#2f3339}.role-tag,.status-tag{display:inline-flex;align-items:center;justify-content:center;border-radius:4px;padding:3px 8px;font-size:12px;white-space:nowrap}
+  .role-country{background:#fff3e8;color:#d97706}.role-manager{background:#eef5ff;color:#3b82f6}.role-super{background:#f4efff;color:#7c3aed}.role-admin{background:#eefaf5;color:#059669}
+  .status-on{background:#eff8e8;color:#57a52a;border:1px solid #d7edc7}.status-off{background:#fff0f0;color:#f05b5b;border:1px solid #ffd8d8}
+  .subtle{color:#8d96a3}.nowrap{white-space:nowrap}.owner{color:#4f5762}.owner-block{display:grid;gap:4px;justify-items:center}.owner-name{font-weight:600;color:#3d4652}.owner-id{font-size:12px;color:#8d96a3}.owner-role{margin-top:1px}
+  .actions{display:flex;flex-wrap:wrap;justify-content:center;gap:7px 12px;min-width:215px}.action{border:0;background:transparent;padding:0;cursor:pointer;font-size:13px}.edit{color:#5dbb2f}.adjust{color:#8b5cf6}.disable{color:#f56c6c}.enable{color:#67c23a}.unlink{color:#e6a23c}.terminate{color:#f56c6c}.bind{color:#409eff}.view{color:#8b5cf6}
+  .pagination{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px;color:#7b8490;font-size:12px}.pagebtn{border:1px solid #dce2e8;background:#fff;border-radius:4px;padding:5px 9px;color:#65707d}
+  .empty{padding:32px;text-align:center;color:#9aa3af}
+  .mask{position:fixed;inset:0;background:rgba(20,27,36,.38);display:none;align-items:center;justify-content:center;z-index:50}.mask.show{display:flex}
+  .modal{width:520px;background:#fff;border-radius:8px;box-shadow:0 16px 50px rgba(0,0,0,.22);overflow:hidden}.modal-h{padding:14px 18px;border-bottom:1px solid #e5e9ef;font-weight:700;display:flex;align-items:center;justify-content:space-between}.x{border:0;background:transparent;font-size:21px;color:#9aa2ad;cursor:pointer}.modal-b{padding:18px}.formrow{display:grid;grid-template-columns:100px 1fr;align-items:center;gap:12px;margin-bottom:14px}.formrow label{text-align:right;color:#555e69}.formrow input,.formrow select{height:36px;border:1px solid #d8dee7;border-radius:4px;padding:0 10px;width:100%}.hint{font-size:12px;color:#9aa3af;margin-top:6px;line-height:1.5}.modal-f{padding:12px 18px;border-top:1px solid #e5e9ef;display:flex;justify-content:flex-end;gap:10px}
+  .stats-panel{padding:14px 12px;display:flex;align-items:center;justify-content:space-between;gap:16px}.stats-title{font-weight:700;color:#3b424c;white-space:nowrap}.stats-sub{font-size:12px;color:#9aa3af;margin-left:8px;font-weight:400}.summary{display:flex;gap:10px;flex-wrap:wrap}.pill{background:#f6f8fb;border:1px solid #e4e9ef;border-radius:999px;padding:5px 10px;color:#707987;font-size:12px}.pill strong{color:#343b45}.team-scope{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;min-width:260px}.team-chip{display:inline-flex;gap:5px;align-items:center;padding:4px 8px;border-radius:999px;background:#f7f9fc;border:1px solid #dfe6ef;color:#66717e;font-size:11px;white-space:nowrap;cursor:pointer}.team-chip:hover{border-color:#8fc5ff;background:#eef7ff;color:#409eff}.team-chip b{color:#343b45}.team-chip .jump{font-size:10px;color:#9aa3af}.team-chip:hover .jump{color:#409eff}.readonly-note{margin-top:6px;font-size:12px;color:#9aa3af}.relation{display:none;align-items:center;gap:7px;padding:6px 10px;border-radius:4px;background:#eef7ff;border:1px solid #cfe7ff;color:#3b82c4;font-size:12px}.relation.show{display:inline-flex}.relation .close-rel{border:0;background:transparent;color:#409eff;cursor:pointer;padding:0;font-size:15px}.picker{position:relative}.picker-btn{width:100%;min-height:36px;border:1px solid #d8dee7;border-radius:4px;background:#fff;padding:6px 10px;text-align:left;display:flex;align-items:center;justify-content:space-between;cursor:pointer}.picker-menu{display:none;position:absolute;left:0;right:0;top:40px;background:#fff;border:1px solid #d8dee7;border-radius:4px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:80;max-height:220px;overflow:auto}.picker.open .picker-menu{display:block}.picker-opt{width:100%;border:0;border-bottom:1px solid #eef1f5;background:#fff;padding:9px 10px;text-align:left;cursor:pointer}.picker-opt:last-child{border-bottom:0}.picker-opt:hover{background:#f5f9ff}.picker-opt.is-current,.picker-opt:disabled{background:#f5f7fa;color:#b7bec8;cursor:not-allowed}.picker-opt.is-current:hover,.picker-opt:disabled:hover{background:#f5f7fa}.picker-opt.is-current .picker-id,.picker-opt:disabled .picker-id{color:#c4cad1}.picker-opt.is-current .role-tag,.picker-opt:disabled .role-tag{opacity:.55}.picker-line{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.picker-id{font-size:12px;color:#8d96a3}.target-view{display:none}.target-view.show{display:block}.target-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}.target-title{font-size:16px;font-weight:700}.back-link{border:0;background:transparent;color:#409eff;cursor:pointer;padding:0}.target-query{display:flex;gap:14px;flex-wrap:wrap;padding:14px 12px}.target-table{padding:12px}.target-note{padding:28px;text-align:center;color:#8d96a3;border:1px dashed #d8dee7;background:#fafbfd}
+
+  .modal.wide{width:760px}.bd-section{margin-bottom:18px}.bd-section:last-child{margin-bottom:0}.bd-section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-weight:700;color:#3f4752}.bd-title-actions{display:flex;align-items:center;gap:10px}.bd-count{font-weight:400;color:#8d96a3;font-size:12px}.bd-add{height:30px;padding:0 11px;border:1px solid #409eff;background:#fff;color:#409eff;border-radius:4px;cursor:pointer}.bd-list{border:1px solid #e3e8ee;border-radius:6px;overflow:hidden}.bd-head,.bd-row{display:grid;grid-template-columns:minmax(210px,1fr) minmax(250px,1.15fr) 72px;gap:12px;align-items:center}.bd-head{padding:8px 12px;background:#f5f7fa;color:#606874;font-size:12px;font-weight:700;border-bottom:1px solid #e3e8ee}.bd-row{padding:10px 12px;border-bottom:1px solid #edf0f4}.bd-row:last-child{border-bottom:0}.bd-main{display:flex;align-items:center;gap:9px}.bd-avatar{width:32px;height:32px;border-radius:50%;background:#f1f4f8;display:grid;place-items:center}.bd-name{font-weight:600}.bd-id{font-size:12px;color:#8d96a3;margin-top:2px}.bd-owner{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.bd-owner-name{font-weight:600;color:#4a515c}.mini-btn{border:0;background:transparent;cursor:pointer;font-size:13px;padding:3px 0}.mini-unbind{color:#e6a23c}.bd-empty{padding:20px;text-align:center;color:#9aa3af}.bd-tip{padding:9px 11px;background:#f8fafc;border:1px solid #e8edf3;border-radius:5px;color:#7d8793;font-size:12px;line-height:1.6;margin-bottom:12px}.target-role-box{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:36px;padding:7px 10px;border:1px solid #e3e8ee;border-radius:4px;background:#f8fafc}.target-role-name{font-weight:600}.legacy-form .formrow{grid-template-columns:125px 1fr}.legacy-readonly{background:#f5f7fa!important;color:#a3abb5}.legacy-avatar{width:148px;height:148px;border:1px dashed #d8dee7;border-radius:6px;display:grid;place-items:center;color:#b1b8c1;font-size:42px;background:#fff}.legacy-alert{display:none;margin:-2px 0 12px 137px;padding:8px 10px;border-radius:4px;background:#fff4e8;border:1px solid #f7d7ae;color:#b86b12;font-size:12px}.legacy-alert.show{display:block}
+
+  .picker-search{position:sticky;top:0;background:#fff;padding:8px;border-bottom:1px solid #eef1f5;z-index:2}.picker-search input{width:100%;height:30px;border:1px solid #d8dee7;border-radius:4px;padding:0 8px;outline:none}.picker-search input:focus{border-color:#66b1ff}
+  .user-preview{display:none;margin-top:8px;padding:9px 10px;border:1px solid #e3e8ee;background:#f8fafc;border-radius:5px;align-items:center;gap:9px}.user-preview.show{display:flex}.user-preview-avatar{width:34px;height:34px;border-radius:50%;background:#eef2f7;display:grid;place-items:center}.user-preview-main{line-height:1.45}.user-preview-name{font-weight:600}.user-preview-id{font-size:12px;color:#8d96a3}.user-preview.warn{background:#fff8ee;border-color:#f4d7ad}.user-preview.error{background:#fff3f3;border-color:#ffd3d3}
+  .toast{position:fixed;left:50%;top:72px;transform:translateX(-50%) translateY(-8px);background:rgba(35,42,52,.94);color:#fff;padding:9px 15px;border-radius:5px;box-shadow:0 8px 24px rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:.18s;z-index:120;font-size:13px}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .bd-page{display:none}.bd-page.show{display:block}.bd-page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.bd-page-title{display:flex;align-items:center;gap:10px}.bd-page-actions{display:flex;align-items:center;gap:10px}.bd-page-scope{padding:10px 12px;background:#f8fafc;border:1px solid #e5eaf0;border-radius:5px;color:#68727f;font-size:12px;margin-bottom:12px}.bd-page-table table{min-width:760px}.bd-page-table .user{min-width:220px}.bd-owner-cell{text-align:left}.bd-filter-owner{min-width:220px}.sub-note{display:flex;align-items:flex-start;gap:7px;padding:9px 11px;margin-bottom:12px;background:#fffaf0;border:1px solid #f4dfb8;border-radius:5px;color:#8a6a2b;font-size:12px;line-height:1.55}.relation-type{display:inline-flex;align-items:center;justify-content:center;border-radius:4px;padding:3px 8px;font-size:12px;background:#f3f5f8;color:#68727f}.direct-owner{text-align:left}.adjust-summary.single{grid-template-columns:1fr}.adjust-summary.single .adjust-card{min-height:88px}
+
+  /* 调整上级：更紧凑的关系变更弹窗 */
+  .adjust-modal{width:560px;border-radius:10px}
+  .adjust-modal .modal-h{padding:15px 20px;font-size:15px}
+  .adjust-modal .modal-b{padding:18px 20px 20px}
+  .adjust-summary{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+  .adjust-card{min-height:104px;border:1px solid #e5eaf0;background:#f8fafc;border-radius:8px;padding:12px 14px}
+  .adjust-card-label{font-size:12px;color:#8d96a3;margin-bottom:10px}
+  .adjust-person{display:flex;align-items:center;gap:10px;min-width:0}
+  .adjust-avatar{width:38px;height:38px;border-radius:50%;background:#eef2f7;display:grid;place-items:center;font-size:20px;flex:none}
+  .adjust-person-main{min-width:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .adjust-name{font-weight:700;color:#303844;line-height:1.3}
+  .adjust-id{font-size:12px;color:#8d96a3}
+  .adjust-role{display:flex;align-items:center}
+  .adjust-empty-parent{display:flex;align-items:center;height:38px;color:#9aa3af}
+  .adjust-field{margin-top:2px}
+  .adjust-field-label{display:block;font-size:13px;font-weight:600;color:#4f5864;margin-bottom:8px}
+  .adjust-modal .picker-btn{min-height:42px;border-radius:6px;padding:8px 11px}
+  .adjust-modal .picker-menu{top:46px;border-radius:6px;max-height:240px}
+  .adjust-help{display:flex;align-items:flex-start;gap:7px;margin-top:10px;padding:9px 11px;border:1px solid #e3eaf2;background:#f7faff;border-radius:6px;color:#738091;font-size:12px;line-height:1.55}
+  .adjust-help-icon{color:#5b9cf0;font-weight:700;line-height:1.45}
+  .adjust-modal .modal-f{padding:12px 20px}
+  .adjust-modal .modal-f .btn{min-width:64px}
+  @media(max-width:900px){.filters{gap:10px}.field{width:100%}.input,.select{flex:1;min-width:0}.modal{width:min(92vw,520px)}}
+
+  /* V19 关系管理页 */
+  .relation-page-card{padding:16px 18px 20px}.relation-page-head{margin-bottom:14px}.relation-object{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#f8fafc;border:1px solid #e5eaf0;border-radius:8px}.relation-object-avatar{width:42px;height:42px;border-radius:8px;background:#fff;border:1px solid #e5eaf0;display:grid;place-items:center;font-size:22px}.relation-object-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.relation-object-name{font-weight:700;font-size:15px}.relation-object-id{font-size:12px;color:#8d96a3}.operator-scope-note{margin:10px 0 14px;padding:9px 12px;border-radius:6px;background:#f4f8ff;border:1px solid #dceaff;color:#66809f;font-size:12px}.relation-section{border:1px solid #e4e9ef;border-radius:8px;background:#fff;padding:15px 16px;margin-top:12px}.relation-section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px}.relation-section-title{font-size:15px;font-weight:700;color:#353c46}.relation-section-sub{font-size:12px;color:#929aa5;margin-top:4px}.parent-relation-card{min-height:72px;border:1px solid #e6ebf1;border-radius:7px;background:#fafbfd;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:14px}.parent-relation-left{display:flex;align-items:center;gap:10px}.parent-relation-avatar{width:36px;height:36px;border-radius:8px;background:#fff;border:1px solid #e2e7ed;display:grid;place-items:center;font-size:19px}.parent-relation-name{font-weight:650;color:#3d4651}.parent-relation-meta{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:4px}.parent-relation-state{font-size:12px;color:#9aa3af}.no-parent{color:#8e97a3}.relation-filters{padding:12px;min-height:auto}.relation-page-card .table-wrap table{min-width:820px}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="crumb">国际包管理 <span>/ 管理角色列表</span></div>
+    <div class="operator">Operator A⌄</div>
+  </div>
+
+  <div class="wrap" id="roleListView">
+    <section class="panel stats-panel">
+      <div class="stats-title">管理角色数据统计 <span class="stats-sub">当前签约</span></div>
+      <div class="summary" id="summary"></div>
+    </section>
+
+    <section class="panel filters">
+      <div class="field"><label>UID/昵称</label><input class="input" id="kw" placeholder="请输入UID/昵称"></div>
+      <div class="field"><label>角色</label><select class="select role" id="roleFilter"><option value="">全部角色</option><option>Country Manager</option><option>Manager</option><option>Super Admin</option><option>Admin</option></select></div>
+      <div class="field"><label>状态</label><select class="select status" id="statusFilter"><option value="">请选择状态</option><option value="启用">启用</option><option value="禁用">禁用</option></select></div>
+      <button class="btn primary" id="searchBtn">🔍 搜索</button>
+      <button class="btn success" id="resetBtn">↻ 重置</button>
+      <div class="relation" id="relationFilter"><span id="relationText"></span><button class="close-rel" id="clearRelation">×</button></div>
+    </section>
+
+    <section class="panel main">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button class="btn primary" id="addBtn">＋ 新增管理角色</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>用户信息</th>
+              <th>角色</th>
+              <th>上级归属</th>
+              <th>团队规模（人数）</th>
+              <th>签约时间</th>
+              <th>状态</th>
+              <th>归属运营</th>
+              <th>备注</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="pagination"><span id="countText"></span><button class="pagebtn">‹</button><button class="pagebtn">1</button><button class="pagebtn">›</button></div>
+    </section>
+  </div>
+
+  <div class="wrap target-view" id="targetView">
+    <section class="panel main">
+      <div class="target-head"><button class="back-link" id="backToRoleList">‹ 返回管理角色列表</button><span class="target-title" id="targetTitle">BD列表</span></div>
+      <div class="panel target-query">
+        <div class="field"><label>管理角色UID</label><input class="input" id="targetUid" readonly></div>
+        <div class="field"><label>管理角色昵称</label><input class="input" id="targetNick" readonly></div>
+        <button class="btn primary">🔍 搜索</button>
+      </div>
+      <div class="target-table"><div class="target-note" id="targetNote">复用原列表，进入页面后自动带入管理角色信息，并按其数据范围执行搜索。</div></div>
+    </section>
+  </div>
+
+  <div class="wrap bd-page" id="subPage">
+    <section class="panel main relation-page-card">
+      <div class="bd-page-head relation-page-head">
+        <div class="bd-page-title"><button class="back-link" id="backFromSubPage">‹ 返回管理角色列表</button><span class="target-title">关系管理</span></div>
+      </div>
+
+      <div class="relation-object" id="subPageScope"></div>
+      <div class="operator-scope-note">ⓘ 当前页面由平台运营操作，实际可操作范围以后台账号权限及所属运营数据范围为准。</div>
+
+      <section class="relation-section">
+        <div class="relation-section-head">
+          <div>
+            <div class="relation-section-title">上级关系</div>
+            <div class="relation-section-sub">仅支持为当前无上级角色补充上级；已有上级暂不支持直接更换。</div>
+          </div>
+          <button class="btn primary" id="bindParentFromRelation" style="display:none">＋ 绑定上级</button>
+        </div>
+        <div class="parent-relation-card" id="relationParentCard"></div>
+      </section>
+
+      <section class="relation-section">
+        <div class="relation-section-head">
+          <div>
+            <div class="relation-section-title">下级关系</div>
+            <div class="relation-section-sub">查看该角色数据范围内管理角色及 BD，并可解除其当前直属归属。</div>
+          </div>
+          <button class="btn primary" id="openBindBdBtn">＋ 绑定BD</button>
+        </div>
+        <div class="sub-note">解绑只解除当前直属归属；下级管理角色自身团队、BD 下 Agency / Host 关系均保持不变。</div>
+        <section class="panel filters relation-filters" style="box-shadow:none;margin-bottom:12px">
+          <div class="field"><label>UID/昵称</label><input class="input" id="subKw" placeholder="请输入 UID/昵称"></div>
+          <div class="field"><label>下级类型</label><select class="select role" id="subType"><option value="">全部类型</option><option>Manager</option><option>Super Admin</option><option>Admin</option><option>BD</option></select></div>
+          <button class="btn primary" id="subSearchBtn">🔍 搜索</button>
+          <button class="btn success" id="subResetBtn">↻ 重置</button>
+        </section>
+        <div class="table-wrap bd-page-table">
+          <table>
+            <thead><tr><th>下级信息</th><th>类型</th><th>当前直属归属</th><th>操作</th></tr></thead>
+            <tbody id="subPageTbody"></tbody>
+          </table>
+        </div>
+        <div class="pagination"><span id="subPageCount"></span><button class="pagebtn">‹</button><button class="pagebtn">1</button><button class="pagebtn">›</button></div>
+      </section>
+    </section>
+  </div>
+
+  <div class="mask" id="mask">
+    <div class="modal">
+      <div class="modal-h"><span id="modalTitle">新增管理角色</span><button class="x" id="closeModal">×</button></div>
+      <div class="modal-b">
+        <div class="formrow"><label>用户UID</label><div><input id="uidInput" placeholder="请输入用户UID（Demo: 9101）"><div class="hint">输入 UID 后校验并回显平台用户信息。</div><div class="user-preview" id="userPreview"><div class="user-preview-avatar" id="userPreviewAvatar">🙂</div><div class="user-preview-main"><div class="user-preview-name" id="userPreviewName"></div><div class="user-preview-id" id="userPreviewId"></div></div></div></div></div>
+        <div class="formrow"><label>角色</label><div><select id="roleInput"><option>Country Manager</option><option>Manager</option><option>Super Admin</option><option>Admin</option></select><div class="readonly-note" id="roleEditHint" style="display:none">角色不可在编辑中修改。</div></div></div>
+        <div class="formrow" id="parentRow"><label>上级归属</label><div><div class="picker" id="parentPicker"><button type="button" class="picker-btn" id="parentPickerBtn"><span id="parentPickerText">不指定上级</span><span>⌄</span></button><div class="picker-menu" id="parentPickerMenu"></div><input type="hidden" id="parentInput"></div><div class="hint">选填；未选择时不绑定上级。</div></div></div>
+        <div class="formrow"><label>备注</label><input id="remarkInput" placeholder="请输入备注"></div>
+      </div>
+      <div class="modal-f"><button class="btn ghost" id="cancelBtn">取消</button><button class="btn primary" id="saveBtn">确认</button></div>
+    </div>
+  </div>
+
+  <div class="mask" id="parentMask">
+    <div class="modal adjust-modal">
+      <div class="modal-h"><span>绑定上级</span><button class="x" id="closeParentModal">×</button></div>
+      <div class="modal-b">
+        <div class="adjust-summary single">
+          <div class="adjust-card">
+            <div class="adjust-card-label">当前用户</div>
+            <div class="adjust-person">
+              <div class="adjust-avatar" id="parentUserAvatar">🙂</div>
+              <div class="adjust-person-main">
+                <div><div class="adjust-name" id="parentUserName"></div><div class="adjust-id" id="parentUserId"></div></div>
+                <div class="adjust-role" id="parentRoleView"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="adjust-field">
+          <label class="adjust-field-label">上级归属</label>
+          <div class="picker" id="adjustParentPicker"><button type="button" class="picker-btn" id="adjustParentPickerBtn"><span id="adjustParentPickerText">请选择上级</span><span>⌄</span></button><div class="picker-menu" id="adjustParentPickerMenu"></div><input type="hidden" id="adjustParentInput"></div>
+          <div class="adjust-help"><span class="adjust-help-icon">ⓘ</span><span>仅建立管理角色归属，不影响原业务团队关系。</span></div>
+        </div>
+      </div>
+      <div class="modal-f"><button class="btn ghost" id="cancelParentBtn">取消</button><button class="btn primary" id="saveParentBtn" disabled>确认绑定</button></div>
+    </div>
+  </div>
+
+
+  <div class="mask" id="bindBdMask">
+    <div class="modal">
+      <div class="modal-h"><span>绑定BD</span><button class="x" id="closeBindBdModal">×</button></div>
+      <div class="modal-b legacy-form">
+        <div class="formrow"><label>目标管理角色：</label><div><div class="picker" id="bindTargetPicker"><button type="button" class="picker-btn" id="bindTargetPickerBtn"><span id="bindTargetPickerText">请选择目标管理角色</span><span>⌄</span></button><div class="picker-menu" id="bindTargetPickerMenu"></div><input type="hidden" id="bindTargetRoleUid"></div></div></div>
+        <div class="formrow"><label><span style="color:#f56c6c">*</span> BD UID：</label><input id="bindBdUid" placeholder="请输入UID"></div>
+        <div class="formrow"><label>昵称：</label><input class="legacy-readonly" id="bindBdNick" placeholder="输入UID后回显" readonly></div>
+        <div class="formrow"><label>头像：</label><div class="legacy-avatar" id="bindBdAvatar">＋</div></div>
+        <div class="formrow"><label>BD所属运营：</label><input class="legacy-readonly" id="bindBdOperator" placeholder="输入UID后回显" readonly></div>
+        <div class="formrow"><label>目标角色所属运营：</label><input class="legacy-readonly" id="currentRoleOperator" readonly></div>
+        <div class="legacy-alert" id="bindBdAlert"></div>
+      </div>
+      <div class="modal-f"><button class="btn ghost" id="cancelBindBdBtn">取消</button><button class="btn primary" id="saveBindBdBtn">确认</button></div>
+    </div>
+  </div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const rows=[
+ {uid:'8715',nick:'Nova Ray',avatar:'🧔🏽',role:'Country Manager',parent:'—',manager:2,super:1,admin:0,bd:6,agency:14,host:62,time:'2026-08-05 15:25:04',status:'启用',op:'Operator B',remark:'--',directBdUids:['7201']},
+ {uid:'8622',nick:'Echo Fox',avatar:'🐱',role:'Manager',parent:'Nova Ray · ID:8715 · Country Manager',manager:'—',super:1,admin:0,bd:3,agency:7,host:29,time:'2026-07-30 16:17:22',status:'禁用',op:'Operator C',remark:'--',directBdUids:['7202','7203']},
+ {uid:'8590',nick:'Luna Vale',avatar:'🧔🏽',role:'Super Admin',parent:'Echo Fox · ID:8622 · Manager',manager:'—',super:'—',admin:'—',bd:1,agency:3,host:12,time:'2026-07-29 16:21:39',status:'启用',op:'Operator B',remark:'--',directBdUids:['7204']},
+ {uid:'8587',nick:'Pixel Cat',avatar:'🐱',role:'Admin',parent:'—',manager:'—',super:'—',admin:'—',bd:1,agency:2,host:9,time:'2026-07-27 09:15:12',status:'启用',op:'Operator A',remark:'重点区域',directBdUids:['7205']},
+ {uid:'8466',nick:'River Sky',avatar:'👩🏻',role:'Manager',parent:'Nova Ray · ID:8715 · Country Manager',manager:'—',super:0,admin:0,bd:2,agency:4,host:18,time:'2026-07-18 11:32:00',status:'启用',op:'Operator B',remark:'--',directBdUids:['7206']}
+];
+const bdPool=[
+ {uid:'7201',nick:'Cedar One',avatar:'🟠',ownerUid:'8715'},
+ {uid:'7202',nick:'Mint Wave',avatar:'🟢',ownerUid:'8622'},
+ {uid:'7203',nick:'Amber Kite',avatar:'🟡',ownerUid:'8622'},
+ {uid:'7204',nick:'Slate Moon',avatar:'🔵',ownerUid:'8590'},
+ {uid:'7205',nick:'Coral Wind',avatar:'🟣',ownerUid:'8587'},
+ {uid:'7206',nick:'Maple Star',avatar:'🟤',ownerUid:'8466'},
+ {uid:'7210',nick:'Silver Leaf',avatar:'⚪',ownerUid:''},
+ {uid:'7211',nick:'Cloud Pine',avatar:'🔷',ownerUid:''},
+ {uid:'7212',nick:'Velvet Sun',avatar:'🔶',ownerUid:'8466'}
+];
+const userDirectory={
+ '9101':{uid:'9101',nick:'Aster Vale',avatar:'🟦'},
+ '9102':{uid:'9102',nick:'Milo Reed',avatar:'🟩'},
+ '9103':{uid:'9103',nick:'Sora Finch',avatar:'🟪'}
+};
+let editing=null;
+const CURRENT_OPERATOR='Operator A';
+const roleClass={'Country Manager':'role-country','Manager':'role-manager','Super Admin':'role-super','Admin':'role-admin'};
+let toastTimer=null;
+function showToast(msg){
+ const el=document.getElementById('toast');
+ el.textContent=msg;el.classList.add('show');
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),1700);
+}
+
+function td(v){return `<td>${v===undefined||v===null?'—':v}</td>`}
+function scopeManagementRoles(entry){
+ if(!entry)return [];
+ if(entry.role==='Country Manager')return rows.filter(r=>r.uid!==entry.uid&&['Manager','Super Admin','Admin'].includes(r.role)&&isInManagementScope(r,entry.uid));
+ if(entry.role==='Manager')return rows.filter(r=>r.uid!==entry.uid&&['Super Admin','Admin'].includes(r.role)&&isInManagementScope(r,entry.uid));
+ return [];
+}
+function scopeOwnerRoles(entry){return entry?[entry,...scopeManagementRoles(entry)]:[]}
+function metricValue(r,type){
+ if(['Manager','Super Admin','Admin'].includes(type))return scopeManagementRoles(r).filter(x=>x.role===type).length;
+ if(type==='BD'){
+  const owners=new Set(scopeOwnerRoles(r).map(x=>x.uid));
+  return bdPool.filter(b=>b.ownerUid&&owners.has(b.ownerUid)).length;
+ }
+ if(type==='Agency')return r.agency??0;
+ if(type==='Host')return r.host??0;
+ return 0;
+}
+function teamScope(r){
+ const types=r.role==='Country Manager'?['Manager','Super Admin','Admin','BD','Agency','Host']:r.role==='Manager'?['Super Admin','Admin','BD','Agency','Host']:['BD','Agency','Host'];
+ return `<div class="team-scope">${types.map(k=>`<button class="team-chip" title="查看${k}列表" onclick="jumpTeam(event,'${k}','${r.uid}','${r.nick.replace(/'/g,"\'")}')"><span>${k}</span><b>${metricValue(r,k)}</b><span class="jump">↗</span></button>`).join('')}</div>`;
+}
+function parentHtml(parent){
+ if(parent==='—'||!parent)return '—';
+ const p=parent.split(' · ');
+ const nick=p[0]||'', id=p[1]||'', role=p[2]||'';
+ return `<div class="owner-block"><div class="owner-name">${nick}</div><div class="owner-id">${id}</div><div class="owner-role"><span class="role-tag ${roleClass[role]||''}">${role}</span></div></div>`;
+}
+let relationScopeUid='';
+function parentUidOf(r){
+ const m=String(r.parent||'').match(/ID:(\d+)/);
+ return m?m[1]:'';
+}
+function isInManagementScope(r,scopeUid){
+ if(!scopeUid)return true;
+ let cur=r,guard=0;
+ while(cur&&guard++<8){
+  const pUid=parentUidOf(cur);
+  if(!pUid)return false;
+  if(pUid===scopeUid)return true;
+  cur=rows.find(x=>x.uid===pUid);
+ }
+ return false;
+}
+function jumpTeam(e,type,uid,nick){
+ e.stopPropagation();
+ if(['Manager','Super Admin','Admin'].includes(type)){
+  relationScopeUid=uid;
+  document.getElementById('kw').value='';
+  document.getElementById('roleFilter').value=type;
+  document.getElementById('statusFilter').value='';
+  document.getElementById('relationText').textContent=`数据范围：${nick} · ID:${uid}`;
+  document.getElementById('relationFilter').classList.add('show');
+  search();
+  window.scrollTo({top:0,behavior:'smooth'});
+  return;
+ }
+ openBusinessTarget(type,uid,nick);
+}
+function openBusinessTarget(type,uid,nick){
+ document.getElementById('roleListView').style.display='none';
+ const v=document.getElementById('targetView');v.classList.add('show');
+ document.getElementById('targetTitle').textContent=`${type}列表`;
+ document.getElementById('targetUid').value=uid;
+ document.getElementById('targetNick').value=nick;
+ document.getElementById('targetNote').textContent=`复用现有${type}列表；已自动带入管理角色 ${nick}（ID:${uid}），并按其数据范围搜索对应成员。`;
+ document.querySelector('.crumb span').textContent=`/ ${type}列表`;
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function backToRoleList(){
+ document.getElementById('targetView').classList.remove('show');
+ document.getElementById('roleListView').style.display='block';
+ document.querySelector('.crumb span').textContent='/ 管理角色列表';
+}
+function render(data=rows){
+ const tb=document.getElementById('tbody');
+ if(!data.length){tb.innerHTML=`<tr><td colspan="9" class="empty">暂无数据</td></tr>`;return}
+ tb.innerHTML=data.map((r,i)=>`<tr>
+  <td class="user"><div class="userbox"><div class="avatar">${r.avatar}</div><div class="uinfo"><div class="uid">UID:${r.uid}</div><div class="nick">昵称:${r.nick}</div></div></div></td>
+  <td><span class="role-tag ${roleClass[r.role]}">${r.role}</span></td>
+  <td class="owner">${parentHtml(r.parent)}</td>
+  <td>${teamScope(r)}</td>
+  <td class="nowrap">${r.time}</td>
+  <td><span class="status-tag ${r.status==='启用'?'status-on':'status-off'}">${r.status}</span></td>
+  <td>${r.op}</td><td class="subtle">${r.remark}</td>
+  <td><div class="actions">
+    <button class="action edit" onclick="editRow(${rows.indexOf(r)})">👤 编辑备注</button>
+    <button class="action adjust" onclick="openRelationManager(${rows.indexOf(r)})">⇄ 关系管理</button>
+    <button class="action ${r.status==='启用'?'disable':'enable'}" onclick="toggleState(${rows.indexOf(r)})">♙ ${r.status==='启用'?'禁用':'启用'}</button>
+    <button class="action terminate" onclick="terminateRole(${rows.indexOf(r)})">◴ 解约</button>
+  </div></td>
+ </tr>`).join('');
+ document.getElementById('countText').textContent=`共 ${data.length} 条`;
+ document.getElementById('summary').innerHTML=['Country Manager','Manager','Super Admin','Admin'].map(x=>`<span class="pill">${x} <strong>${rows.filter(r=>r.role===x).length}</strong></span>`).join('');
+}
+function search(){
+ const kw=document.getElementById('kw').value.trim().toLowerCase(), role=document.getElementById('roleFilter').value, status=document.getElementById('statusFilter').value;
+ render(rows.filter(r=>(!kw||r.uid.includes(kw)||r.nick.toLowerCase().includes(kw))&&(!role||r.role===role)&&(!status||r.status===status)&&(!relationScopeUid||isInManagementScope(r,relationScopeUid))));
+}
+function reset(){document.getElementById('kw').value='';document.getElementById('roleFilter').value='';document.getElementById('statusFilter').value='';relationScopeUid='';document.getElementById('relationFilter').classList.remove('show');render()}
+function parentOptionsFor(role){
+ let targetRole='';
+ if(role==='Manager')targetRole='Country Manager';
+ else if(role==='Super Admin'||role==='Admin')targetRole='Manager';
+ else return [];
+ return rows.filter(r=>r.role===targetRole).map(r=>({
+  value:`${r.nick} · ID:${r.uid} · ${r.role}`,
+  nick:r.nick,id:r.uid,role:r.role
+ }));
+}
+function refreshParent(selected=''){
+ const role=document.getElementById('roleInput').value,row=document.getElementById('parentRow');
+ if(role==='Country Manager'){row.style.display='none';setParent('');return}
+ row.style.display='grid';
+ const opts=parentOptionsFor(role);
+ const menu=document.getElementById('parentPickerMenu');
+ menu.innerHTML=`<div class="picker-search"><input id="parentSearchInput" placeholder="搜索昵称 / UID"></div><button type="button" class="picker-opt" data-parent=""><span class="picker-line">不指定上级</span></button>`+opts.map(o=>`<button type="button" class="picker-opt" data-parent="${o.value}" data-key="${(o.nick+' '+o.id).toLowerCase()}"><span class="picker-line"><strong>${o.nick}</strong><span class="picker-id">ID:${o.id}</span><span class="role-tag ${roleClass[o.role]}">${o.role}</span></span></button>`).join('');
+ menu.querySelectorAll('[data-parent]').forEach(b=>b.onclick=()=>{setParent(b.dataset.parent);document.getElementById('parentPicker').classList.remove('open')});
+ const si=document.getElementById('parentSearchInput');if(si)si.oninput=()=>filterPickerOptions(menu,si.value);
+ setParent(selected||'');
+}
+function filterPickerOptions(menu,q){
+ const term=(q||'').trim().toLowerCase();
+ menu.querySelectorAll('.picker-opt').forEach(btn=>{
+  const key=(btn.dataset.key||'').toLowerCase();
+  const blank=(btn.dataset.parent===''||btn.dataset.adjustParent==='');
+  btn.style.display=!term||blank||key.includes(term)?'block':'none';
+ });
+}
+function setParent(value){
+ document.getElementById('parentInput').value=value;
+ const txt=document.getElementById('parentPickerText');
+ if(!value){txt.innerHTML='不指定上级';return}
+ const p=value.split(' · '),role=p[2]||'';
+ txt.innerHTML=`<span class="picker-line"><strong>${p[0]}</strong><span class="picker-id">${p[1]}</span><span class="role-tag ${roleClass[role]||''}">${role}</span></span>`;
+}
+function operatorByParent(parent){
+ if(!parent)return CURRENT_OPERATOR;
+ const m=parent.match(/ID:(\d+)/);
+ if(!m)return CURRENT_OPERATOR;
+ const owner=rows.find(r=>r.uid===m[1]);
+ return owner&&owner.role==='Manager'?owner.op:CURRENT_OPERATOR;
+}
+function openModal(){editing=null;document.getElementById('modalTitle').textContent='新增管理角色';const uidEl=document.getElementById('uidInput');uidEl.value='';uidEl.readOnly=false;uidEl.classList.remove('legacy-readonly');const role=document.getElementById('roleInput');role.disabled=false;role.value='Manager';document.getElementById('roleEditHint').style.display='none';document.getElementById('remarkInput').value='';document.getElementById('userPreview').className='user-preview';refreshParent();document.getElementById('parentRow').style.display='grid';document.getElementById('mask').classList.add('show')}
+function editRow(i){editing=i;const r=rows[i];document.getElementById('modalTitle').textContent='编辑备注';const uidEl=document.getElementById('uidInput');uidEl.value=r.uid;uidEl.readOnly=true;uidEl.classList.add('legacy-readonly');const role=document.getElementById('roleInput');role.value=r.role;role.disabled=true;document.getElementById('roleEditHint').style.display='block';document.getElementById('remarkInput').value=r.remark==='--'?'':r.remark;const pv=document.getElementById('userPreview');pv.className='user-preview show';document.getElementById('userPreviewAvatar').textContent=r.avatar;document.getElementById('userPreviewName').textContent=r.nick;document.getElementById('userPreviewId').textContent=`ID:${r.uid}`;document.getElementById('parentRow').style.display='none';document.getElementById('mask').classList.add('show')}
+
+function refreshUserPreview(){
+ if(editing!==null)return;
+ const uid=document.getElementById('uidInput').value.trim();
+ const box=document.getElementById('userPreview');
+ if(!uid){box.className='user-preview';return}
+ const existing=rows.find(r=>r.uid===uid);
+ if(existing){
+  box.className='user-preview show warn';
+  document.getElementById('userPreviewAvatar').textContent=existing.avatar;
+  document.getElementById('userPreviewName').textContent=existing.nick+'（已是管理角色）';
+  document.getElementById('userPreviewId').textContent=`ID:${existing.uid}`;
+  return;
+ }
+ const u=userDirectory[uid];
+ if(u){
+  box.className='user-preview show';
+  document.getElementById('userPreviewAvatar').textContent=u.avatar;
+  document.getElementById('userPreviewName').textContent=u.nick;
+  document.getElementById('userPreviewId').textContent=`ID:${u.uid}`;
+ }else{
+  box.className='user-preview show error';
+  document.getElementById('userPreviewAvatar').textContent='?';
+  document.getElementById('userPreviewName').textContent='未找到平台用户';
+  document.getElementById('userPreviewId').textContent='请确认 UID 后重试';
+ }
+}
+
+let bindingParent=null;
+function setBindParent(value){
+ document.getElementById('adjustParentInput').value=value;
+ const txt=document.getElementById('adjustParentPickerText');
+ if(!value)txt.innerHTML='请选择上级';
+ else{
+  const p=value.split(' · '),role=p[2]||'';
+  txt.innerHTML=`<span class="picker-line"><strong>${p[0]}</strong><span class="picker-id">${p[1]}</span><span class="role-tag ${roleClass[role]||''}">${role}</span></span>`;
+ }
+ document.getElementById('saveParentBtn').disabled=!value;
+}
+function openBindParent(i){
+ bindingParent=i;
+ const r=rows[i];
+ if(!r||r.role==='Country Manager'||(r.parent&&r.parent!=='—')){showToast('当前角色已有上级，暂不支持直接更换');return}
+ document.getElementById('parentUserAvatar').textContent=r.avatar||'🙂';
+ document.getElementById('parentUserName').textContent=r.nick;
+ document.getElementById('parentUserId').textContent=`ID:${r.uid}`;
+ document.getElementById('parentRoleView').innerHTML=`<span class="role-tag ${roleClass[r.role]||''}">${r.role}</span>`;
+ const menu=document.getElementById('adjustParentPickerMenu');
+ const opts=parentOptionsFor(r.role);
+ menu.innerHTML=`<div class="picker-search"><input id="adjustParentSearchInput" placeholder="搜索昵称 / UID"></div>`+opts.map(o=>`<button type="button" class="picker-opt" data-bind-parent="${o.value}" data-key="${(o.nick+' '+o.id).toLowerCase()}"><span class="picker-line"><strong>${o.nick}</strong><span class="picker-id">ID:${o.id}</span><span class="role-tag ${roleClass[o.role]}">${o.role}</span></span></button>`).join('');
+ menu.querySelectorAll('[data-bind-parent]').forEach(b=>b.onclick=()=>{setBindParent(b.dataset.bindParent);document.getElementById('adjustParentPicker').classList.remove('open')});
+ const si=document.getElementById('adjustParentSearchInput');if(si)si.oninput=()=>filterPickerOptions(menu,si.value);
+ setBindParent('');
+ document.getElementById('parentMask').classList.add('show');
+}
+function closeParentModal(){document.getElementById('parentMask').classList.remove('show');bindingParent=null;setBindParent('')}
+function saveBoundParent(){
+ if(bindingParent===null)return;
+ const r=rows[bindingParent];
+ if(!r)return;
+ if(r.parent&&r.parent!=='—'){closeParentModal();showToast('当前角色已有上级');return}
+ const newParent=document.getElementById('adjustParentInput').value;
+ if(!newParent){showToast('请选择上级');return}
+ r.parent=newParent;
+ closeParentModal();
+ render();
+ if(subEntryRole!==null)renderSubordinateManager();
+ showToast('上级绑定成功');
+}
+
+
+// 关系管理：平台运营维护目标管理角色的上级及下级归属关系；Agency / Host 不参与。
+let subEntryRole=null;
+let bindTargetRoleUid='';
+function roleOwnerLabel(uid){
+ const r=rows.find(x=>x.uid===uid);
+ if(!r)return '无直属管理角色';
+ return `${r.nick} · ID:${r.uid} · ${r.role}`;
+}
+function bdScopeOwners(entry){return scopeOwnerRoles(entry)}
+function bdBindTargets(entry){
+ const owners=bdScopeOwners(entry);
+ if(entry&&entry.role==='Country Manager')return owners.filter(r=>r.uid!==entry.uid&&['Manager','Super Admin','Admin'].includes(r.role));
+ return owners.filter(r=>['Manager','Super Admin','Admin'].includes(r.role));
+}
+function targetOptionHtml(r){
+ return `<span class="picker-line"><strong>${r.nick}</strong><span class="picker-id">ID:${r.uid}</span><span class="role-tag ${roleClass[r.role]||''}">${r.role}</span></span>`;
+}
+function directRoleHtml(r){
+ const pUid=parentUidOf(r),p=rows.find(x=>x.uid===pUid);
+ if(!p)return '<span class="subtle">—</span>';
+ return `<div class="bd-owner"><span class="bd-owner-name">${p.nick}</span><span class="picker-id">ID:${p.uid}</span><span class="role-tag ${roleClass[p.role]||''}">${p.role}</span></div>`;
+}
+function bdOwnerHtml(ownerUid){
+ const r=rows.find(x=>x.uid===ownerUid);
+ if(!r)return '<span class="subtle">—</span>';
+ return `<div class="bd-owner"><span class="bd-owner-name">${r.nick}</span><span class="picker-id">ID:${r.uid}</span><span class="role-tag ${roleClass[r.role]||''}">${r.role}</span></div>`;
+}
+function subordinateRows(entry){
+ if(!entry)return [];
+ const data=[];
+ scopeManagementRoles(entry).forEach(r=>data.push({kind:'role',uid:r.uid,nick:r.nick,avatar:r.avatar,type:r.role,raw:r}));
+ const owners=new Set(scopeOwnerRoles(entry).map(r=>r.uid));
+ bdPool.filter(b=>b.ownerUid&&owners.has(b.ownerUid)).forEach(b=>data.push({kind:'bd',uid:b.uid,nick:b.nick,avatar:b.avatar,type:'BD',raw:b}));
+ return data;
+}
+function subordinateRowHtml(item){
+ const info=`<div class="userbox"><div class="bd-avatar">${item.avatar}</div><div class="uinfo"><div class="nick">${item.nick}</div><div class="uid">ID:${item.uid}</div></div></div>`;
+ const type=item.kind==='bd'?'<span class="relation-type">BD</span>':`<span class="role-tag ${roleClass[item.type]||''}">${item.type}</span>`;
+ const owner=item.kind==='bd'?bdOwnerHtml(item.raw.ownerUid):directRoleHtml(item.raw);
+ return `<tr><td class="user">${info}</td><td>${type}</td><td class="direct-owner">${owner}</td><td><button class="mini-btn mini-unbind" onclick="unbindSubordinate('${item.kind}','${item.uid}')">解绑</button></td></tr>`;
+}
+function openRelationManager(i){
+ subEntryRole=i;
+ document.getElementById('roleListView').style.display='none';
+ document.getElementById('targetView').classList.remove('show');
+ document.getElementById('subPage').classList.add('show');
+ document.querySelector('.crumb span').textContent='/ 关系管理';
+ document.getElementById('subKw').value='';
+ document.getElementById('subType').value='';
+ renderSubordinateManager();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderRelationParent(entry){
+ const card=document.getElementById('relationParentCard');
+ const bindBtn=document.getElementById('bindParentFromRelation');
+ if(!entry){card.innerHTML='';bindBtn.style.display='none';return}
+ if(entry.role==='Country Manager'){
+  bindBtn.style.display='none';
+  card.innerHTML=`<div class="parent-relation-left"><div class="parent-relation-avatar">—</div><div><div class="parent-relation-name no-parent">无上级</div><div class="parent-relation-state">Country Manager 不设置上级归属</div></div></div>`;
+  return;
+ }
+ const pUid=parentUidOf(entry),parent=rows.find(r=>r.uid===pUid);
+ if(parent){
+  bindBtn.style.display='none';
+  card.innerHTML=`<div class="parent-relation-left"><div class="parent-relation-avatar">${parent.avatar||'🙂'}</div><div><div class="parent-relation-name">${parent.nick}</div><div class="parent-relation-meta"><span class="parent-relation-state">ID:${parent.uid}</span><span class="role-tag ${roleClass[parent.role]||''}">${parent.role}</span></div></div></div><span class="parent-relation-state">已绑定</span>`;
+ }else{
+  bindBtn.style.display='inline-flex';
+  card.innerHTML=`<div class="parent-relation-left"><div class="parent-relation-avatar">＋</div><div><div class="parent-relation-name no-parent">暂无上级</div><div class="parent-relation-state">当前为直属平台角色，可补充合法上级归属</div></div></div>`;
+ }
+}
+function renderSubordinateManager(){
+ if(subEntryRole===null)return;
+ const entry=rows[subEntryRole];
+ if(!entry)return;
+ document.getElementById('subPageScope').innerHTML=`<div class="relation-object-avatar">${entry.avatar||'🙂'}</div><div class="relation-object-main"><span class="relation-object-name">${entry.nick}</span><span class="relation-object-id">ID:${entry.uid}</span><span class="role-tag ${roleClass[entry.role]||''}">${entry.role}</span><span class="relation-object-id">所属运营：${entry.op}</span></div>`;
+ renderRelationParent(entry);
+ const kw=document.getElementById('subKw').value.trim().toLowerCase();
+ const type=document.getElementById('subType').value;
+ const data=subordinateRows(entry).filter(x=>(!kw||x.uid.includes(kw)||x.nick.toLowerCase().includes(kw))&&(!type||x.type===type));
+ document.getElementById('subPageTbody').innerHTML=data.length?data.map(subordinateRowHtml).join(''):'<tr><td colspan="4" class="empty">当前范围暂无下级关系</td></tr>';
+ document.getElementById('subPageCount').textContent=`共 ${data.length} 条`;
+ document.getElementById('openBindBdBtn').style.display=bdBindTargets(entry).length?'inline-flex':'none';
+}
+function resetSubFilters(){document.getElementById('subKw').value='';document.getElementById('subType').value='';renderSubordinateManager()}
+function closeSubPage(){
+ document.getElementById('subPage').classList.remove('show');
+ document.getElementById('roleListView').style.display='block';
+ document.querySelector('.crumb span').textContent='/ 管理角色列表';
+ subEntryRole=null;bindTargetRoleUid='';
+ render();
+}
+function unbindSubordinate(kind,uid){
+ if(subEntryRole===null)return;
+ const entry=rows[subEntryRole];
+ if(!entry)return;
+ if(kind==='role'){
+  const child=rows.find(r=>r.uid===uid);
+  if(!child||!isInManagementScope(child,entry.uid)){showToast('该角色不在当前管理范围内');return}
+  const parentUid=parentUidOf(child),owner=rows.find(r=>r.uid===parentUid);
+  if(!owner)return;
+  if(!confirm(`确认解除 ${child.nick}（ID:${child.uid}）与 ${owner.nick}（ID:${owner.uid} / ${owner.role}）的上级归属吗？\n\n解绑后该角色将变为无上级，原业务团队不受影响。`))return;
+  child.parent='—';
+  renderSubordinateManager();render();showToast('下级角色已解绑');
+  return;
+ }
+ const bd=bdPool.find(b=>b.uid===uid);
+ if(!bd)return;
+ const allowed=new Set(scopeOwnerRoles(entry).map(r=>r.uid));
+ if(!allowed.has(bd.ownerUid)){showToast('该 BD 不在当前管理范围内');return}
+ const owner=rows.find(r=>r.uid===bd.ownerUid);if(!owner)return;
+ if(!confirm(`确认解除 ${bd.nick}（ID:${bd.uid}）与 ${owner.nick}（ID:${owner.uid} / ${owner.role}）的直属关系吗？\n\n解绑后 BD 将变为无直属管理角色，BD 下 Agency / Host 关系不受影响。`))return;
+ bd.ownerUid='';
+ renderSubordinateManager();render();showToast('BD 已解绑');
+}
+function setBindTarget(uid){
+ bindTargetRoleUid=uid;
+ document.getElementById('bindTargetRoleUid').value=uid;
+ const r=rows.find(x=>x.uid===uid);
+ document.getElementById('bindTargetPickerText').innerHTML=r?targetOptionHtml(r):'请选择目标管理角色';
+ document.getElementById('currentRoleOperator').value=r?r.op:'';
+ document.getElementById('bindTargetPicker').classList.remove('open');
+}
+function renderBindTargetPicker(entry){
+ const targets=bdBindTargets(entry);
+ const menu=document.getElementById('bindTargetPickerMenu');
+ menu.innerHTML=`<div class="picker-search"><input id="bindTargetSearchInput" placeholder="搜索昵称 / UID"></div>`+targets.map(r=>`<button type="button" class="picker-opt" data-bind-target="${r.uid}" data-key="${(r.nick+' '+r.uid).toLowerCase()}">${targetOptionHtml(r)}</button>`).join('');
+ menu.querySelectorAll('[data-bind-target]').forEach(b=>b.onclick=()=>setBindTarget(b.dataset.bindTarget));
+ const si=document.getElementById('bindTargetSearchInput');if(si)si.oninput=()=>filterPickerOptions(menu,si.value);
+ const defaultTarget=targets.find(r=>r.uid===entry.uid)||targets[0]||null;
+ setBindTarget(defaultTarget?defaultTarget.uid:'');
+}
+function openBindBdModal(){
+ if(subEntryRole===null)return;
+ const entry=rows[subEntryRole];
+ renderBindTargetPicker(entry);
+ document.getElementById('bindBdUid').value='';
+ document.getElementById('bindBdNick').value='';
+ document.getElementById('bindBdOperator').value='';
+ document.getElementById('bindBdAvatar').textContent='＋';
+ document.getElementById('bindBdAlert').classList.remove('show');
+ document.getElementById('bindBdAlert').textContent='';
+ document.getElementById('bindBdMask').classList.add('show');
+}
+function refreshBindBdPreview(){
+ const uid=document.getElementById('bindBdUid').value.trim();
+ const bd=bdPool.find(b=>b.uid===uid);
+ const alertEl=document.getElementById('bindBdAlert');
+ alertEl.classList.remove('show');alertEl.textContent='';
+ if(!uid||!bd){document.getElementById('bindBdNick').value='';document.getElementById('bindBdOperator').value='';document.getElementById('bindBdAvatar').textContent='＋';return}
+ document.getElementById('bindBdNick').value=bd.nick;
+ document.getElementById('bindBdOperator').value=bd.ownerUid?((rows.find(r=>r.uid===bd.ownerUid)||{}).op||'Operator D'):'Operator D';
+ document.getElementById('bindBdAvatar').textContent=bd.avatar;
+ if(bd.ownerUid){alertEl.textContent=`该BD已绑定 ${roleOwnerLabel(bd.ownerUid)}，请先解绑后再重新绑定。`;alertEl.classList.add('show')}
+}
+function saveBindBd(){
+ if(subEntryRole===null)return;
+ const uid=document.getElementById('bindBdUid').value.trim();
+ if(!bindTargetRoleUid){alert('请选择目标管理角色');return}
+ if(!uid){alert('请输入BD UID');return}
+ const bd=bdPool.find(b=>b.uid===uid);if(!bd){alert('未找到该BD，请确认UID');return}
+ const entry=rows[subEntryRole],targets=bdBindTargets(entry),target=targets.find(r=>r.uid===bindTargetRoleUid);
+ if(!target){alert('当前目标角色不在可操作范围内');return}
+ if(bd.ownerUid){const alertEl=document.getElementById('bindBdAlert');alertEl.textContent=`该BD已绑定 ${roleOwnerLabel(bd.ownerUid)}，请先解绑后再重新绑定。`;alertEl.classList.add('show');return}
+ bd.ownerUid=target.uid;
+ closeBindBdModal();renderSubordinateManager();render();showToast('BD 绑定成功');
+}
+function closeBindBdModal(){document.getElementById('bindBdMask').classList.remove('show');bindTargetRoleUid=''}
+
+
+function terminateRole(i){
+ const r=rows[i];
+ if(!r)return;
+ const msg=`确认解约 ${r.nick}（ID:${r.uid}）吗？\n\n解约后，下级管理角色及直属 BD 将自动解除归属，原有业务团队不受影响。`;
+ if(!confirm(msg))return;
+ rows.forEach(child=>{
+  if(parentUidOf(child)===r.uid)child.parent='—';
+ });
+ bdPool.forEach(bd=>{if(bd.ownerUid===r.uid)bd.ownerUid=''});
+ rows.splice(i,1);
+ relationScopeUid='';
+ document.getElementById('relationFilter').classList.remove('show');
+ render();
+ showToast('已解约');
+}
+function toggleState(i){
+ const r=rows[i];if(!r)return;
+ r.status=r.status==='启用'?'禁用':'启用';render();
+ showToast(r.status==='启用'?'已启用':'已禁用');
+}
+function closeModal(){document.getElementById('mask').classList.remove('show')}
+function save(){
+ const uid=document.getElementById('uidInput').value.trim();if(!uid){alert('请输入用户UID');return}
+ const role=document.getElementById('roleInput').value;
+ const isEdit=editing!==null;
+ if(isEdit){
+  const r=rows[editing];
+  r.remark=document.getElementById('remarkInput').value||'--';
+ }else{
+  if(rows.some(r=>r.uid===uid)){alert('该UID已存在有效管理角色，请勿重复新增');return}
+  const u=userDirectory[uid];if(!u){alert('未找到该平台用户，请确认UID');return}
+  const parent=role==='Country Manager'?'':document.getElementById('parentInput').value;
+  const op=CURRENT_OPERATOR;
+  rows.unshift({uid,nick:u.nick,avatar:u.avatar,role,parent:parent||'—',manager:'—',super:0,admin:0,bd:0,agency:0,host:0,time:'2026-08-13 09:40:00',status:'启用',op,remark:document.getElementById('remarkInput').value||'--',directBdUids:[]});
+ }
+ closeModal();render();showToast(isEdit?'备注已更新':'管理角色已新增');
+}
+document.getElementById('searchBtn').onclick=search;
+document.getElementById('resetBtn').onclick=reset;
+document.getElementById('clearRelation').onclick=()=>{relationScopeUid='';document.getElementById('relationFilter').classList.remove('show');search()};
+document.getElementById('addBtn').onclick=openModal;
+document.getElementById('closeModal').onclick=closeModal;
+document.getElementById('cancelBtn').onclick=closeModal;
+document.getElementById('saveBtn').onclick=save;
+document.getElementById('uidInput').oninput=refreshUserPreview;
+document.getElementById('roleInput').onchange=()=>refreshParent();
+document.getElementById('parentPickerBtn').onclick=()=>document.getElementById('parentPicker').classList.toggle('open');
+document.getElementById('adjustParentPickerBtn').onclick=()=>document.getElementById('adjustParentPicker').classList.toggle('open');
+document.getElementById('closeParentModal').onclick=closeParentModal;
+document.getElementById('cancelParentBtn').onclick=closeParentModal;
+document.getElementById('saveParentBtn').onclick=saveBoundParent;
+document.getElementById('backToRoleList').onclick=backToRoleList;
+document.getElementById('backFromSubPage').onclick=closeSubPage;
+document.getElementById('bindParentFromRelation').onclick=()=>{if(subEntryRole!==null)openBindParent(subEntryRole)};
+document.getElementById('subSearchBtn').onclick=renderSubordinateManager;
+document.getElementById('subKw').onkeydown=e=>{if(e.key==='Enter')renderSubordinateManager()};
+document.getElementById('subType').onchange=renderSubordinateManager;
+document.getElementById('subResetBtn').onclick=resetSubFilters;
+document.getElementById('openBindBdBtn').onclick=openBindBdModal;
+document.getElementById('bindTargetPickerBtn').onclick=()=>document.getElementById('bindTargetPicker').classList.toggle('open');
+document.getElementById('closeBindBdModal').onclick=closeBindBdModal;
+document.getElementById('cancelBindBdBtn').onclick=closeBindBdModal;
+document.getElementById('saveBindBdBtn').onclick=saveBindBd;
+document.getElementById('bindBdUid').oninput=refreshBindBdPreview;
+document.getElementById('mask').onclick=e=>{if(e.target.id==='mask')closeModal()};
+document.getElementById('parentMask').onclick=e=>{if(e.target.id==='parentMask')closeParentModal()};
+document.getElementById('bindBdMask').onclick=e=>{if(e.target.id==='bindBdMask')closeBindBdModal()};
+document.addEventListener('click',e=>{
+ if(!e.target.closest('#parentPicker'))document.getElementById('parentPicker').classList.remove('open');
+ if(!e.target.closest('#adjustParentPicker'))document.getElementById('adjustParentPicker').classList.remove('open');
+ if(!e.target.closest('#bindTargetPicker'))document.getElementById('bindTargetPicker').classList.remove('open');
+});
+render();
+</script>
+</body>
+</html>
