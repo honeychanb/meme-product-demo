@@ -794,7 +794,7 @@ body{background:#0d0713;color:var(--text)}
 .teamWeekFilter>span{color:#8e8195;font-size:9px;font-weight:800}.teamWeekFilter select{min-width:155px;height:34px;border:1px solid rgba(242,208,113,.22);border-radius:9px;background:#392442;color:#f3d171;padding:0 30px 0 10px;font-size:10px;font-weight:800;outline:none}
 .teamMemberSearch{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:12px;margin-bottom:10px}.teamMemberSearch input,.teamMemberSearch button{height:52px;border:0;border-radius:14px;font-size:17px;font-weight:700}.teamMemberSearch input{min-width:0;outline:none;background:#5d4a67;color:#fff;padding:0 18px}.teamMemberSearch input::placeholder{color:#f0e7f2}.teamMemberSearch button{background:linear-gradient(#fff1a9,#ffbd1d);color:#6a3600}
 .teamMgmtMeta{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:10px 2px 14px}.teamMgmtMeta b{font-size:10px;color:#e9dfea}.teamMgmtMeta span{font-size:8px;color:#8f8296;text-align:right}.currentTag{display:inline-flex;align-items:center;margin-left:5px;padding:2px 5px;border-radius:99px;background:rgba(242,208,113,.08);color:#d9ba63;font-size:6px;font-weight:900}
-.teamHostCard{margin-bottom:12px;border-radius:15px;background:#21102d;border:1px solid var(--line);overflow:hidden}.teamHostHead{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:9px;align-items:center;padding:11px 12px}.teamHostAvatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#4b2a5b;color:#f1d071;font-size:13px;font-weight:900}.teamHostIdentity b{display:block;font-size:11px}.teamHostIdentity small{display:block;margin-top:4px;color:#918398;font-size:8px}.teamHostStatus{height:22px;padding:0 8px;border-radius:99px;display:inline-flex;align-items:center;background:rgba(77,203,139,.11);color:#70dfa7;font-size:8px;font-weight:900}.teamHostStatus.suspended{background:rgba(255,108,126,.1);color:#ff8798}
+.teamHostCard{margin-bottom:12px;border-radius:15px;background:#21102d;border:1px solid var(--line);overflow:hidden}.teamHostHead{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:9px;align-items:center;padding:11px 12px}.teamHostAvatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#4b2a5b;color:#f1d071;font-size:13px;font-weight:900}.teamHostIdentity b{display:block;font-size:11px}.teamHostIdentity small{display:block;margin-top:4px;color:#918398;font-size:8px}.teamHostStatus{height:22px;padding:0 8px;border-radius:99px;display:inline-flex;align-items:center;background:rgba(77,203,139,.11);color:#70dfa7;font-size:8px;font-weight:900}.teamHostStatus.banned{background:rgba(255,108,126,.1);color:#ff8798}
 .teamHostBody{padding:0 12px 11px}.teamDataHead{display:flex;align-items:center;justify-content:space-between;padding:10px 0 8px;border-top:1px solid var(--line)}.teamDataHead b{font-size:9px}.teamDataHead span{font-size:7.5px;color:#817487}.teamHostMetrics{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:11px;overflow:hidden}.teamHostMetric{min-height:58px;padding:10px 11px;border-bottom:1px solid var(--line)}.teamHostMetric:nth-child(odd){border-right:1px solid var(--line)}.teamHostMetric:nth-last-child(-n+2){border-bottom:0}.teamHostMetric b{display:block;color:#eee3f1;font-size:11px}.teamHostMetric span{display:block;color:#918399;font-size:8px;margin-top:4px}.effectiveYes{color:#6de0ad!important}.effectiveNo{color:#ff9aa2!important}
 .teamMemberActions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:9px}.teamMemberActions button{height:31px;border-radius:8px;background:#37243f;border:1px solid #594364;color:#ddd1e2;font-size:8.5px;font-weight:800}.teamMemberActions .warning{border-color:#775d2a;color:#f4d376;background:rgba(242,208,113,.045)}.teamMemberActions .success{border-color:#2d6651;color:#75e4b6;background:rgba(82,211,155,.045)}.teamMemberActions .danger{border-color:#71414c;color:#ff9aa2;background:rgba(255,95,107,.035)}
 .memberInfoPage{padding:14px 16px 38px}.memberInfoCard{overflow:hidden}.memberInfoHead{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;padding:13px 14px;border-bottom:1px solid var(--line)}.memberInfoTitle{padding:12px 14px 8px;color:#f2d071;font-size:11px;font-weight:900}.memberInfoGrid{display:grid;grid-template-columns:1fr 1fr}.memberInfoGrid>div{min-height:60px;padding:11px 14px;border-top:1px solid var(--line)}.memberInfoGrid>div:nth-child(odd){border-right:1px solid var(--line)}.memberInfoGrid .wide{grid-column:1/-1;border-right:0}.memberInfoGrid span{display:block;color:#918398;font-size:8.5px}.memberInfoGrid b{display:block;margin-top:5px;color:#eee3f1;font-size:11px;line-height:1.4}
@@ -825,6 +825,40 @@ body{background:#0d0713;color:var(--text)}
 .teamFilterSearch input{min-width:0;outline:none;background:#5d4a67;color:#fff;padding:0 14px}.teamFilterSearch input::placeholder{color:#f0e7f2;opacity:1}
 .teamFilterSearch button{background:linear-gradient(#fff1a9,#ffbd1d);color:#6a3600;box-shadow:0 3px 10px rgba(255,190,34,.18)}
 
+
+/* v30 — Agency / Management Center visual alignment */
+.homeSectionHead{margin:22px 2px 10px!important;min-height:36px;align-items:center!important}
+.homeSectionHead>b{color:#f7efff!important;font-size:15px!important}
+.homeSectionHead .sectionHeadAction,.homeSectionAction{margin-left:auto;flex:0 0 auto}
+.homeSectionAction{height:32px;padding:0 11px;border:0;border-radius:9px;background:linear-gradient(#fff1a9,#ffbd1d);color:#6a3600;font-size:8.5px;font-weight:900;box-shadow:0 4px 10px rgba(255,189,29,.14);white-space:nowrap}
+.inviteSectionHead .whatsappConfigBtn{height:32px;padding:0 11px;border-radius:9px;font-size:9px;font-weight:900;display:flex;align-items:center;gap:6px;box-shadow:none}
+.inviteSectionHead .whatsappConfigBtn svg{width:16px;height:16px;flex:0 0 16px}
+.inviteSectionHead .whatsappConfigBtn span{color:#fff!important}
+.inviteCompactTop{grid-template-columns:minmax(0,1fr)!important}
+.billingHomeBlock{margin-top:0!important}
+.homeWorkingCard{margin-top:0!important}
+
+#reviewApply{padding:0 16px 30px}
+#reviewApply .reviewtabs{display:flex;gap:20px;overflow-x:auto;padding:16px 0 8px;border-bottom:1px solid var(--line);text-align:left;scrollbar-width:none}
+#reviewApply .reviewtabs::-webkit-scrollbar{display:none}
+#reviewApply .reviewtabs button{flex:0 0 auto;height:36px;padding:0 0 8px;border:0;border-bottom:2px solid transparent;background:transparent;color:#9c8fa5;font-size:13px;font-weight:900}
+#reviewApply .reviewtabs button.active{color:#f2d071;border-bottom-color:#f2d071}
+#reviewApply .reviewFilter{display:grid!important;grid-template-columns:minmax(0,1fr) 92px!important;gap:8px!important;padding:10px 0 2px!important}
+#reviewApply .reviewFilter .statusSelect,#reviewApply .reviewFilter .reviewSearchBtn{height:44px!important;min-height:44px!important;margin:0!important;border:0!important;border-radius:12px!important;font-size:13px!important;font-weight:800!important;line-height:normal!important}
+#reviewApply .reviewFilter .statusSelect{background:#3b2844!important;color:#fff!important;padding:0 12px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;text-align:left!important}
+#reviewApply .reviewFilter .reviewSearchBtn{background:linear-gradient(#fff1a9,#ffbd1d)!important;color:#6a3600!important}
+#reviewApply .reviewCard{margin:12px 0;padding:14px;border-radius:17px;background:var(--panel);border:1px solid var(--line)}
+#reviewApply .reviewHead{display:flex;justify-content:space-between;align-items:center;color:#f5d979;font-size:12px}
+#reviewApply .reviewBody{display:grid;grid-template-columns:42px minmax(0,1fr) 92px;gap:10px;align-items:center;margin-top:12px;background:#301c39;border-radius:12px;padding:10px}
+#reviewApply .avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#5a326c;color:#f2d071}
+#reviewApply .reviewAvatarLetter{font-size:16px;font-weight:900}
+#reviewApply .reviewUser{font-size:9px;line-height:1.5;min-width:0}
+#reviewApply .reviewUser b{display:block;margin:0;color:#f2e8f5;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#reviewApply .reviewUser span{display:block;color:#a99bac;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#reviewApply .reviewActions button{display:block;width:100%;padding:7px 4px;margin:4px 0;border-radius:8px;font-size:9px;font-weight:900}
+#reviewApply .reviewActions .approve{border:0;background:#2e9a5b;color:#fff}
+#reviewApply .reviewActions .reject{border:1px solid #7c4f5a;background:#442a35;color:#ffafbb}
+#reviewApply .reviewApplyEmpty{text-align:center;color:#7f7386;font-size:10px;padding:28px 10px}
 </style></head>
 <body><div class="app">
 <div class="top"><div class="l" onclick="goBack()" style="cursor:pointer">‹</div><span id="title">Agency Center</span><div class="r" onclick="goHome()">×</div></div>
@@ -842,7 +876,7 @@ body{background:#0d0713;color:var(--text)}
       </div>
     </div>
 
-    <div class="dashSectionHead simple"><b>Invite Hosts</b></div>
+    <div class="dashSectionHead homeSectionHead inviteSectionHead"><b>Invite Hosts</b><button class="whatsappConfigBtn sectionHeadAction" onclick="event.stopPropagation();openWhatsAppConfig()" aria-label="Configure WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.173.198-.297.298-.495.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.885 9.888-9.885 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.9 6.99c-.003 5.45-4.437 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.14 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/></svg><span>WhatsApp</span></button></div>
     <div class="panelCard inviteReviewCard">
       <div class="inviteCompactTop">
         <div class="inviteLinkBlock">
@@ -852,26 +886,22 @@ body{background:#0d0713;color:var(--text)}
             <button class="copyIconBtn" aria-label="Copy invitation link" onclick="event.stopPropagation();copyText('homeInviteLink')">⧉</button>
           </div>
         </div>
-        <button class="whatsappConfigBtn" onclick="event.stopPropagation();openWhatsAppConfig()" aria-label="Configure WhatsApp">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.173.198-.297.298-.495.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.885 9.888-9.885 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.9 6.99c-.003 5.45-4.437 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.14 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413Z"/></svg>
-          <span>WhatsApp</span><span class="waArrow">›</span>
-        </button>
       </div>
       <div class="inviteActionGrid">
         <div class="inviteActionItem inviteCodeItem">
           <span class="inviteActionIcon">#</span>
-          <span class="inviteCodeText"><b>Code</b><span class="inviteCodeValueInline"><small id="homeInviteCode">AGY48219</small><button class="copyIconBtn" aria-label="Copy invitation code" onclick="event.stopPropagation();copyText('homeInviteCode')">⧉</button></span></span>
+          <span class="inviteCodeText"><b>Invitation Code</b><span class="inviteCodeValueInline"><small id="homeInviteCode">AGY48219</small><button class="copyIconBtn" aria-label="Copy invitation code" onclick="event.stopPropagation();copyText('homeInviteCode')">⧉</button></span></span>
         </div>
-        <button onclick="openp('reviewApply','Review apply')">
+        <button onclick="openp('reviewApply','Review Apply')">
           <span class="inviteActionIcon">✓</span>
-          <span><b>Review Apply</b><small>Review applications</small></span>
+          <span><b>Review Apply</b><small>Review Host applications</small></span>
         </button>
       </div>
     </div>
 
+    <div class="dashSectionHead homeSectionHead teamWorkingSectionHead"><b>Team working data</b><button class="homeSectionAction" onclick="openTeamManagement()">Team Management ›</button></div>
     <div class="billingHomeBlock">
       <div class="panelCard homeWorkingCard">
-        <div class="workingDataTitle homeWorkingTitle"><span>Team working data</span><button class="teamManagementBtn" onclick="openTeamManagement()">Team Management <b>›</b></button></div>
         <div class="teamWorkingPeriod">
           <b>2026-08-17 00:00:00 ~ 2026-08-23 23:59:59 (UTC+5)</b>
           <small>Update in: 12 : 48</small>
@@ -1029,13 +1059,12 @@ body{background:#0d0713;color:var(--text)}
 </section>
 
 <section id="reviewApply" class="page">
-  <div class="reviewtabs"><span class="active">Host</span></div>
+  <div class="reviewtabs"><button class="active" type="button">Host</button></div>
   <div class="reviewFilter">
     <button id="reviewStatusBtn" class="statusSelect" onclick="openStatusSheet()"><span id="reviewStatusLabel">All status</span><span>⌄</span></button>
     <button class="reviewSearchBtn" onclick="renderApplicationsData()">Search</button>
   </div>
   <div id="applicationList"></div>
-  <div id="reviewNoMore" class="nomore">no more</div>
 </section>
 
 
@@ -1080,7 +1109,7 @@ body{background:#0d0713;color:var(--text)}
     </div>
     <button class="statusOption selected" data-status="All status" onclick="selectReviewStatus(this)">All status</button>
     <button class="statusOption" data-status="Under review" onclick="selectReviewStatus(this)">Under review</button>
-    <button class="statusOption" data-status="Approved" onclick="selectReviewStatus(this)">Approved</button>
+    <button class="statusOption" data-status="Approval" onclick="selectReviewStatus(this)">Approval</button>
     <button class="statusOption" data-status="Not pass" onclick="selectReviewStatus(this)">Not pass</button>
   </div>
 </div>
@@ -1194,7 +1223,7 @@ body{background:#0d0713;color:var(--text)}
     <p><b>5. Coins:</b> Gift coins received by agency hosts.</p>
     <p><b>6. Consumers:</b> Users who sent gifts to agency hosts.</p>
     <p><b>7. New Hosts:</b> Hosts newly added to the agency during the selected period.</p>
-    <p><b>8. Effective Hosts:</b> Hosts with at least 4 Effective Days and 10 Valid Working Hours during the selected period.</p>
+    <p><b>8. Effective Hosts:</b> Hosts with at least 4 Valid Days and 10 Valid Hours during the selected period.</p>
     <p><b>9. Valid Hours:</b> Total valid on-mic time of agency hosts.</p>
     <p><b>10. Active Hosts:</b> Hosts with on-mic time greater than 0.</p>
     <p><b>11. Gifted Hosts:</b> Hosts who received more than 0 diamonds.</p>
@@ -1231,7 +1260,7 @@ function setPage(id,t){
     hostMemberDetails:'Member Details',
     analysis:'Data Analysis',
     rewards:'Invitation Rewards',
-    reviewApply:'Review apply'
+    reviewApply:'Review Apply'
   }[id]||'Agency Center');
   window.scrollTo(0,0);
 }
@@ -1555,22 +1584,22 @@ const agencySourceData={
 /* Team Management state — current members + natural-week business data */
 let hostManagementWeekStart=naturalWeekCurrentStart(),selectedHostMemberId=null;
 const hostManagementProfiles={
- '10364025':{status:1,bound:true,country:'Pakistan',timeZone:'UTC+5',joinedVia:'Agency Invitation',invitedBy:'Jaden Agency',joinTime:'2026-06-18 14:20',bindTime:'2026-06-18 14:26'},
- '10826491':{status:1,bound:true,country:'Bangladesh',timeZone:'UTC+6',joinedVia:'Agency Invitation',invitedBy:'Jaden Agency',joinTime:'2026-06-24 11:05',bindTime:'2026-06-24 11:10'},
- '10597320':{status:0,bound:true,country:'India',timeZone:'UTC+5:30',joinedVia:'Agency Invitation',invitedBy:'Jaden Agency',joinTime:'2026-07-02 16:42',bindTime:'2026-07-02 16:48'},
- '10261488':{status:1,bound:true,country:'Pakistan',timeZone:'UTC+5',joinedVia:'Agency Invitation',invitedBy:'Jaden Agency',joinTime:'2026-06-10 09:30',bindTime:'2026-06-10 09:36'},
- '10987211':{status:1,bound:true,country:'UAE',timeZone:'UTC+4',joinedVia:'Agency Invitation',invitedBy:'Jaden Agency',joinTime:'2026-07-08 13:06',bindTime:'2026-07-08 13:11'}
+ '10364025':{status:1,bound:true,country:'Pakistan',timeZone:'UTC+5',joinTime:'2026-06-18 14:20'},
+ '10826491':{status:1,bound:true,country:'Bangladesh',timeZone:'UTC+6',joinTime:'2026-06-24 11:05'},
+ '10597320':{status:0,bound:true,country:'India',timeZone:'UTC+5:30',joinTime:'2026-07-02 16:42'},
+ '10261488':{status:1,bound:true,country:'Pakistan',timeZone:'UTC+5',joinTime:'2026-06-10 09:30'},
+ '10987211':{status:1,bound:true,country:'UAE',timeZone:'UTC+4',joinTime:'2026-07-08 13:06'}
 };
 function hostMgmtMetric(h,key){const v=Number(h[key]||0),factor=naturalWeekFactor(hostManagementWeekStart);if(naturalWeekDiff(hostManagementWeekStart)===0)return v;const out=v*factor;return key==='validTime'?Math.round(out*10)/10:Math.max(0,Math.round(out))}
-function hostProfile(h){return hostManagementProfiles[h.id]||(hostManagementProfiles[h.id]={status:1,bound:true,country:'—',timeZone:'UTC+5',joinedVia:'Agency Invitation',invitedBy:'Jaden Agency',joinTime:'—',bindTime:'—'})}
+function hostProfile(h){return hostManagementProfiles[h.id]||(hostManagementProfiles[h.id]={status:1,bound:true,country:'—',timeZone:'UTC+5',joinTime:'—'})}
 function applyAgencyTeamWeek(startIso){hostManagementWeekStart=startIso;renderHostManagement()}
 function openTeamManagement(){openp('teamManagement','Team Management');setTimeout(renderHostManagement,0)}
-function hostMemberCard(h){const p=hostProfile(h),statusBadge=p.status?'':`<span class="teamHostStatus suspended">Suspended</span>`;return `<article class="teamHostCard"><div class="teamHostHead"><div class="teamHostAvatar">${h.nick.charAt(0)}</div><div class="teamHostIdentity"><b>${h.nick}</b><small>UID ${h.id}</small></div>${statusBadge}</div><div class="teamHostBody"><div class="teamHostMetrics"><div class="teamHostMetric"><b>${fmtData(hostMgmtMetric(h,'goldNum'))}</b><span>Coins</span></div><div class="teamHostMetric"><b>${fmtData(hostMgmtMetric(h,'diamondNum'))}</b><span>Diamonds</span></div><div class="teamHostMetric"><b>${hostMgmtMetric(h,'validDay')}</b><span>Valid Days</span></div><div class="teamHostMetric"><b>${hostMgmtMetric(h,'validTime')}h</b><span>Valid Hours</span></div></div><div class="teamMemberActions"><button onclick="openHostMemberDetails('${h.id}')">Details</button><button class="${p.status?'warning':'success'}" onclick="toggleHostBusinessStatus('${h.id}')">${p.status?'Suspend':'Reactivate'}</button><button class="danger" onclick="unbindHostMember('${h.id}')">Unbind</button></div></div></article>`}
+function hostMemberCard(h){const p=hostProfile(h),statusBadge=`<span class="teamHostStatus ${p.status?'':'banned'}">${p.status?'Normal':'Banned'}</span>`;return `<article class="teamHostCard"><div class="teamHostHead"><div class="teamHostAvatar">${h.nick.charAt(0)}</div><div class="teamHostIdentity"><b>${h.nick}</b><small>UID ${h.id}</small></div>${statusBadge}</div><div class="teamHostBody"><div class="teamHostMetrics"><div class="teamHostMetric"><b>${fmtData(hostMgmtMetric(h,'goldNum'))}</b><span>Coins</span></div><div class="teamHostMetric"><b>${fmtData(hostMgmtMetric(h,'diamondNum'))}</b><span>Diamonds</span></div><div class="teamHostMetric"><b>${hostMgmtMetric(h,'validDay')}</b><span>Valid Days</span></div><div class="teamHostMetric"><b>${hostMgmtMetric(h,'validTime')}h</b><span>Valid Hours</span></div></div><div class="teamMemberActions"><button onclick="openHostMemberDetails('${h.id}')">Details</button><button class="${p.status?'warning':'success'}" onclick="toggleHostBusinessStatus('${h.id}')">${p.status?'Ban':'Unban'}</button><button class="danger" onclick="unbindHostMember('${h.id}')">Unbind</button></div></div></article>`}
 function renderHostManagement(){const box=document.getElementById('teamHostMemberList');if(!box)return;const q=(document.getElementById('teamHostSearchInput')?.value||'').trim().toLowerCase();const list=agencySourceData.hosts.filter(h=>hostProfile(h).bound!==false&&(!q||`${h.nick} ${h.id}`.toLowerCase().includes(q)));box.innerHTML=list.length?list.map(hostMemberCard).join(''):'<div class="sourceEmpty">No more data</div>';const range=naturalWeekRange(hostManagementWeekStart),field=document.getElementById('agencyTeamWeekRange');if(field)field.textContent=range.replace(' ~ ',' / ')}
-function toggleHostBusinessStatus(id){const h=agencySourceData.hosts.find(x=>x.id===id);if(!h)return;const p=hostProfile(h),next=p.status?'Suspend':'Reactivate';showDataConfirm(`${next} Host`,`<b>${h.nick}</b><br>${p.status?'Pause this Host’s business qualification. The user account and organization relationship remain.':'Restore this Host’s business qualification.'}`,next,()=>{p.status=p.status?0:1;renderHostManagement();toastData(p.status?'Host reactivated':'Host suspended')})}
+function toggleHostBusinessStatus(id){const h=agencySourceData.hosts.find(x=>x.id===id);if(!h)return;const p=hostProfile(h),next=p.status?'Ban':'Unban';showDataConfirm(`${next} Host`,`<b>${h.nick}</b><br>${p.status?'Ban this Host’s business qualification. The user account and organization relationship remain.':'Restore this Host’s business qualification.'}`,next,()=>{p.status=p.status?0:1;renderHostManagement();toastData(p.status?'Host unbanned':'Host banned')})}
 function unbindHostMember(id){const h=agencySourceData.hosts.find(x=>x.id===id);if(!h)return;showDataConfirm('Unbind Host',`<b>${h.nick}</b><br>Remove this Host from the current Agency relationship. The user account remains.`, 'Unbind',()=>{hostProfile(h).bound=false;renderHostManagement();toastData('Host unbound')})}
 function openHostMemberDetails(id){selectedHostMemberId=id;renderHostMemberDetails();openp('hostMemberDetails','Member Details')}
-function renderHostMemberDetails(){const h=agencySourceData.hosts.find(x=>x.id===selectedHostMemberId)||agencySourceData.hosts[0],p=hostProfile(h),box=document.getElementById('hostMemberDetailContent');if(!box)return;const statusBadge=p.status?'':`<span class="teamHostStatus suspended">Suspended</span>`;box.innerHTML=`<div class="memberInfoHead"><div class="teamHostAvatar">${h.nick.charAt(0)}</div><div class="teamHostIdentity"><b>${h.nick}</b><small>UID ${h.id}</small></div>${statusBadge}</div><div class="memberInfoTitle">Member Information</div><div class="memberInfoGrid"><div><span>Role</span><b>Host</b></div><div><span>Country / Region</span><b>${p.country}</b></div><div><span>Time Zone</span><b>${p.timeZone}</b></div><div><span>Joined Via</span><b>${p.joinedVia}</b></div><div><span>Invited By</span><b>${p.invitedBy}</b></div><div><span>Join Time</span><b>${p.joinTime}</b></div><div><span>Bind Time</span><b>${p.bindTime}</b></div><div><span>Direct Superior</span><b>Agent · Jaden Agency</b></div><div class="wide"><span>Management Path</span><b>Agent · Jaden Agency &gt; Host · ${h.nick}</b></div></div>`}
+function renderHostMemberDetails(){const h=agencySourceData.hosts.find(x=>x.id===selectedHostMemberId)||agencySourceData.hosts[0],p=hostProfile(h),box=document.getElementById('hostMemberDetailContent');if(!box)return;const statusBadge=`<span class="teamHostStatus ${p.status?'':'banned'}">${p.status?'Normal':'Banned'}</span>`;box.innerHTML=`<div class="memberInfoHead"><div class="teamHostAvatar">${h.nick.charAt(0)}</div><div class="teamHostIdentity"><b>${h.nick}</b><small>Host · UID ${h.id}</small></div>${statusBadge}</div><div class="memberInfoTitle">Member Information</div><div class="memberInfoGrid"><div><span>Country / Region</span><b>${p.country}</b></div><div><span>Time Zone</span><b>${p.timeZone}</b></div><div><span>Direct Superior</span><b>Agency · Jaden Agency</b></div><div><span>Join Time</span><b>${p.joinTime}</b></div></div>`}
 
 const agencyCharts=[
   {title:'Weekly Coins Data',last:[52,61,48,66,72,70,79],now:[63,74,68,82,90,88,96]},
@@ -1643,13 +1672,12 @@ function requestSalaryUpdate(id,status){const b=agencySourceData.salaryBills.fin
 function openAnchorSalaryData(periodId){document.getElementById('anchorSalaryPeriod').textContent=periodId+' · 2026-08-17 - 2026-08-23';renderAnchorSalaryData();openp('anchorSalary','Host Salary Bills')}
 function renderAnchorSalaryData(){const box=document.getElementById('anchorSalaryList');if(!box)return;box.innerHTML=agencySourceData.hosts.slice(0,4).map(h=>{const hostSalary=(h.goldNum/1000).toFixed(2),agencySalary=(h.goldNum*.00016).toFixed(2);return `<div class="hostSalaryCardNew"><div class="hostSalaryHeadNew"><b>${h.nick}</b><small>User ID: ${h.id} · 2026-08-17 - 2026-08-23</small></div><div class="hostSalaryGridNew"><div><b>${fmtData(h.goldNum)}</b><span>Total Coins</span></div><div><b>${fmtData(h.diamondNum)}</b><span>Total Diamonds</span></div><div><b>$${hostSalary}</b><span>Host Salary</span></div><div><b>$${agencySalary}</b><span>Agent Salary</span></div><div><b>${h.validDay}</b><span>Valid Days</span></div><div><b>${h.validTime}h</b><span>Valid Hours</span></div></div><div class="achievementNew"><b class="${h.validAnchorNum?'validYes':'validNo'}">${h.validAnchorNum?'Working Time Achieved':'Working Time Not Met'}</b><small>Result is determined by the valid-day and valid-hour requirements.</small></div></div>`}).join('')}
 
-function applicationStatusData(v){return v===0?['Under review','review']:v===1?['Approved','ok']:['Not pass','no']}
+function applicationStatusData(v){return v===0?['Under review','review']:v===1?['Approval ✓','ok']:['Not pass','no']}
 function renderApplicationsData(){
   const label=document.getElementById('reviewStatusLabel')?.textContent||'All status';reviewFilterValue=label;
-  const statusMap={'Under review':0,'Approved':1,'Not pass':2};const list=label==='All status'?agencySourceData.applications:agencySourceData.applications.filter(x=>x.reviewStatus===statusMap[label]);
+  const statusMap={'Under review':0,'Approval':1,'Not pass':2};const list=label==='All status'?agencySourceData.applications:agencySourceData.applications.filter(x=>x.reviewStatus===statusMap[label]);
   const box=document.getElementById('applicationList');if(!box)return;
-  box.innerHTML=list.map(a=>{const st=applicationStatusData(a.reviewStatus);return `<div class="reviewCard"><div class="reviewHead"><b>Apply status</b><span class="reviewStatusBadge ${st[1]}">${st[0]}</span></div><div class="reviewBody"><div class="avatar"><span class="reviewAvatarLetter">${a.nick.charAt(0)}</span></div><div class="reviewUser"><b>User ID: ${a.userId}</b><b>Username: ${a.nick}</b></div>${a.reviewStatus===0?`<div class="reviewActions"><button class="approve" onclick="reviewApplicationData(${a.id},1)">Approval</button><button class="reject" onclick="reviewApplicationData(${a.id},2)">Not pass</button></div>`:'<div></div>'}</div></div>`}).join('');
-  document.getElementById('reviewNoMore').style.display=list.length?'block':'none';if(!list.length)box.innerHTML='<div class="sourceEmpty">No more data</div>';
+  box.innerHTML=list.length?list.map(a=>{const st=applicationStatusData(a.reviewStatus);return `<div class="reviewCard"><div class="reviewHead"><b>Apply status</b><span class="reviewStatusBadge ${st[1]}">${st[0]}</span></div><div class="reviewBody"><div class="avatar"><span class="reviewAvatarLetter">${a.nick.charAt(0)}</span></div><div class="reviewUser"><b>${a.nick}</b><span>User ID: ${a.userId}</span></div>${a.reviewStatus===0?`<div class="reviewActions"><button class="approve" onclick="reviewApplicationData(${a.id},1)">Approval</button><button class="reject" onclick="reviewApplicationData(${a.id},2)">Not pass</button></div>`:'<div class="reviewActions"></div>'}</div></div>`}).join(''):'<div class="reviewApplyEmpty">No applications in this scope</div>';
 }
 function reviewApplicationData(id,status){const a=agencySourceData.applications.find(x=>x.id===id);if(a)a.reviewStatus=status;renderApplicationsData();toastData(status===1?'✓ Application approved':'Application rejected')}
 function selectReviewStatus(btn){document.querySelectorAll('#statusSheet .statusOption').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');const label=document.getElementById('reviewStatusLabel');if(label)label.textContent=btn.dataset.status;hideStatusSheet()}
