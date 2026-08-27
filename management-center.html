@@ -278,6 +278,14 @@
 .managementMemberCard .compactMetricGrid>.compactMetric:nth-last-child(2):nth-child(even){border-bottom:1px solid var(--line)!important}
 .teamOverviewMini>button{grid-column:auto!important}
 
+
+/* v31 — Details kept as placeholder; interaction intentionally not implemented */
+.managementMemberCard .managementActions{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+/* vFinal relationship visibility — Direct / via branch */
+.managementMemberCard .relationHint{display:block;margin-top:3px;font-size:7.2px;font-weight:800;line-height:1.25;color:#8f8296;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.managementMemberCard .relationHint.direct{color:#69dca9}
+.managementMemberCard .relationHint.indirect{color:#b49bc0}
 </style>
 </head>
 <body>
@@ -404,11 +412,11 @@ const stats={user:[['userNick','Username review quantity',38,12,4],['userAvatar'
 const fmt=n=>new Intl.NumberFormat('en-US').format(n);
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.__tt);window.__tt=setTimeout(()=>t.classList.remove('show'),1600)}
 function copy(v){navigator.clipboard?.writeText(v);toast('Copied')}
-function memberStatus(a){return a.status?'Active':'Suspended'}
+function memberStatus(a){return a.status?'Normal':'Banned'}
 function memberStatusClass(a){return a.status?'ok':'no'}
 function invitationCodeField(a){return `<div class="kv invitationCodeKv"><span>Host Invitation Code</span><div class="codeValue"><b>${a.code}</b><button class="copyMiniBtn" onclick="event.stopPropagation();copy('${a.code}')" aria-label="Copy invitation code">⧉</button></div></div>`}
-function toggleAgencyBusinessStatus(id){const a=directAgencies.find(x=>x.id===id);if(!a)return;a.status=a.status?0:1;closeModal();render();toast(a.status?'Business qualification reactivated':'Business qualification suspended')}
-function openAgencyActions(id){const a=directAgencies.find(x=>x.id===id);if(!a)return;showModal(`<div class="memberActionSheet"><div class="memberActionTitle"><span>Member Management</span><b>${a.name}</b><small>Changes apply to the current business relationship only.</small></div><button class="sheetAction ${a.status?'warning':'success'}" onclick="toggleAgencyBusinessStatus(${a.id})"><b>${a.status?'Suspend':'Reactivate'}</b><span>${a.status?'Pause business qualification; account and organization relationship remain.':'Restore the member’s business qualification.'}</span></button><button class="sheetAction danger" onclick="confirmUnbindAgency(${a.id})"><b>Unbind</b><span>Remove the current organization relationship. This does not delete the user account.</span></button></div>`)}
+function toggleAgencyBusinessStatus(id){const a=directAgencies.find(x=>x.id===id);if(!a)return;a.status=a.status?0:1;closeModal();render();toast(a.status?'Business qualification unbanned':'Business qualification banned')}
+function openAgencyActions(id){const a=directAgencies.find(x=>x.id===id);if(!a)return;showModal(`<div class="memberActionSheet"><div class="memberActionTitle"><span>Member Management</span><b>${a.name}</b><small>Changes apply to the current business relationship only.</small></div><button class="sheetAction ${a.status?'warning':'success'}" onclick="toggleAgencyBusinessStatus(${a.id})"><b>${a.status?'Ban':'Unban'}</b><span>${a.status?'Ban business qualification; account and organization relationship remain.':'Remove the ban and restore the member’s business qualification.'}</span></button><button class="sheetAction danger" onclick="confirmUnbindAgency(${a.id})"><b>Unbind</b><span>Remove the current organization relationship. This does not delete the user account.</span></button></div>`)}
 function confirmUnbindAgency(id){const a=directAgencies.find(x=>x.id===id);if(!a)return;showModal(`<div class="memberActionSheet"><div class="memberActionTitle"><span>Unbind Member</span><b>${a.name}</b><small>After unbinding, this Agency will no longer be directly linked to the current Manager.</small></div><button class="sheetAction danger solid" onclick="closeModal();toast('Unbind submitted (demo)')"><b>Confirm Unbind</b><span>Organization relationship only · user account remains.</span></button><button class="sheetAction" onclick="closeModal()"><b>Cancel</b></button></div>`)}
 function showModal(html){document.getElementById('modalBody').innerHTML=`<button class="modalClose" onclick="closeModal()">×</button>${html}`;document.getElementById('modal').classList.add('show')}
 function closeModal(){document.getElementById('modal').classList.remove('show')}
@@ -426,9 +434,9 @@ function workingGridDirect(d){return `<div class="workingGrid six"><div><b>${fmt
 function workingGridTeam(d){return `<div class="workingGrid six"><div><b>${fmt(d.gold)}</b><span>Coins</span></div><div><b>${fmt(d.diamonds)}</b><span>Diamonds</span></div><div class="managementMetric"><b>${d.management}<small>linked</small></b><span>Management Team</span><small class="managementBreakdown">${d.superAdmin} Super Admin · ${d.admin} Admin · ${d.bd} BD</small></div><div><b>${d.agency}</b><span>Total Agency</span></div><div><b>${d.voice}</b><span>Active Hosts</span></div><div><b>${d.gifted}</b><span>Gifted Hosts</span></div></div>`}
 function inviteData(){const map={agency:{label:'Invite Agency',code:'MGR-AG-82LQ',link:'https://example.app/invite?role=agency&code=MGR-AG-82LQ'},bd:{label:'Invite BD',code:'MGR-BD-31VN',link:'https://example.app/invite?role=bd&code=MGR-BD-31VN'},admin:{label:'Invite Admin',code:'MGR-AD-74KP',link:'https://example.app/invite?role=admin&code=MGR-AD-74KP'},superAdmin:{label:'Invite Super Admin',code:'MGR-SA-52QT',link:'https://example.app/invite?role=super-admin&code=MGR-SA-52QT'}};return map[state.inviteType]||map.agency}
 function renderInviteCard(){const d=inviteData();const tabs=[['agency','Agency'],['bd','BD'],['admin','Admin'],['superAdmin','Super Admin']];return `<div class="sectionHead"><b>Invite Team</b></div><div class="panelCard inviteReviewCard"><div class="inviteTypeTabs">${tabs.map(([k,label])=>`<button class="${state.inviteType===k?'active':''}" onclick="state.inviteType='${k}';render()">${label}</button>`).join('')}</div><div class="inviteCompactTop"><div class="inviteLinkBlock"><span>${d.label} · Invitation Link</span><div class="inviteLinkInline"><b>${d.link}</b><button class="copyIconBtn" onclick="copy('${d.link}')">⧉</button></div></div><button class="whatsappConfigBtn" onclick="event.stopPropagation();openWA()"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.173.198-.297.298-.495.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>WhatsApp ›</button></div><div class="inviteActionGrid"><div class="inviteCodeItem"><span class="inviteActionIcon">#</span><span><b>Code</b><span class="inviteCodeValueInline"><small>${d.code}</small><button class="copyIconBtn" onclick="copy('${d.code}')">⧉</button></span></span></div><button onclick="openp('reviewApply')"><span class="inviteActionIcon">✓</span><span><b>Review Apply</b><small>Agency / BD / Admin / Super Admin</small></span></button></div></div>`}
-function renderHome(){const p=periodData();return `<section class="page"><div class="roleCard"><div class="roleMain"><div class="roleAvatar">J</div><div><div class="roleNameLine"><b>Jaden</b><span class="levelBadge">Manager · Lv2</span></div><div class="roleId">ID 10032846</div></div><span class="roleChevron">›</span></div></div>${renderInviteCard()}<div class="panelCard teamWorkingCard" style="margin-top:18px"><div class="teamWorkingHead"><span>Team working data</span><button onclick="openp('team')">Team Management ›</button></div><div class="billingPeriodSwitch"><button class="${state.period==='current'?'active':''}" onclick="switchPeriod('current')">Current Billing Cycle</button><button class="${state.period==='last'?'active':''}" onclick="switchPeriod('last')">Last Billing Cycle</button></div><div class="teamWorkingMeta"><b>${p.period}</b><small>${p.update}</small></div><div class="workingGroupTitle">My Agency</div>${workingGridDirect(p.direct)}<div class="workingGroupTitle">Team Agency</div>${workingGridTeam(p.team)}</div><div class="sectionHead"><b>Tools</b></div><div class="toolGrid"><button class="toolTile" onclick="openp('analysis')"><span class="toolTileIcon">▥</span><b>Data Analysis</b></button><button class="toolTile" onclick="openp('salary')"><span class="toolTileIcon">$</span><b>Salary Bill</b></button><div class="toolTile toolTileStatic"><span class="toolTileIcon">✦</span><b>Invitation Rewards</b></div><div class="toolTile toolTileStatic"><span class="toolTileIcon">✓</span><b>Review Info</b></div><div class="toolTile toolTileStatic"><span class="toolTileIcon">◇</span><b>Send Props</b></div></div></section>`}
-function agencyCard(a){return `<article class="memberCard managementMemberCard"><div class="memberHead"><div class="avatar">${a.name[0]}</div><div class="identity"><b>${a.name}</b><small>User ID ${a.userId} · UID ${a.uid}</small></div><span class="status ${memberStatusClass(a)}">${memberStatus(a)}</span></div><div class="memberBody"><div class="kvGrid memberBasics"><div class="kv"><span>Country / Time zone</span><b>${a.country} · ${a.timeZone}</b></div><div class="kv"><span>Agency Type</span><b>${a.type===2?'Official Agency':'Trial Agency'}</b></div>${invitationCodeField(a)}</div><div class="businessDataLabel"><span>This Week Business Data</span><small>For member quality evaluation</small></div><div class="kvGrid businessDataGrid"><div class="kv"><span>Week Coins</span><b>${fmt(a.gold)}</b></div><div class="kv"><span>Week Diamonds</span><b>${fmt(a.diamonds)}</b></div><div class="kv"><span>Total Hosts</span><b>${a.hosts}</b></div><div class="kv"><span>Effective Hosts</span><b>${a.effectiveHosts??'—'}</b></div><div class="kv"><span>Active Hosts</span><b>${a.voice}</b></div><div class="kv"><span>Gifted Hosts</span><b>${a.hostDiamonds}</b></div></div><div class="cardActions managementActions"><button class="plainBtn" onclick="openAgencyDetails(${a.id},'direct')">Details</button><button class="plainBtn" onclick="openAgencyTeam(${a.id},'direct')">View Team</button><button class="plainBtn moreBtn" onclick="openAgencyActions(${a.id})">More ···</button></div></div></article>`}
-function teamAgencyCard(a){const viaTag=state.teamManagementFilter==='All'?`<span class="viaRoleTag">Via ${a.linkedRole}</span>`:'';return `<article class="memberCard managementMemberCard"><div class="memberHead"><div class="avatar">${a.name[0]}</div><div class="identity"><b>${a.name}</b><small>User ID ${a.userId} · UID ${a.uid}</small></div><span class="status ${memberStatusClass(a)}">${memberStatus(a)}</span></div><div class="memberBody">${viaTag}<div class="kvGrid memberBasics"><div class="kv"><span>Agency Type</span><b>${a.type===2?'Official Agency':'Trial Agency'}</b></div><div class="kv"><span>UTC</span><b>${a.timeZone}</b></div>${invitationCodeField(a)}</div><div class="businessDataLabel"><span>This Week Business Data</span><small>For member quality evaluation</small></div><div class="kvGrid businessDataGrid"><div class="kv"><span>Week Coins</span><b>${fmt(a.gold)}</b></div><div class="kv"><span>Week Diamonds</span><b>${fmt(a.diamonds)}</b></div><div class="kv"><span>Total Hosts</span><b>${a.hosts}</b></div><div class="kv"><span>Effective Hosts</span><b>${a.effectiveHosts??'—'}</b></div><div class="kv"><span>Active Hosts</span><b>${a.voice}</b></div><div class="kv"><span>Gifted Hosts</span><b>${a.hostDiamonds}</b></div></div><div class="cardActions managementActions"><button class="plainBtn" onclick="openAgencyDetails(${a.id},'team')">Details</button><button class="plainBtn" onclick="openAgencyTeam(${a.id},'team')">View Team</button></div><div class="indirectNote">Indirect member · relationship changes are handled by the direct superior.</div></div></article>`}
+function renderHome(){const p=periodData();return `<section class="page"><div class="roleCard"><div class="roleMain"><div class="roleAvatar">J</div><div><div class="roleNameLine"><b>Jaden</b><span class="levelBadge">Manager · Lv2</span></div><div class="roleId">ID 10032846</div></div><span class="roleChevron">›</span></div></div>${renderInviteCard()}<div class="panelCard teamWorkingCard" style="margin-top:18px"><div class="teamWorkingHead"><span>Team working data</span><button onclick="openp('team')">Team Management ›</button></div><div class="billingPeriodSwitch"><button class="${state.period==='current'?'active':''}" onclick="switchPeriod('current')">Current Billing Cycle</button><button class="${state.period==='last'?'active':''}" onclick="switchPeriod('last')">Last Billing Cycle</button></div><div class="teamWorkingMeta"><b>${p.period} <span class="workingTimezone">(UTC+0)</span></b><small>${p.update}</small></div><div class="workingGroupTitle">My Agency</div>${workingGridDirect(p.direct)}<div class="workingGroupTitle">Team Agency</div>${workingGridTeam(p.team)}</div><div class="sectionHead"><b>Tools</b></div><div class="toolGrid"><button class="toolTile" onclick="openp('analysis')"><span class="toolTileIcon">▥</span><b>Data Analysis</b></button><button class="toolTile" onclick="openp('salary')"><span class="toolTileIcon">$</span><b>Salary Bill</b></button><div class="toolTile toolTileStatic"><span class="toolTileIcon">✦</span><b>Invitation Rewards</b></div><div class="toolTile toolTileStatic"><span class="toolTileIcon">✓</span><b>Review Info</b></div><div class="toolTile toolTileStatic"><span class="toolTileIcon">◇</span><b>Send Props</b></div></div></section>`}
+function agencyCard(a){return `<article class="memberCard managementMemberCard"><div class="memberHead"><div class="avatar">${a.name[0]}</div><div class="identity"><b>${a.name}</b><small>User ID ${a.userId} · UID ${a.uid}</small></div><span class="status ${memberStatusClass(a)}">${memberStatus(a)}</span></div><div class="memberBody"><div class="kvGrid memberBasics"><div class="kv"><span>Country / Time zone</span><b>${a.country} · ${a.timeZone}</b></div><div class="kv"><span>Agency Type</span><b>${a.type===2?'Official Agency':'Trial Agency'}</b></div>${invitationCodeField(a)}</div><div class="businessDataLabel"><span>This Week Business Data</span><small>For member quality evaluation</small></div><div class="kvGrid businessDataGrid"><div class="kv"><span>Week Coins</span><b>${fmt(a.gold)}</b></div><div class="kv"><span>Week Diamonds</span><b>${fmt(a.diamonds)}</b></div><div class="kv"><span>Total Hosts</span><b>${a.hosts}</b></div><div class="kv"><span>Effective Hosts</span><b>${a.effectiveHosts??'—'}</b></div><div class="kv"><span>Active Hosts</span><b>${a.voice}</b></div><div class="kv"><span>Gifted Hosts</span><b>${a.hostDiamonds}</b></div></div><div class="cardActions managementActions"><button class="plainBtn" onclick="openAgencyTeam(${a.id},'direct')">View Team</button><button class="plainBtn moreBtn" onclick="openAgencyActions(${a.id})">More ···</button></div></div></article>`}
+function teamAgencyCard(a){const viaTag=state.teamManagementFilter==='All'?`<span class="viaRoleTag">Via ${a.linkedRole}</span>`:'';return `<article class="memberCard managementMemberCard"><div class="memberHead"><div class="avatar">${a.name[0]}</div><div class="identity"><b>${a.name}</b><small>User ID ${a.userId} · UID ${a.uid}</small></div><span class="status ${memberStatusClass(a)}">${memberStatus(a)}</span></div><div class="memberBody">${viaTag}<div class="kvGrid memberBasics"><div class="kv"><span>Agency Type</span><b>${a.type===2?'Official Agency':'Trial Agency'}</b></div><div class="kv"><span>UTC</span><b>${a.timeZone}</b></div>${invitationCodeField(a)}</div><div class="businessDataLabel"><span>This Week Business Data</span><small>For member quality evaluation</small></div><div class="kvGrid businessDataGrid"><div class="kv"><span>Week Coins</span><b>${fmt(a.gold)}</b></div><div class="kv"><span>Week Diamonds</span><b>${fmt(a.diamonds)}</b></div><div class="kv"><span>Total Hosts</span><b>${a.hosts}</b></div><div class="kv"><span>Effective Hosts</span><b>${a.effectiveHosts??'—'}</b></div><div class="kv"><span>Active Hosts</span><b>${a.voice}</b></div><div class="kv"><span>Gifted Hosts</span><b>${a.hostDiamonds}</b></div></div><div class="cardActions managementActions"><button class="plainBtn" onclick="openAgencyTeam(${a.id},'team')">View Team</button></div><div class="indirectNote">Indirect member · relationship changes are handled by the direct superior.</div></div></article>`}
 function filterDirect(){const q=(document.getElementById('directSearch')?.value||'').toLowerCase();return directAgencies.filter(a=>`${a.name} ${a.uid} ${a.userId} ${a.code}`.toLowerCase().includes(q))}
 function filterTeamAgencies(){const q=(document.getElementById('teamAgencySearch')?.value||'').toLowerCase();return teamAgencies.filter(a=>(state.teamManagementFilter==='All'||a.linkedRole===state.teamManagementFilter)&&`${a.name} ${a.uid} ${a.userId} ${a.linkedRole} ${a.linkedName} ${a.linkedUserId} ${a.directManagerRole} ${a.directManagerName} ${a.managementPath}`.toLowerCase().includes(q))}
 function renderTeam(){let content='';if(state.teamTab==='direct'){const list=filterDirect();content=`<div class="scopeHint managementScopeHint"><b>Current organization</b><span>Direct Agencies under the Manager. Weekly data is shown only to evaluate member quality; it is not a billing-cycle snapshot.</span></div><div class="searchRow"><input id="directSearch" placeholder="Enter Agency ID / Name" oninput="renderTeamListOnly()"><button onclick="renderTeamListOnly()">Search</button></div><div class="updateLine">Business data update in: 13 : 26</div><div class="list" id="teamList">${list.map(agencyCard).join('')||'<div class="empty">No more data here</div>'}</div>`}else{const list=filterTeamAgencies();const filters=['All','Super Admin','Admin','BD'];content=`<div class="scopeHint managementScopeHint"><b>Current organization</b><span>Indirect Agencies reached through the Manager’s management branches. View-only relationship scope.</span></div><div class="teamAgencyFilter">${filters.map(x=>`<button class="${state.teamManagementFilter===x?'active':''}" onclick="state.teamManagementFilter='${x}';render()">${x}</button>`).join('')}</div><div class="searchRow"><input id="teamAgencySearch" placeholder="Enter Agency ID / Name" oninput="renderTeamListOnly()"><button onclick="renderTeamListOnly()">Search</button></div><div class="updateLine">Business data update in: 13 : 18</div><div class="list" id="teamList">${list.map(teamAgencyCard).join('')||'<div class="empty">No more data here</div>'}</div>`}return `<section class="page"><div class="pageTabs"><button class="${state.teamTab==='direct'?'active':''}" onclick="state.teamTab='direct';render()">My Agency</button><button class="${state.teamTab==='team'?'active':''}" onclick="state.teamTab='team';render()">Team Agency</button></div>${content}</section>`}
@@ -456,14 +464,14 @@ function memberTeamOverview(m){const rows=memberTeamOverviewRows(m);return `<div
 
 function managementMemberCard(m){
  const code='';
- const statusAction=m.status?`<button class="plainBtn warning" onclick="toggleManagementMemberStatus(${m.id})">Suspend</button>`:`<button class="plainBtn success" onclick="toggleManagementMemberStatus(${m.id})">Reactivate</button>`;
- return `<article class="memberCard managementMemberCard"><div class="memberHead"><div class="avatar">${m.name[0]}</div><div class="identity"><b>${m.name}<span class="inlineRoleBadge">${m.role}</span></b><small>UID ${m.uid}</small></div><span class="status ${memberStatusClass(m)}">${memberStatus(m)}</span></div><div class="memberBody">${code}${memberRoleMetrics(m)}${memberTeamOverview(m)}<div class="cardActions managementActions"><button class="plainBtn" onclick="openManagementMemberDetails(${m.id})">Details</button>${statusAction}<button class="plainBtn danger" onclick="confirmUnbindManagementMember(${m.id})">Unbind</button></div></div></article>`
+ const statusAction=m.status?`<button class="plainBtn warning" onclick="toggleManagementMemberStatus(${m.id})">Ban</button>`:`<button class="plainBtn success" onclick="toggleManagementMemberStatus(${m.id})">Unban</button>`;
+ return `<article class="memberCard managementMemberCard"><div class="memberHead"><div class="avatar">${m.name[0]}</div><div class="identity"><b>${m.name}<span class="inlineRoleBadge">${m.role}</span></b><small>UID ${m.uid}</small></div><span class="status ${memberStatusClass(m)}">${memberStatus(m)}</span></div><div class="memberBody">${code}${memberRoleMetrics(m)}${memberTeamOverview(m)}<div class="cardActions managementActions">${statusAction}<button class="plainBtn danger" onclick="confirmUnbindManagementMember(${m.id})">Unbind</button></div></div></article>`
 }
 function renderTeam(){const roles=['Super Admin','Admin','BD','Agent'];const list=managementRoleList();const w=selectedTeamWeek();const topRange=w.range.replace(' ~ ',' / ');return `<section class="page"><div class="managementRoleTabs">${roles.map(x=>`<button class="${state.teamManagementRole===x?'active':''}" onclick="state.teamManagementRole='${x}';render()">${x}</button>`).join('')}</div><div class="teamFilterCard"><button class="teamDateRow" onclick="openNaturalWeekPicker(state.teamWeekStart,'applyManagerTeamWeek')"><span>Date</span><b>${topRange}</b></button><div class="teamFilterSearch"><input id="teamMemberSearch" placeholder="Search name / UID" oninput="renderTeamListOnly()"><button onclick="renderTeamListOnly()">Search</button></div></div><div class="list" id="teamList">${list.map(managementMemberCard).join('')||'<div class="empty">No more data here</div>'}</div></section>`}
 function renderTeamListOnly(){if(current()!=='team')return;const box=document.getElementById('teamList');if(!box)return;const list=managementRoleList();box.innerHTML=list.length?list.map(managementMemberCard).join(''):'<div class="empty">No more data here</div>'}
 function findManagementMember(id){return managementMembers.find(x=>x.id===Number(id))}
-function toggleManagementMemberStatus(id){const m=findManagementMember(id);if(!m)return;m.status=m.status?0:1;closeModal();render();toast(m.status?'Business qualification reactivated':'Business qualification suspended')}
-function openManagementMemberActions(id){const m=findManagementMember(id);if(!m)return;showModal(`<div class="memberActionSheet"><div class="memberActionTitle"><span>Member Management</span><b>${m.name}</b><small>The current Manager can manage members within the authorized team scope.</small></div><button class="sheetAction ${m.status?'warning':'success'}" onclick="toggleManagementMemberStatus(${m.id})"><b>${m.status?'Suspend':'Reactivate'}</b><span>${m.status?'Pause the current business qualification; user account and organization relationship remain.':'Restore the member’s business qualification.'}</span></button><button class="sheetAction danger" onclick="confirmUnbindManagementMember(${m.id})"><b>Unbind</b><span>Remove this member from the current organization relationship. This does not delete the user account.</span></button></div>`)}
+function toggleManagementMemberStatus(id){const m=findManagementMember(id);if(!m)return;m.status=m.status?0:1;closeModal();render();toast(m.status?'Business qualification unbanned':'Business qualification banned')}
+function openManagementMemberActions(id){const m=findManagementMember(id);if(!m)return;showModal(`<div class="memberActionSheet"><div class="memberActionTitle"><span>Member Management</span><b>${m.name}</b><small>The current Manager can manage members within the authorized team scope.</small></div><button class="sheetAction ${m.status?'warning':'success'}" onclick="toggleManagementMemberStatus(${m.id})"><b>${m.status?'Ban':'Unban'}</b><span>${m.status?'Ban the current business qualification; user account and organization relationship remain.':'Remove the ban and restore the member’s business qualification.'}</span></button><button class="sheetAction danger" onclick="confirmUnbindManagementMember(${m.id})"><b>Unbind</b><span>Remove this member from the current organization relationship. This does not delete the user account.</span></button></div>`)}
 function confirmUnbindManagementMember(id){const m=findManagementMember(id);if(!m)return;showModal(`<div class="memberActionSheet"><div class="memberActionTitle"><span>Unbind Member</span><b>${m.name}</b><small>Current superior: ${m.directSuperiorRole} · ${m.directSuperiorName}. Unbind removes this organization relationship only.</small></div><button class="sheetAction danger solid" onclick="closeModal();toast('Unbind submitted (demo)')"><b>Confirm Unbind</b><span>Organization relationship only · user account remains.</span></button><button class="sheetAction" onclick="closeModal()"><b>Cancel</b></button></div>`)}
 function openManagementMemberDetails(id){const m=findManagementMember(id);if(!m)return;state.selectedMember=id;openp('memberDetails')}
 function renderManagementMemberDetails(){
@@ -501,7 +509,7 @@ function teamOverviewHostList(m){
  const seeds=agencyHostSamples;
  return Array.from({length:Math.min(count,12)},(_,i)=>{const h=seeds[i%seeds.length];return {...h,id:`${h.id}${i>=seeds.length?'-'+(i+1):''}`,name:i<seeds.length?h.name:`${h.name} ${i+1}`}})
 }
-function overviewMemberCard(c,label){const shownRole=c.role==='Agent'?'Agency':c.role;return `<article class="teamOverviewMemberCard"><div class="teamMiniHead"><div class="teamChildAvatar">${c.name[0]}</div><div><b>${c.name}</b><small>${shownRole} · UID ${c.uid}</small></div><span class="status ${memberStatusClass(c)}">${memberStatus(c)}</span></div><div class="teamOverviewMemberActions"><button onclick="openManagementMemberDetails(${c.id})">Details</button></div></article>`}
+function overviewMemberCard(c,label){const shownRole=c.role==='Agent'?'Agency':c.role;return `<article class="teamOverviewMemberCard"><div class="teamMiniHead"><div class="teamChildAvatar">${c.name[0]}</div><div><b>${c.name}</b><small>${shownRole} · UID ${c.uid}</small></div><span class="status ${memberStatusClass(c)}">${memberStatus(c)}</span></div></article>`}
 function overviewHostCard(h){return `<article class="teamOverviewMemberCard"><div class="teamMiniHead"><div class="teamChildAvatar">${h.name[0]}</div><div><b>${h.name}</b><small>Host · ${h.id}</small></div></div></article>`}
 function renderTeamOverview(){const m=selectedManagementMember(),type=state.selectedOverviewType;let list=[];if(type==='Agency')list=teamOverviewAgencyList(m);else if(type==='Hosts')list=teamOverviewHostList(m);else list=teamOverviewManagementList(m,type);const total=memberTeamOverviewRows(m).find(x=>x[0]===type)?.[1]??list.length;return `<section class="page"><div class="panelCard overviewScopeCard"><span>Team Overview · Current</span><b>${m.name}</b><small>${m.role} · ${type} ${total}</small></div><div class="sectionHead"><b>${type}</b><small>Current team members</small></div><div class="list teamDetailList">${list.length?(type==='Hosts'?list.map(overviewHostCard).join(''):list.map(x=>overviewMemberCard(x,type)).join('')):'<div class="empty">No team members</div>'}</div></section>`}
 function openManagementMemberTeam(id){const m=findManagementMember(id);if(!m)return;state.selectedMember=id;openp('memberTeam')}
@@ -702,7 +710,7 @@ function workingGridTeam(d){const pieces=[];if(d.superAdmin)pieces.push(`${d.sup
 
 function inviteData(){const c=demoConfig();const labels={agency:'Agency',bd:'BD',admin:'Admin',superAdmin:'Super Admin'};const slugs={agency:'agency',bd:'bd',admin:'admin',superAdmin:'super-admin'};const k=state.inviteType;const suffix={agency:'AG-82LQ',bd:'BD-31VN',admin:'AD-74KP',superAdmin:'SA-52QT'}[k]||'AG-82LQ';const code=`${c.codePrefix}-${suffix}`;return {label:`Invite ${labels[k]||'Agency'}`,code,link:`https://example.app/invite?role=${slugs[k]||'agency'}&code=${code}`}}
 function renderInviteCard(){const c=demoConfig(),d=inviteData(),tabs=c.invite;return `<div class="sectionHead"><b>Invite Team</b></div><div class="panelCard inviteReviewCard"><div class="inviteTypeTabs">${tabs.map(([k,label])=>`<button class="${state.inviteType===k?'active':''}" onclick="state.inviteType='${k}';render()">${label}</button>`).join('')}</div><div class="inviteCompactTop"><div class="inviteLinkBlock"><span>${d.label} · Invitation Link</span><div class="inviteLinkInline"><b>${d.link}</b><button class="copyIconBtn" onclick="copy('${d.link}')">⧉</button></div></div><button class="whatsappConfigBtn" onclick="event.stopPropagation();openWA()"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.173.198-.297.298-.495.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>WhatsApp ›</button></div><div class="inviteActionGrid"><div class="inviteCodeItem"><span class="inviteActionIcon">#</span><span><b>Code</b><span class="inviteCodeValueInline"><small>${d.code}</small><button class="copyIconBtn" onclick="copy('${d.code}')">⧉</button></span></span></div><button onclick="openp('reviewApply')"><span class="inviteActionIcon">✓</span><span><b>Review Apply</b><small>${c.review.join(' / ')}</small></span></button></div></div>`}
-function renderHome(){const p=periodData(),c=demoConfig();return `<section class="page">${roleDemoSwitch()}<div class="roleCard"><div class="roleMain"><div class="roleAvatar">${c.avatar}</div><div><div class="roleNameLine"><b>${c.name}</b><span class="levelBadge">${c.role} · ${c.level}</span></div><div class="roleId">ID ${c.id}</div></div><span class="roleChevron">›</span></div></div>${renderInviteCard()}<div class="panelCard teamWorkingCard" style="margin-top:18px"><div class="teamWorkingHead"><span>Team working data</span><button onclick="openp('team')">Team Management ›</button></div><div class="billingPeriodSwitch"><button class="${state.period==='current'?'active':''}" onclick="switchPeriod('current')">Current Billing Cycle</button><button class="${state.period==='last'?'active':''}" onclick="switchPeriod('last')">Last Billing Cycle</button></div><div class="teamWorkingMeta"><b>${p.period}</b><small>${p.update}</small></div><div class="workingGroupTitle">My Agency</div>${workingGridDirect(p.direct)}<div class="workingGroupTitle">Team Agency</div>${workingGridTeam(p.team)}</div><div class="sectionHead"><b>Tools</b></div><div class="toolGrid"><button class="toolTile" onclick="openp('analysis')"><span class="toolTileIcon">▥</span><b>Data Analysis</b></button><button class="toolTile" onclick="openp('salary')"><span class="toolTileIcon">$</span><b>Salary Bill</b></button><div class="toolTile toolTileStatic"><span class="toolTileIcon">✦</span><b>Invitation Rewards</b></div><div class="toolTile toolTileStatic"><span class="toolTileIcon">✓</span><b>Review Info</b></div><div class="toolTile toolTileStatic"><span class="toolTileIcon">◇</span><b>Send Props</b></div></div></section>`}
+function renderHome(){const p=periodData(),c=demoConfig();return `<section class="page">${roleDemoSwitch()}<div class="roleCard"><div class="roleMain"><div class="roleAvatar">${c.avatar}</div><div><div class="roleNameLine"><b>${c.name}</b><span class="levelBadge">${c.role} · ${c.level}</span></div><div class="roleId">ID ${c.id}</div></div><span class="roleChevron">›</span></div></div>${renderInviteCard()}<div class="panelCard teamWorkingCard" style="margin-top:18px"><div class="teamWorkingHead"><span>Team working data</span><button onclick="openp('team')">Team Management ›</button></div><div class="billingPeriodSwitch"><button class="${state.period==='current'?'active':''}" onclick="switchPeriod('current')">Current Billing Cycle</button><button class="${state.period==='last'?'active':''}" onclick="switchPeriod('last')">Last Billing Cycle</button></div><div class="teamWorkingMeta"><b>${p.period} <span class="workingTimezone">(UTC+0)</span></b><small>${p.update}</small></div><div class="workingGroupTitle">My Agency</div>${workingGridDirect(p.direct)}<div class="workingGroupTitle">Team Agency</div>${workingGridTeam(p.team)}</div><div class="sectionHead"><b>Tools</b></div><div class="toolGrid"><button class="toolTile" onclick="openp('analysis')"><span class="toolTileIcon">▥</span><b>Data Analysis</b></button><button class="toolTile" onclick="openp('salary')"><span class="toolTileIcon">$</span><b>Salary Bill</b></button><div class="toolTile toolTileStatic"><span class="toolTileIcon">✦</span><b>Invitation Rewards</b></div><div class="toolTile toolTileStatic"><span class="toolTileIcon">✓</span><b>Review Info</b></div><div class="toolTile toolTileStatic"><span class="toolTileIcon">◇</span><b>Send Props</b></div></div></section>`}
 
 function roleScopedManagementMembers(){const c=demoConfig();if(c.role==='Manager')return managementMembers;return managementMembers.filter(m=>m.id!==Number(c.id)&&String(m.managementPath||'').includes(c.pathNeedle))}
 function managementRoleList(){const c=demoConfig(),q=(document.getElementById('teamMemberSearch')?.value||'').trim().toLowerCase();return roleScopedManagementMembers().filter(m=>m.role===state.teamManagementRole&&`${m.name} ${m.uid} ${m.role}`.toLowerCase().includes(q))}
@@ -745,6 +753,7 @@ function managerWeeklySalaryMarkup(){const role=demoConfig().role;return manager
 function renderSalaryRules(){const role=demoConfig().role;return `<section class="page"><div class="panelCard" style="padding:16px"><b style="color:#f2d071;font-size:13px">Salary Rules</b><p style="font-size:10px;line-height:1.65;color:#b8aabd">1. Salary Bill uses the same page structure for Manager / Super Admin / Admin.<br>2. Current demo role: <b>${role}</b>.<br>3. Total Salary = Commission + Actual Base.<br>4. Weekly Agency Salary is calculated from the current role's authorized organization scope without duplicate counting.<br>5. Commission rate, level threshold and Base follow the configured policy for the current role/level.<br>6. Effective Hosts completion affects Base according to policy and does not change the Center information architecture.</p></div></section>`}
 
 /* Initialize role-specific defaults after all original functions have loaded. */
+
 setDemoRole(state.demoRole);
 </script>
 
@@ -826,14 +835,14 @@ function workingGridBD(d){return `<div class="workingGrid six"><div><b>${fmt(d.g
 const _renderHomeBeforeBD=renderHome;
 renderHome=function(){
  if(state.demoRole!=='BD')return _renderHomeBeforeBD();
- const p=periodData(),c=demoConfig();return `<section class="page">${roleDemoSwitch()}<div class="roleCard"><div class="roleMain"><div class="roleAvatar">${c.avatar}</div><div><div class="roleNameLine"><b>${c.name}</b><span class="levelBadge">BD ${c.level}</span></div><div class="roleId">ID ${c.id}</div></div><span class="roleChevron">›</span></div></div>${renderInviteCard()}<div class="panelCard teamWorkingCard" style="margin-top:18px"><div class="teamWorkingHead"><span>Team working data</span><button onclick="openp('team')">Team Management ›</button></div><div class="billingPeriodSwitch"><button class="${state.period==='current'?'active':''}" onclick="switchPeriod('current')">Current Billing Cycle</button><button class="${state.period==='last'?'active':''}" onclick="switchPeriod('last')">Last Billing Cycle</button></div><div class="teamWorkingMeta"><b>${p.period}</b><small>${p.update}</small></div>${workingGridBD(p.direct)}</div><div class="sectionHead"><b>Tools</b></div><div class="toolGrid"><button class="toolTile" onclick="openp('analysis')"><span class="toolTileIcon">▥</span><b>Data Analysis</b></button><button class="toolTile" onclick="openp('salary')"><span class="toolTileIcon">$</span><b>Salary Bill</b></button><button class="toolTile" onclick="openp('rewards')"><span class="toolTileIcon">✦</span><b>Invitation Rewards</b></button></div></section>`;
+ const p=periodData(),c=demoConfig();return `<section class="page">${roleDemoSwitch()}<div class="roleCard"><div class="roleMain"><div class="roleAvatar">${c.avatar}</div><div><div class="roleNameLine"><b>${c.name}</b><span class="levelBadge">BD ${c.level}</span></div><div class="roleId">ID ${c.id}</div></div><span class="roleChevron">›</span></div></div>${renderInviteCard()}<div class="panelCard teamWorkingCard" style="margin-top:18px"><div class="teamWorkingHead"><span>Team working data</span><button onclick="openp('team')">Team Management ›</button></div><div class="billingPeriodSwitch"><button class="${state.period==='current'?'active':''}" onclick="switchPeriod('current')">Current Billing Cycle</button><button class="${state.period==='last'?'active':''}" onclick="switchPeriod('last')">Last Billing Cycle</button></div><div class="teamWorkingMeta"><b>${p.period} <span class="workingTimezone">(UTC+0)</span></b><small>${p.update}</small></div>${workingGridBD(p.direct)}</div><div class="sectionHead"><b>Tools</b></div><div class="toolGrid"><button class="toolTile" onclick="openp('analysis')"><span class="toolTileIcon">▥</span><b>Data Analysis</b></button><button class="toolTile" onclick="openp('salary')"><span class="toolTileIcon">$</span><b>Salary Bill</b></button><button class="toolTile" onclick="openp('rewards')"><span class="toolTileIcon">✦</span><b>Invitation Rewards</b></button></div></section>`;
 };
 
 const _managementMemberCardBeforeBD=managementMemberCard;
 managementMemberCard=function(m){
  if(state.demoRole!=='BD')return _managementMemberCardBeforeBD(m);
- const statusAction=m.status?`<button class="plainBtn warning" onclick="toggleManagementMemberStatus(${m.id})">Suspend</button>`:`<button class="plainBtn success" onclick="toggleManagementMemberStatus(${m.id})">Reactivate</button>`;
- return `<article class="memberCard managementMemberCard"><div class="memberHead"><div class="avatar">${m.name[0]}</div><div class="identity"><b>${m.name}<span class="inlineRoleBadge">Agency</span></b><small>UID ${m.uid}</small></div><span class="status ${memberStatusClass(m)}">${memberStatus(m)}</span></div><div class="memberBody">${memberRoleMetrics(m)}${memberTeamOverview(m)}<div class="cardActions managementActions"><button class="plainBtn" onclick="openManagementMemberDetails(${m.id})">Details</button>${statusAction}<button class="plainBtn danger" onclick="confirmUnbindManagementMember(${m.id})">Unbind</button></div></div></article>`;
+ const statusAction=m.status?`<button class="plainBtn warning" onclick="toggleManagementMemberStatus(${m.id})">Ban</button>`:`<button class="plainBtn success" onclick="toggleManagementMemberStatus(${m.id})">Unban</button>`;
+ return `<article class="memberCard managementMemberCard"><div class="memberHead"><div class="avatar">${m.name[0]}</div><div class="identity"><b>${m.name}<span class="inlineRoleBadge">Agency</span></b><small>UID ${m.uid}</small></div><span class="status ${memberStatusClass(m)}">${memberStatus(m)}</span></div><div class="memberBody">${memberRoleMetrics(m)}${memberTeamOverview(m)}<div class="cardActions managementActions">${statusAction}<button class="plainBtn danger" onclick="confirmUnbindManagementMember(${m.id})">Unbind</button></div></div></article>`;
 };
 const _renderTeamBeforeBD=renderTeam;
 renderTeam=function(){
@@ -874,8 +883,430 @@ renderWeekSalary=function(){if(state.demoRole!=='BD')return _renderWeekSalaryBef
 renderSalaryRules=function(){if(state.demoRole!=='BD')return _renderSalaryRulesBeforeBD();return `<section class="page"><div class="panelCard" style="padding:16px"><b style="color:#f2d071;font-size:13px">Salary Rules</b><p style="font-size:10px;line-height:1.65;color:#b8aabd">1. All times follow UTC+0. A weekly salary bill is generated for each settlement week; payout is aggregated every 4 weeks.<br>2. Total Salary = Commission + Actual Base Salary.<br>3. Commission = Weekly Agency Salary × 5%.<br>4. Effective Hosts completion ≥70% grants 100% of Full Base; ≥50% and &lt;70% grants 50%; &lt;50% grants 0.<br>5. BD Level is determined by Weekly Agency Salary and rematched every week.<br>6. Weekly Agency Salary = Total Team Agency Weekly Actual Salary, counted once per underlying Agency.<br>7. Effective Hosts = 4 Valid Days + 10 Valid Hours.</p></div></section>`};
 renderRewards=function(){if(state.demoRole!=='BD')return _renderRewardsBeforeBD();return `<section id="rewards"><div class="panelCard rewardEligibilityCard"><div class="rewardEligibilityHead"><b>Reward Eligibility</b><span class="eligibilityBadge">Qualified</span></div><div class="rewardEligibilityGrid"><div><b>14</b><span>New Hosts</span></div><div><b>12 <small>/ 10</small></b><span>Eligible Hosts</span></div></div></div><div class="rewardbox"><h3>120,000 rewards available to claim.</h3><div class="rewardIntro">Choose 1 of the 2 rewards. Choose Beans to get +50% bonus.</div><div class="rewardcards"><button class="reward ${state.rewardType===1?'on':''}" onclick="state.rewardType=1;render()"><div class="rewardPic">●</div><div class="rewardName">120,000 Coins</div></button><span class="rewardOr">OR</span><button class="reward bean ${state.rewardType===2?'on':''}" onclick="state.rewardType=2;render()"><div class="rewardPic">◆</div><span class="bonusTag">+50%</span><div class="rewardName">180,000 Beans</div></button></div><button class="claim" onclick="toast('Claim successful')">One-click Claim</button><div class="rewardRule">UTC+0 · Claim window: Tuesday 1:00 AM to Sunday 12:00 AM.</div></div><div class="records"><div class="recHead"><span>Statistical Time</span><span>Rewards</span><span>Status</span></div><div class="recRow"><span>Aug 10–16</span><b>120,000 Coins</b><span>Unclaimed</span></div><div class="recRow"><span>Aug 03–09</span><b>142,500 Beans</b><span>Claimed</span></div></div></section>`};
 
+
+/* vBD restore — Agency Team Overview must drill into actionable Host list */
+const bdAgencyHostPools={
+  901:[
+    {id:'10364025',uid:'10364025',name:'Sajjadul Km5312',validDay:5,validTime:21.8,gold:128600,diamonds:38580,status:1,bound:true},
+    {id:'10597320',uid:'10597320',name:'Lina Voice',validDay:3,validTime:8.7,gold:54320,diamonds:16296,status:0,bound:true},
+    {id:'10826491',uid:'10826491',name:'Ayesha Live',validDay:4,validTime:16.2,gold:96740,diamonds:29022,status:1,bound:true}
+  ],
+  902:[
+    {id:'10261488',uid:'10261488',name:'Mariam Star',validDay:6,validTime:27.4,gold:148900,diamonds:44670,status:1,bound:true},
+    {id:'10987211',uid:'10987211',name:'Noor Party',validDay:2,validTime:6.1,gold:57760,diamonds:17328,status:1,bound:true},
+    {id:'10745218',uid:'10745218',name:'Sara Voice',validDay:5,validTime:19.6,gold:112480,diamonds:33744,status:1,bound:true}
+  ],
+  903:[
+    {id:'10673142',uid:'10673142',name:'Rina Live',validDay:4,validTime:14.8,gold:76420,diamonds:22926,status:1,bound:true},
+    {id:'10451807',uid:'10451807',name:'Maya Room',validDay:3,validTime:9.4,gold:48600,diamonds:14580,status:0,bound:true},
+    {id:'10198436',uid:'10198436',name:'Nora Night',validDay:6,validTime:24.1,gold:130250,diamonds:39075,status:1,bound:true}
+  ]
+};
+function bdAgencyForManagementMember(id){
+  const idx=bdManagementMembers.findIndex(x=>x.id===Number(id));
+  return idx>=0?directAgencies[idx]:null;
+}
+function openBDAgencyHosts(memberId){
+  const a=bdAgencyForManagementMember(memberId);if(!a)return;
+  state.selectedAgency={id:a.id,scope:'direct'};
+  openp('agencyTeam');
+}
+const _memberTeamOverviewBeforeBDAgencyHosts=memberTeamOverview;
+memberTeamOverview=function(m){
+  if(state.demoRole==='BD'&&m.role==='Agent'){
+    return `<div class="teamOverviewInline"><div class="teamOverviewLabel"><b>Team Overview</b><span>Current</span></div><div class="teamOverviewMini"><button onclick="openBDAgencyHosts(${m.id})"><b>${m.hosts}</b><span>Hosts</span><i>›</i></button></div></div>`;
+  }
+  return _memberTeamOverviewBeforeBDAgencyHosts(m);
+};
+function bdCurrentAgencyHosts(){
+  const a=selectedAgencyRecord();
+  return (bdAgencyHostPools[a.id]||[]).filter(h=>h.bound!==false);
+}
+function filterBDAgencyHosts(){
+  const q=(document.getElementById('agencyHostSearch')?.value||'').trim().toLowerCase();
+  return bdCurrentAgencyHosts().filter(h=>!q||`${h.name} ${h.id} ${h.uid}`.toLowerCase().includes(q));
+}
+function toggleBDAgencyHostStatus(id){
+  const a=selectedAgencyRecord(),h=(bdAgencyHostPools[a.id]||[]).find(x=>x.id===String(id));if(!h)return;
+  h.status=h.status?0:1;renderAgencyHostListOnly();toast(h.status?'Host unbanned':'Host banned');
+}
+function unbindBDAgencyHost(id){
+  const a=selectedAgencyRecord(),h=(bdAgencyHostPools[a.id]||[]).find(x=>x.id===String(id));if(!h)return;
+  showModal(`<div class="memberActionSheet"><div class="memberActionTitle"><span>Unbind Host</span><b>${h.name}</b><small>Remove this Host from ${a.name}. The user account remains.</small></div><button class="sheetAction danger solid" onclick="closeModal();confirmBDAgencyHostUnbind('${id}')"><b>Confirm Unbind</b></button><button class="sheetAction" onclick="closeModal()"><b>Cancel</b></button></div>`);
+}
+function confirmBDAgencyHostUnbind(id){
+  const a=selectedAgencyRecord(),h=(bdAgencyHostPools[a.id]||[]).find(x=>x.id===String(id));if(!h)return;
+  h.bound=false;renderAgencyHostListOnly();toast('Host unbound');
+}
+function openBDAgencyHostDetails(id){
+  const a=selectedAgencyRecord(),h=(bdAgencyHostPools[a.id]||[]).find(x=>x.id===String(id));if(!h)return;
+  showModal(`<div class="memberActionSheet"><div class="memberActionTitle"><span>Host Details</span><b>${h.name}</b><small>UID ${h.uid} · ${a.name}</small></div><div class="kvGrid" style="margin-top:12px"><div class="kv"><span>Coins</span><b>${fmt(h.gold)}</b></div><div class="kv"><span>Diamonds</span><b>${fmt(h.diamonds)}</b></div><div class="kv"><span>Valid Days</span><b>${h.validDay}</b></div><div class="kv"><span>Valid Hours</span><b>${h.validTime}h</b></div></div></div>`);
+}
+function bdAgencyHostCard(h){
+  const statusBadge=h.status?'':`<span class="status no">Banned</span>`;
+  const statusAction=h.status?`<button class="plainBtn warning" onclick="toggleBDAgencyHostStatus('${h.id}')">Ban</button>`:`<button class="plainBtn success" onclick="toggleBDAgencyHostStatus('${h.id}')">Unban</button>`;
+  return `<article class="memberCard managementMemberCard bdHostMemberCard"><div class="memberHead"><div class="avatar">${h.name[0]}</div><div class="identity"><b>${h.name}</b><small>UID ${h.uid}</small></div>${statusBadge}</div><div class="memberBody"><div class="compactMetricGrid"><div class="compactMetric"><b>${fmt(h.gold)}</b><span>Coins</span></div><div class="compactMetric"><b>${fmt(h.diamonds)}</b><span>Diamonds</span></div><div class="compactMetric"><b>${h.validDay}</b><span>Valid Days</span></div><div class="compactMetric"><b>${h.validTime}h</b><span>Valid Hours</span></div></div><div class="cardActions managementActions"><button class="plainBtn" type="button">Details</button>${statusAction}<button class="plainBtn danger" onclick="unbindBDAgencyHost('${h.id}')">Unbind</button></div></div></article>`;
+}
+const _renderAgencyHostListOnlyBeforeBDAgencyHosts=renderAgencyHostListOnly;
+renderAgencyHostListOnly=function(){
+  if(state.demoRole!=='BD')return _renderAgencyHostListOnlyBeforeBDAgencyHosts();
+  const box=document.getElementById('agencyHostList');if(!box)return;
+  const list=filterBDAgencyHosts();box.innerHTML=list.length?list.map(bdAgencyHostCard).join(''):'<div class="empty">No Hosts in this Agency</div>';
+};
+const _renderAgencyTeamBeforeBDAgencyHosts=renderAgencyTeam;
+renderAgencyTeam=function(){
+  if(state.demoRole!=='BD')return _renderAgencyTeamBeforeBDAgencyHosts();
+  const a=selectedAgencyRecord(),w=selectedTeamWeek(),range=w.range.replace(' ~ ',' / '),list=filterBDAgencyHosts();
+  return `<section class="page bdAgencyHostsPage"><div class="panelCard bdAgencyHostsScope"><div><b>${a.name}</b><small>UID ${a.userId}</small></div><span>${bdCurrentAgencyHosts().length} Hosts · Current</span></div><div class="teamFilterCard"><button class="teamDateRow" onclick="openNaturalWeekPicker(state.teamWeekStart,'applyManagerTeamWeek')"><span>Date (+5)</span><b>${range}</b></button><div class="teamFilterSearch"><input id="agencyHostSearch" placeholder="Search name / UID" oninput="renderAgencyHostListOnly()"><button onclick="renderAgencyHostListOnly()">Search</button></div></div><div class="list" id="agencyHostList">${list.length?list.map(bdAgencyHostCard).join(''):'<div class="empty">No Hosts in this Agency</div>'}</div></section>`;
+};
+const _shellBeforeBDAgencyHosts=shell;
+shell=function(body){
+  if(state.demoRole==='BD'&&current()==='agencyTeam'){
+    return `<div><header class="top"><button class="l" onclick="goBack()">‹</button><span>Agency's Hosts</span><button class="r" onclick="goHome()">×</button></header>${body}</div>`;
+  }
+  return _shellBeforeBDAgencyHosts(body);
+};
+
+
+/* vFinal Team Management — role tabs + 3 standardized card templates */
+const unifiedTeamTabs={
+  BD:['Agency','Hosts'],
+  Admin:['BD','Agency','Hosts'],
+  'Super Admin':['Admin','BD','Agency','Hosts'],
+  Manager:['Super Admin','Admin','BD','Agency','Hosts']
+};
+function teamTabInternalRole(label){return label==='Agency'?'Agent':label==='Hosts'?'Host':label}
+function teamTabDisplayRole(role){return role==='Agent'?'Agency':role==='Host'?'Hosts':role}
+
+/* Demo Host pool used by the Hosts tab and Team Overview drilldowns. */
+const unifiedHostPool=[
+  ...Object.entries(bdAgencyHostPools).flatMap(([agencyId,list])=>list.map((h,i)=>({
+    ...h,
+    hostKey:`${agencyId}-${h.id}`,
+    agencyId:Number(agencyId),
+    agencyName:(directAgencies.find(a=>a.id===Number(agencyId))||{}).name||'Agency',
+    bound:h.bound!==false
+  }))),
+  ...agencyHostSamples.map((h,i)=>({
+    ...h,uid:h.id,hostKey:`sample-${h.id}`,agencyId:1303+i%3,
+    agencyName:['Moonlight Agency','Wave Audio','Sunbeam Studio'][i%3],status:1,bound:true
+  }))
+];
+function hostScopeForRole(){
+  if(state.demoRole==='BD')return unifiedHostPool.filter(h=>[901,902,903].includes(Number(h.agencyId)));
+  if(state.demoRole==='Admin')return unifiedHostPool.filter((h,i)=>i%3!==2);
+  if(state.demoRole==='Super Admin')return unifiedHostPool.filter((h,i)=>i%4!==3);
+  return unifiedHostPool;
+}
+function hostByKey(key){return unifiedHostPool.find(h=>String(h.hostKey)===String(key))}
+function filteredTeamHosts(){
+  const q=(document.getElementById('teamMemberSearch')?.value||'').trim().toLowerCase();
+  return hostScopeForRole().filter(h=>h.bound!==false&&(!q||`${h.name} ${h.uid} ${h.agencyName}`.toLowerCase().includes(q)));
+}
+function openUnifiedHostDetails(key){
+  const h=hostByKey(key);if(!h)return;
+  showModal(`<div class="memberActionSheet"><div class="memberActionTitle"><span>Host Details</span><b>${h.name}</b><small>UID ${h.uid} · ${h.agencyName}</small></div><div class="kvGrid" style="margin-top:12px"><div class="kv"><span>Coins</span><b>${fmt(h.gold)}</b></div><div class="kv"><span>Diamonds</span><b>${fmt(h.diamonds)}</b></div><div class="kv"><span>Valid Days</span><b>${h.validDay}</b></div><div class="kv"><span>Valid Hours</span><b>${h.validTime}h</b></div></div></div>`)
+}
+function toggleUnifiedHostStatus(key){const h=hostByKey(key);if(!h)return;h.status=h.status?0:1;render();toast(h.status?'Host unbanned':'Host banned')}
+function unbindUnifiedHost(key){const h=hostByKey(key);if(!h)return;showModal(`<div class="memberActionSheet"><div class="memberActionTitle"><span>Unbind Host</span><b>${h.name}</b><small>Remove this Host from ${h.agencyName}. The user account remains.</small></div><button class="sheetAction danger solid" onclick="closeModal();confirmUnifiedHostUnbind('${key}')"><b>Confirm Unbind</b></button><button class="sheetAction" onclick="closeModal()"><b>Cancel</b></button></div>`)}
+function confirmUnifiedHostUnbind(key){const h=hostByKey(key);if(!h)return;h.bound=false;render();toast('Host unbound')}
+function unifiedHostCard(h){
+  const statusBadge=h.status?``:`<span class="status no">Banned</span>`;
+  const statusAction=h.status?`<button class="plainBtn warning" onclick="toggleUnifiedHostStatus('${h.hostKey}')">Ban</button>`:`<button class="plainBtn success" onclick="toggleUnifiedHostStatus('${h.hostKey}')">Unban</button>`;
+  return `<article class="memberCard managementMemberCard"><div class="memberHead"><div class="avatar">${h.name[0]}</div><div class="identity"><b>${h.name}</b><small>UID ${h.uid}</small></div>${statusBadge}</div><div class="memberBody"><div class="compactMetricGrid"><div class="compactMetric"><b>${fmt(h.gold)}</b><span>Coins</span></div><div class="compactMetric"><b>${fmt(h.diamonds)}</b><span>Diamonds</span></div><div class="compactMetric"><b>${h.validDay}</b><span>Valid Days</span></div><div class="compactMetric"><b>${h.validTime}h</b><span>Valid Hours</span></div></div><div class="cardActions managementActions"><button class="plainBtn" type="button">Details</button>${statusAction}<button class="plainBtn danger" onclick="unbindUnifiedHost('${h.hostKey}')">Unbind</button></div></div></article>`
+}
+
+/* FINAL Team Management QA — one organization tree, one data source. */
+
+/* Levels shown together with role badges. */
+const qaLevelMap={1001:'Lv2',1101:'Lv2',1102:'Lv1',1201:'Lv2',1202:'Lv1',1203:'Lv1',1301:'Lv2',1302:'Lv1',1303:'Lv1',1304:'Lv2',1305:'Lv1',1306:'Lv1'};
+managementMembers.forEach(m=>m.level=qaLevelMap[m.id]||m.level||'Lv1');
+bdManagementMembers.forEach((m,i)=>m.level=['Lv2','Lv1','Lv1'][i]||'Lv1');
+
+/* Keep the demo organization internally consistent.
+   Admin · Amina Noor -> BD · Aiden Lee -> 4 Agencies. */
+function qaPatchMember(id,patch){const m=managementMembers.find(x=>x.id===id);if(m)Object.assign(m,patch);return m}
+qaPatchMember(1301,{directSuperiorRole:'BD',directSuperiorName:'Aiden Lee',direct:false,managementPath:'Manager · Jaden > Admin · Amina Noor > BD · Aiden Lee > Agent · Aurora Agency',hosts:5,effectiveHosts:4,voice:5,newHosts:1});
+qaPatchMember(1302,{directSuperiorRole:'BD',directSuperiorName:'Aiden Lee',direct:false,managementPath:'Manager · Jaden > Admin · Amina Noor > BD · Aiden Lee > Agent · Starlight Club',hosts:4,effectiveHosts:3,voice:4,newHosts:1});
+qaPatchMember(1303,{directSuperiorRole:'BD',directSuperiorName:'Mia Chen',direct:false,managementPath:'Manager · Jaden > BD · Mia Chen > Agent · Moonlight Agency',hosts:5,effectiveHosts:4,voice:5,newHosts:1});
+qaPatchMember(1304,{directSuperiorRole:'BD',directSuperiorName:'Aiden Lee',direct:false,managementPath:'Manager · Jaden > Admin · Amina Noor > BD · Aiden Lee > Agent · Wave Audio',hosts:5,effectiveHosts:4,voice:5,newHosts:2});
+qaPatchMember(1305,{directSuperiorRole:'BD',directSuperiorName:'Noor Aziz',direct:false,managementPath:'Manager · Jaden > Super Admin · Sora Lee > Admin · Omar Hassan > BD · Noor Aziz > Agent · Sunbeam Studio',hosts:4,effectiveHosts:3,voice:4,newHosts:1});
+if(!managementMembers.some(x=>x.id===1306))managementMembers.push({id:1306,role:'Agent',level:'Lv1',uid:'320246',userId:'SKY246',name:'Skyline Club',code:'SKY6L',status:1,directSuperiorRole:'BD',directSuperiorName:'Aiden Lee',direct:false,managementPath:'Manager · Jaden > Admin · Amina Noor > BD · Aiden Lee > Agent · Skyline Club',gold:980600,diamonds:72840,validHours:96.4,newHosts:1,newAgency:0,agencyCount:1,hosts:4,effectiveHosts:3,voice:4,hostDiamonds:3});
+qaPatchMember(1202,{agencyCount:4,hosts:18,effectiveHosts:14,newHosts:5,newAgency:1});
+qaPatchMember(1101,{agencyCount:4,hosts:18,effectiveHosts:14,newHosts:5,newAgency:1});
+qaPatchMember(1201,{agencyCount:1,hosts:5,effectiveHosts:4,newHosts:1,newAgency:1});
+qaPatchMember(1203,{agencyCount:1,hosts:4,effectiveHosts:3,newHosts:1,newAgency:1});
+qaPatchMember(1102,{agencyCount:1,hosts:4,effectiveHosts:3,newHosts:1,newAgency:1});
+qaPatchMember(1001,{agencyCount:1,hosts:4,effectiveHosts:3,newHosts:1,newAgency:1});
+
+/* BD demo uses the actual three Host rows under each Agency, so its counts and drilldowns also agree. */
+bdManagementMembers.forEach((m,i)=>{
+  const a=directAgencies[i],hosts=(bdAgencyHostPools[a.id]||[]).filter(h=>h.bound!==false);
+  m.hosts=hosts.length;m.voice=hosts.length;m.effectiveHosts=hosts.filter(h=>Number(h.validDay)>=4&&Number(h.validTime)>=10).length;m.newHosts=1;
+});
+
+/* Stable Host demo records for the shared management tree. */
+const qaHostNames=['Luna Waves','Mia Voice','Ayesha Live','Sara Voice','Noor Party','Mariam Star','Rina Live','Nora Night','Lina Voice','Maya Room','Ari Live','Zoya Voice','Nina Star','Lara Room','Sana Party','Raya Live','Mira Voice','Tia Star','Aya Room','Lumi Live','Naya Voice','Rina Star','Maya Live','Sara Night','Amina Voice','Lena Star','Nora Live','Mia Room'];
+const qaTeamHostPool=[];
+function qaBuildAgencyHosts(a,count,effectiveCount,seed){
+  for(let i=0;i<count;i++){
+    const effective=i<effectiveCount,name=qaHostNames[(seed+i)%qaHostNames.length];
+    const gold=58000+((seed+1)*17300)+(i*12480),validDay=effective?4+(i%3):2+(i%2),validTime=effective?12.4+(i%5)*2.7:5.2+(i%3)*1.4;
+    qaTeamHostPool.push({hostKey:`team-${a.id}-${i+1}`,agencyId:a.id,agencyName:a.name,uid:String(76000000+a.id*10+i+1),id:String(76000000+a.id*10+i+1),name,gold,diamonds:Math.round(gold*.3),validDay,validTime:Math.round(validTime*10)/10,status:i%9===8?0:1,bound:true});
+  }
+}
+managementMembers.filter(m=>m.role==='Agent').forEach((a,idx)=>qaBuildAgencyHosts(a,Number(a.hosts||0),Number(a.effectiveHosts||0),idx*4));
+
+function qaManagementAgenciesUnder(m){
+  if(m.role==='Agent')return [m];
+  const prefix=String(m.managementPath||'')+' > ';
+  return managementMembers.filter(x=>x.role==='Agent'&&String(x.managementPath||'').startsWith(prefix));
+}
+function qaHostsForMember(m){
+  const bdIndex=bdManagementMembers.findIndex(x=>x.id===m.id);
+  if(bdIndex>=0){const agencyId=directAgencies[bdIndex]?.id;return unifiedHostPool.filter(h=>Number(h.agencyId)===Number(agencyId)&&h.bound!==false)}
+  const ids=new Set(qaManagementAgenciesUnder(m).map(a=>a.id));
+  return qaTeamHostPool.filter(h=>ids.has(h.agencyId)&&h.bound!==false);
+}
+
+/* Unified lookup lets Host actions work for both the BD pool and the shared management pool. */
+hostByKey=function(key){return qaTeamHostPool.find(h=>String(h.hostKey)===String(key))||unifiedHostPool.find(h=>String(h.hostKey)===String(key))};
+
+/* Current-role Tabs and Host tab are generated from the exact same organization scope. */
+function roleScopedManagementMembersFinal(){
+  if(state.demoRole==='BD')return bdManagementMembers;
+  const c=demoConfig();if(c.role==='Manager')return managementMembers;
+  return managementMembers.filter(m=>String(m.managementPath||'').includes(c.pathNeedle));
+}
+hostScopeForRole=function(){
+  if(state.demoRole==='BD')return unifiedHostPool.filter(h=>[901,902,903].includes(Number(h.agencyId))&&h.bound!==false);
+  const ids=new Set(roleScopedManagementMembersFinal().filter(m=>m.role==='Agent').map(a=>a.id));
+  return qaTeamHostPool.filter(h=>ids.has(h.agencyId)&&h.bound!==false);
+};
+managementRoleList=function(){
+  if(state.teamManagementRole==='Host')return filteredTeamHosts();
+  const q=(document.getElementById('teamMemberSearch')?.value||'').trim().toLowerCase();
+  return roleScopedManagementMembersFinal().filter(m=>m.role===state.teamManagementRole&&`${m.name} ${m.uid} ${m.role}`.toLowerCase().includes(q));
+};
+
+/* Four business fields per card. */
+memberRoleMetricRows=function(m){
+  if(m.role==='Agent')return [
+    ['Coins',fmt(weeklyMemberMetric(m,'gold'))],
+    ['Active Hosts',weeklyMemberMetric(m,'voice')],
+    ['Effective Hosts',weeklyMemberMetric(m,'effectiveHosts')],
+    ['New Hosts',weeklyMemberMetric(m,'newHosts')]
+  ];
+  return [
+    ['Coins',fmt(weeklyMemberMetric(m,'gold'))],
+    ['New Agency',weeklyMemberMetric(m,'newAgency')],
+    ['Effective Hosts',weeklyMemberMetric(m,'effectiveHosts')],
+    ['New Hosts',weeklyMemberMetric(m,'newHosts')]
+  ];
+};
+
+/* Team Overview counts are derived from the same member/host records shown in Tabs and drilldowns. */
+teamOverviewAgencyList=function(m){return qaManagementAgenciesUnder(m).filter(a=>a.id!==m.id)};
+memberTeamOverviewRows=function(m){
+  const descendants=managementDescendants(m),countRole=r=>descendants.filter(x=>x.role===r).length;
+  const agencies=qaManagementAgenciesUnder(m).filter(a=>a.id!==m.id).length,hosts=qaHostsForMember(m).length;
+  if(m.role==='Manager')return [['Super Admin',countRole('Super Admin')],['Admin',countRole('Admin')],['BD',countRole('BD')],['Agency',agencies],['Hosts',hosts]];
+  if(m.role==='Super Admin')return [['Admin',countRole('Admin')],['BD',countRole('BD')],['Agency',agencies],['Hosts',hosts]];
+  if(m.role==='Admin')return [['BD',countRole('BD')],['Agency',agencies],['Hosts',hosts]];
+  if(m.role==='BD')return [['Agency',agencies],['Hosts',hosts]];
+  if(m.role==='Agent')return [['Hosts',hosts]];
+  return [];
+};
+memberTeamOverview=function(m){
+  const rows=memberTeamOverviewRows(m);if(!rows.length)return '';
+  return `<div class="teamOverviewInline"><div class="teamOverviewLabel"><b>Team Overview · Current</b></div><div class="teamOverviewMini">${rows.map(([label,value])=>`<button onclick="openTeamOverview(${m.id},'${label}')"><b>${value}</b><span>${label}</span><i>›</i></button>`).join('')}</div></div>`;
+};
+
+/* Role badge includes level. Details remains a placeholder only. */
+function relationForMember(m,root=null){
+  const c=demoConfig(),rootRole=root?.role||c.role,rootName=root?.name||c.name;
+  if(m.directSuperiorRole===rootRole&&m.directSuperiorName===rootName)return {text:'Direct',direct:true};
+  const parts=String(m.managementPath||'').split(' > '),rootToken=`${rootRole} · ${rootName}`,idx=parts.indexOf(rootToken);
+  if(idx>=0&&parts[idx+1]){
+    const hop=parts[idx+1];
+    if(hop===`${m.role} · ${m.name}`)return {text:'Direct',direct:true};
+    return {text:`via ${hop}`,direct:false};
+  }
+  return {text:`via ${m.directSuperiorRole} · ${m.directSuperiorName}`,direct:false};
+}
+function relationForHost(h,root=null){
+  if(root?.role==='Agent'&&String(root.name)===String(h.agencyName))return {text:'Direct',direct:true};
+  return {text:`via Agency · ${h.agencyName}`,direct:false};
+}
+managementMemberCard=function(m,relationRoot=null){
+  if(m.role==='Host')return unifiedHostCard(m,relationRoot);
+  const shownRole=m.role==='Agent'?'Agency':m.role,level=m.level||'Lv1',rel=relationForMember(m,relationRoot);
+  const statusAction=m.status?`<button class="plainBtn warning" onclick="toggleManagementMemberStatus(${m.id})">Ban</button>`:`<button class="plainBtn success" onclick="toggleManagementMemberStatus(${m.id})">Unban</button>`;
+  return `<article class="memberCard managementMemberCard"><div class="memberHead"><div class="avatar">${m.name[0]}</div><div class="identity"><b>${m.name}<span class="inlineRoleBadge">${shownRole} · ${level}</span></b><small>UID ${m.uid}</small><small class="relationHint ${rel.direct?'direct':'indirect'}">${rel.text}</small></div><span class="status ${memberStatusClass(m)}">${memberStatus(m)}</span></div><div class="memberBody">${memberRoleMetrics(m)}${memberTeamOverview(m)}<div class="cardActions managementActions"><button class="plainBtn" type="button">Details</button>${statusAction}<button class="plainBtn danger" onclick="confirmUnbindManagementMember(${m.id})">Unbind</button></div></div></article>`;
+};
+const _unifiedHostCardRelationBase=unifiedHostCard;
+unifiedHostCard=function(h,relationRoot=null){
+  const statusBadge=h.status?``:`<span class="status no">Banned</span>`,rel=relationForHost(h,relationRoot);
+  const statusAction=h.status?`<button class="plainBtn warning" onclick="toggleUnifiedHostStatus('${h.hostKey}')">Ban</button>`:`<button class="plainBtn success" onclick="toggleUnifiedHostStatus('${h.hostKey}')">Unban</button>`;
+  return `<article class="memberCard managementMemberCard"><div class="memberHead"><div class="avatar">${h.name[0]}</div><div class="identity"><b>${h.name}</b><small>UID ${h.uid}</small><small class="relationHint ${rel.direct?'direct':'indirect'}">${rel.text}</small></div>${statusBadge}</div><div class="memberBody"><div class="compactMetricGrid"><div class="compactMetric"><b>${fmt(h.gold)}</b><span>Coins</span></div><div class="compactMetric"><b>${fmt(h.diamonds)}</b><span>Diamonds</span></div><div class="compactMetric"><b>${h.validDay}</b><span>Valid Days</span></div><div class="compactMetric"><b>${h.validTime}h</b><span>Valid Hours</span></div></div><div class="cardActions managementActions"><button class="plainBtn" type="button">Details</button>${statusAction}<button class="plainBtn danger" onclick="unbindUnifiedHost('${h.hostKey}')">Unbind</button></div></div></article>`;
+};
+
+/* Team Management: role tabs first, no redundant scope sentence. */
+renderTeam=function(){
+  const c=demoConfig(),tabs=unifiedTeamTabs[c.role]||[],w=selectedTeamWeek(),topRange=w.range.replace(' ~ ',' / ');
+  const currentLabel=teamTabDisplayRole(state.teamManagementRole);
+  if(!tabs.includes(currentLabel))state.teamManagementRole=teamTabInternalRole(tabs[0]);
+  const list=managementRoleList();
+  return `<section class="page"><div class="managementRoleTabs">${tabs.map(label=>{const internal=teamTabInternalRole(label);return `<button class="${state.teamManagementRole===internal?'active':''}" onclick="state.teamManagementRole='${internal}';render()">${label}</button>`}).join('')}</div><div class="teamFilterCard"><button class="teamDateRow" onclick="openNaturalWeekPicker(state.teamWeekStart,'applyManagerTeamWeek')"><span>Date${c.role==='BD'?' (+5)':''}</span><b>${topRange}</b></button><div class="teamFilterSearch"><input id="teamMemberSearch" placeholder="Search name / UID" oninput="renderTeamListOnly()"><button onclick="renderTeamListOnly()">Search</button></div></div><div class="list" id="teamList">${list.length?list.map(m=>state.teamManagementRole==='Host'?unifiedHostCard(m):managementMemberCard(m)).join(''):'<div class="empty">No members in this role scope</div>'}</div></section>`;
+};
+renderTeamListOnly=function(){
+  if(current()!=='team')return;const box=document.getElementById('teamList');if(!box)return;
+  const list=managementRoleList();box.innerHTML=list.length?list.map(m=>state.teamManagementRole==='Host'?unifiedHostCard(m):managementMemberCard(m)).join(''):'<div class="empty">No members in this role scope</div>';
+};
+
+/* Team Overview drilldown: same underlying list, simpler non-repetitive header. */
+overviewHostsForMember=function(m){return qaHostsForMember(m)};
+renderTeamOverview=function(){
+  const m=selectedManagementMember(),type=state.selectedOverviewType;let list=[];
+  if(type==='Hosts')list=overviewHostsForMember(m);
+  else if(type==='Agency')list=teamOverviewAgencyList(m);
+  else list=teamOverviewManagementList(m,type);
+  const shownRole=m.role==='Agent'?'Agency':m.role,level=m.level||'Lv1';
+  return `<section class="page"><div class="panelCard overviewScopeCard overviewIdentityCard"><div class="overviewIdentity"><div class="avatar">${m.name[0]}</div><div class="overviewIdentityText"><b>${m.name}</b><small>${shownRole} · ${level}</small></div></div></div><div class="sectionHead teamOverviewListHead"><b>Current team members</b></div><div class="list teamDetailList">${list.length?(type==='Hosts'?list.map(h=>unifiedHostCard(h,m)).join(''):list.map(x=>managementMemberCard(x,m)).join('')):'<div class="empty">No team members</div>'}</div></section>`;
+};
+
+/* Set the correct first tab whenever the demo role changes. */
+setDemoRole=function(role){
+  state.demoRole=role;const c=demoConfig(),tabs=unifiedTeamTabs[c.role]||[];
+  state.teamManagementRole=teamTabInternalRole(tabs[0]||'Agency');
+  state.inviteType=c.invite[0][0];state.reviewApplyType=c.review[0];state.reviewApplyStatus='All status';
+  state.analysisTeamFilter='All';state.analysisTab='total';state.analysisQuery='';hist=['home'];
+  if(paymentProfiles?.['Bank Card']){paymentProfiles['Bank Card'].name=c.paymentName;paymentProfiles['Bank Card'].email=c.paymentEmail}
+  render();
+};
+
+
+/* Home section headers: actions sit on the same line as the white section title. */
+renderInviteCard=function(){
+  const c=demoConfig(),d=inviteData(),tabs=c.invite,title=c.role==='BD'?'Invite Agencies':'Invite Team';
+  return `<div class="sectionHead homeSectionHead inviteSectionHead"><b>${title}</b><button class="whatsappConfigBtn sectionHeadAction" onclick="event.stopPropagation();openWA()"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.149-.173.198-.297.298-.495.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>WhatsApp</button></div><div class="panelCard inviteReviewCard"><div class="inviteTypeTabs">${tabs.map(([k,label])=>`<button class="${state.inviteType===k?'active':''}" onclick="state.inviteType='${k}';render()">${label}</button>`).join('')}</div><div class="inviteCompactTop"><div class="inviteLinkBlock"><span>${d.label} · Invitation Link</span><div class="inviteLinkInline"><b>${d.link}</b><button class="copyIconBtn" onclick="copy('${d.link}')">⧉</button></div></div></div><div class="inviteActionGrid"><div class="inviteCodeItem"><span class="inviteActionIcon">#</span><span><b>Code</b><span class="inviteCodeValueInline"><small>${d.code}</small><button class="copyIconBtn" onclick="copy('${d.code}')">⧉</button></span></span></div><button onclick="openp('reviewApply')"><span class="inviteActionIcon">✓</span><span><b>Review Apply</b><small>${c.role==='BD'?'Review Agency / Host applications':c.review.join(' / ')}</small></span></button></div></div>`;
+};
+
+renderHome=function(){
+  const p=periodData(),c=demoConfig(),isBD=c.role==='BD';
+  const workingBody=isBD
+    ? `${workingGridBD(p.direct)}`
+    : `<div class="workingGroupTitle">My Agency</div>${workingGridDirect(p.direct)}<div class="workingGroupTitle">Team Agency</div>${workingGridTeam(p.team)}`;
+  const tools=isBD
+    ? `<div class="toolGrid"><button class="toolTile" onclick="openp('analysis')"><span class="toolTileIcon">▥</span><b>Data Analysis</b></button><button class="toolTile" onclick="openp('salary')"><span class="toolTileIcon">$</span><b>Salary Bill</b></button><button class="toolTile" onclick="openp('rewards')"><span class="toolTileIcon">✦</span><b>Invitation Rewards</b></button></div>`
+    : `<div class="toolGrid"><button class="toolTile" onclick="openp('analysis')"><span class="toolTileIcon">▥</span><b>Data Analysis</b></button><button class="toolTile" onclick="openp('salary')"><span class="toolTileIcon">$</span><b>Salary Bill</b></button><div class="toolTile toolTileStatic"><span class="toolTileIcon">✦</span><b>Invitation Rewards</b></div><div class="toolTile toolTileStatic"><span class="toolTileIcon">✓</span><b>Review Info</b></div><div class="toolTile toolTileStatic"><span class="toolTileIcon">◇</span><b>Send Props</b></div></div>`;
+  return `<section class="page">${roleDemoSwitch()}<div class="roleCard"><div class="roleMain"><div class="roleAvatar">${c.avatar}</div><div><div class="roleNameLine"><b>${c.name}</b><span class="levelBadge">${isBD?'BD '+c.level:c.role+' · '+c.level}</span></div><div class="roleId">ID ${c.id}</div></div><span class="roleChevron">›</span></div></div>${renderInviteCard()}<div class="sectionHead homeSectionHead teamWorkingSectionHead"><b>Team working data</b><button class="homeSectionAction" onclick="openp('team')">Team Management ›</button></div><div class="panelCard teamWorkingCard"><div class="billingPeriodSwitch"><button class="${state.period==='current'?'active':''}" onclick="switchPeriod('current')">Current Billing Cycle</button><button class="${state.period==='last'?'active':''}" onclick="switchPeriod('last')">Last Billing Cycle</button></div><div class="teamWorkingMeta"><b>${p.period} <span class="workingTimezone">(UTC+0)</span></b><small>${p.update}</small></div>${workingBody}</div><div class="sectionHead"><b>Tools</b></div>${tools}</section>`;
+};
+
 setDemoRole(state.demoRole);
 
 </script>
+
+<style>
+/* FINAL Team Management visual QA */
+.managementRoleTabs{justify-content:flex-start!important;gap:20px!important;padding-left:18px!important;padding-right:18px!important}
+.managementRoleTabs button{flex:0 0 auto!important}
+.teamOverviewLabel{justify-content:flex-start!important;margin:0 1px 6px!important}
+.teamOverviewLabel b{font-size:8.2px!important;color:#d7cadb!important}
+.overviewIdentityCard{padding:12px 14px!important;margin-bottom:12px!important}
+.overviewIdentity{display:grid;grid-template-columns:42px minmax(0,1fr);gap:10px;align-items:center}
+.overviewIdentity .avatar{width:42px;height:42px;font-size:13px}
+.overviewIdentityText{min-width:0}.overviewIdentityText b{display:block!important;margin:0!important;color:#f4eaf5!important;font-size:12px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.overviewIdentityText small{display:block!important;margin-top:5px!important;color:#f2d071!important;font-size:8px!important;font-weight:800}
+.teamOverviewListHead{margin:18px 2px 10px!important}.teamOverviewListHead b{font-size:13px!important}.teamOverviewListHead small{display:none!important}
+/* Home section hierarchy: title outside card, action aligned right. */
+.homeSectionHead{margin:22px 2px 10px!important;min-height:36px}
+.homeSectionHead>b{color:#f7efff!important;font-size:15px!important}
+.homeSectionHead .sectionHeadAction,.homeSectionAction{margin-left:auto;flex:0 0 auto}
+.homeSectionAction{height:32px;padding:0 11px;border:0;border-radius:9px;background:linear-gradient(#fff1a9,#ffbd1d);color:#6a3600;font-size:8.5px;font-weight:900;box-shadow:0 4px 10px rgba(255,189,29,.14)}
+.inviteSectionHead .whatsappConfigBtn{height:32px;padding:0 11px;border-radius:9px}
+.inviteSectionHead .whatsappConfigBtn svg{width:16px;height:16px}
+.inviteCompactTop{grid-template-columns:minmax(0,1fr)!important}
+.teamWorkingCard{margin-top:0!important}
+</style>
+
+<script>
+/* FINAL Data Analysis cleanup — concise scope, no branch role tabs, compact trend identity. */
+analysisCandidateList=function(kind){
+  let list=roleAnalysisLists(kind);
+  const q=state.analysisQuery.trim().toLowerCase();
+  if(q)list=list.filter(a=>`${a.name} ${a.userId} ${a.uid} ${a.code||''}`.toLowerCase().includes(q));
+  return [...list].sort((a,b)=>analysisFilter.order==='Descending'?analysisMetricResult(b).raw-analysisMetricResult(a).raw:analysisMetricResult(a).raw-analysisMetricResult(b).raw);
+};
+
+renderAnalysis=function(){
+  const c=demoConfig();
+  if(c.role==='BD'){
+    const tabs=[['total','Total Data'],['agency','My Agency']];let body='';
+    if(state.analysisTab==='team')state.analysisTab='total';
+    if(state.analysisTab==='total'){
+      body=`<div class="dataCaption"><strong>This Week's Data</strong> · Excludes today · refreshes daily at 00:30 (UTC-11).</div>
+      <div class="panelCard analysisProductionGrid cleanProductionGrid">
+        <div><b>3</b><span>Agency</span></div><div><b>91</b><span>Hosts</span></div>
+        <div><b>8,460,320</b><span>Coins</span></div><div><b>1,842.5h</b><span>Valid Hours</span></div>
+        <div><b>14</b><span>New Hosts</span></div><div><b>62</b><span>Effective Hosts</span></div>
+        <div><b>54</b><span>Active Hosts</span></div><div><b>47</b><span>Gifted Hosts</span></div>
+      </div>
+      <div class="sectionHead"><b>Yesterday's Data</b></div>
+      <div class="panelCard analysisProductionGrid">
+        <div><b>1,260,800</b><span>Coins</span><small class="pos">↑ 12.6% vs day before</small></div>
+        <div><b>266.5h</b><span>Valid Hours</span><small class="pos">↑ 8.4% vs day before</small></div>
+        <div><b>54</b><span>Active Hosts</span><small class="neg">↓ 3.6% vs day before</small></div>
+        <div><b>47</b><span>Gifted Hosts</span><small class="pos">↑ 6.8% vs day before</small></div>
+      </div>`;
+    }else{
+      body=`<div class="dataCaption"><strong>My Agency</strong> · Agencies directly managed by the current BD · excludes today.</div>${analysisListMarkup('agency')}`;
+    }
+    return `<section class="page"><div class="analysisTabsWrap"><div class="analysisTabs">${tabs.map(x=>`<button class="${state.analysisTab===x[0]?'active':''}" onclick="setAnalysisTab('${x[0]}')">${x[1]}</button>`).join('')}</div><button class="analysisHelpBtn" onclick="openp('rules')">?</button></div>${body}</section>`;
+  }
+
+  const a=roleAnalysisSummary[state.demoRole],tabs=[['total','Total Data'],['agency','My Agency'],['team','Team Agency']];let body='';
+  if(state.analysisTab==='total'){
+    const t=totalAnalysisScope();
+    body=`<div class="dataCaption"><strong>This Week's Data</strong> · Same Agency counted once.</div>
+    <div class="panelCard analysisOrgGrid"><div><b>${a.management}</b><span>Management Team</span><small>${a.breakdown}</small></div><div><b>${a.agency}</b><span>Agency</span><small>${a.agencyNote}</small></div><div><b>${a.host}</b><span>Hosts</span></div></div>
+    <div class="sectionHead"><b>Production Data</b></div>
+    <div class="panelCard analysisProductionGrid cleanProductionGrid">
+      <div><b>${a.coins}</b><span>Coins</span></div><div><b>${a.hours}</b><span>Valid Hours</span></div>
+      <div><b>${a.newHosts}</b><span>New Hosts</span></div><div><b>${a.effective}</b><span>Effective Hosts</span></div>
+      <div><b>${a.active}</b><span>Active Hosts</span></div><div><b>${a.gifted}</b><span>Gifted Hosts</span></div>
+    </div>
+    <div class="sectionHead analysisCompareHead"><b>Data comparison</b><button onclick="openAnalysisTrend('total')">Details ›</button></div>${chart(t.analysis.trend.coins,'','Coins')}`;
+  }else if(state.analysisTab==='agency'){
+    body=`<div class="dataCaption"><strong>My Agency</strong> · Directly managed Agencies · excludes today.</div>${analysisListMarkup('agency')}`;
+  }else{
+    state.analysisTeamFilter='All';
+    body=`<div class="dataCaption"><strong>Team Agency</strong> · Agencies reached through lower management branches · excludes today.</div>${analysisListMarkup('team')}`;
+  }
+  return `<section class="page"><div class="analysisTabsWrap"><div class="analysisTabs">${tabs.map(x=>`<button class="${state.analysisTab===x[0]?'active':''}" onclick="setAnalysisTab('${x[0]}')">${x[1]}</button>`).join('')}</div><button class="analysisHelpBtn" onclick="openp('rules')">?</button></div>${body}</section>`;
+};
+
+function trendIdentityData(){
+  const c=demoConfig(),s=state.analysisSelected;
+  if(!s||s.scope==='total')return {name:c.name,role:c.role,level:c.level||'Lv1',avatar:c.avatar||c.name[0]};
+  return {name:s.name,role:'Agency',level:s.level||'Lv1',avatar:(s.name||'A')[0]};
+}
+renderTrend=function(){
+  const d=trendData(),id=trendIdentityData(),metrics=[['coins','Coins'],['valid','Valid Hours'],['active','Active Hosts'],['gifted','Gifted Hosts']];
+  return `<section class="page">
+    <div class="panelCard trendIdentityCard"><div class="overviewIdentity"><div class="avatar">${id.avatar}</div><div class="overviewIdentityText"><b>${id.name}</b><small>${id.role} · ${id.level}</small></div></div></div>
+    <div class="pageTabs">${metrics.map(([k,l])=>`<button class="${state.trendMetric===k?'active':''}" onclick="state.trendMetric='${k}';render()">${l}</button>`).join('')}</div>
+    <div class="dataCaption">Last 3 completed/current weekly views</div>${chart(d.values,d.unit,d.label)}
+  </section>`;
+};
+
+render();
+</script>
+<style>
+.workingTimezone{font-size:9px;color:#a99cad;font-weight:700}
+.cleanProductionGrid small{display:none!important}
+.trendIdentityCard{padding:12px 14px;margin-bottom:12px}
+</style>
+
 </body>
 </html>
