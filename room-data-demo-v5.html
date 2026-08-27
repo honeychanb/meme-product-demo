@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Room Data</title>
+<style>
+:root{
+  --bg:#0d0612;
+  --bg2:#16091d;
+  --card:#21102b;
+  --card2:#2a1733;
+  --card3:#35223c;
+  --line:rgba(255,255,255,.08);
+  --line-gold:rgba(242,208,113,.20);
+  --text:#f7eff9;
+  --muted:#93859b;
+  --gold:#f2d071;
+  --green:#71dfaa;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);font-family:Arial,sans-serif;color:var(--text)}
+body{display:flex;justify-content:center}
+button,input{font:inherit}
+.app{
+  width:100%;max-width:430px;min-height:100vh;
+  background:radial-gradient(circle at 50% -8%,#31123f 0,#17091f 28%,#0d0612 64%);
+  padding-bottom:34px
+}
+.top{
+  height:58px;display:grid;grid-template-columns:54px 1fr 54px;align-items:center;
+  position:sticky;top:0;z-index:20;background:rgba(20,8,27,.94);
+  border-bottom:1px solid rgba(242,208,113,.10);backdrop-filter:blur(12px)
+}
+.top h1{margin:0;text-align:center;font-size:18px;font-weight:900}
+.iconBtn{
+  width:36px;height:36px;margin:auto;border:0;border-radius:50%;
+  display:grid;place-items:center;background:#2d1835;color:#d7cbdc;font-size:26px
+}
+.page{padding:14px 16px 30px}
+.sectionTitle{
+  margin:16px 2px 8px;display:flex;align-items:center;justify-content:space-between;gap:10px
+}
+.sectionTitle b{font-size:13px}.sectionTitle span{font-size:8px;color:var(--muted)}
+.sectionTitleRight{display:flex;align-items:center;gap:7px}
+.helpBtn{
+  width:22px;height:22px;border-radius:50%;border:1px solid rgba(242,208,113,.28);
+  background:rgba(242,208,113,.07);color:var(--gold);font-size:11px;font-weight:900;
+  display:grid;place-items:center;padding:0
+}
+
+.roomCard{
+  display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:center;
+  padding:12px;border:1px solid var(--line);border-radius:15px;background:rgba(33,16,43,.92)
+}
+.roomCover{
+  width:72px;height:72px;border-radius:12px;
+  background:
+    radial-gradient(circle at 30% 25%,rgba(255,255,255,.22),transparent 25%),
+    linear-gradient(145deg,#8e4caf,#54215f 55%,#2f1438);
+  border:1px solid rgba(242,208,113,.18);display:grid;place-items:center;
+  color:#ffe59a;font-size:25px;font-weight:900
+}
+.roomInfo{min-width:0}
+.roomInfo b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.roomInfo span{display:block;margin-top:6px;color:#a697ad;font-size:9px}
+.roomInfo span strong{color:#d9cedc;font-weight:800}
+
+.timeCard{
+  margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:15px;
+  background:rgba(33,16,43,.92)
+}
+.modeTabs{
+  display:flex;gap:6px;padding:4px;border-radius:10px;background:#170b1f
+}
+.modeTabs button{
+  flex:1;height:34px;border:0;border-radius:8px;background:transparent;
+  color:#8e8195;font-size:9px;font-weight:900
+}
+.modeTabs button.active{
+  background:linear-gradient(180deg,#6d4b25,#8a5725);color:#fff0b0;
+  box-shadow:inset 0 0 0 1px rgba(242,208,113,.28)
+}
+.timeSelector{
+  width:100%;min-height:48px;margin-top:8px;padding:0 2px;border:0;border-top:1px solid var(--line);
+  background:transparent;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left
+}
+.timeSelector span{display:block;color:#918398;font-size:8px;font-weight:800}
+.timeSelector b{display:block;margin-top:4px;color:#d9cedd;font-size:10px}
+.timeSelector i{font-style:normal;color:var(--gold);font-size:18px}
+
+.dataCard{
+  overflow:hidden;border:1px solid var(--line);border-radius:15px;background:rgba(33,16,43,.92)
+}
+.micHero{
+  min-height:112px;display:flex;align-items:center;justify-content:center;flex-direction:column;
+  background:linear-gradient(145deg,#45204f,#2d1537);border-bottom:1px solid var(--line)
+}
+.micHero b{font-size:38px;color:var(--gold);line-height:1}.micHero span{margin-top:10px;font-size:11px;font-weight:900}
+.ownerMetric{
+  min-height:64px;padding:13px 14px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:12px
+}
+.ownerMetric span{color:#a696ad;font-size:9px;font-weight:800}
+.ownerMetric b{color:var(--gold);font-size:18px}
+.metricGrid{display:grid;grid-template-columns:1fr 1fr}
+.metric{
+  min-height:78px;padding:13px;border-bottom:1px solid var(--line)
+}
+.metric:nth-child(odd){border-right:1px solid var(--line)}
+.metric:nth-last-child(-n+2){border-bottom:0}
+.metric b{display:block;color:var(--gold);font-size:19px}
+.metric span{display:block;margin-top:7px;color:#a696ad;font-size:8.5px;line-height:1.35;font-weight:700}
+
+.rankCard{
+  border:1px solid var(--line);border-radius:15px;background:rgba(33,16,43,.92);overflow:hidden
+}
+.rankTabs{
+  display:flex;gap:18px;padding:0 14px;border-bottom:1px solid var(--line)
+}
+.rankTabs button{
+  height:46px;border:0;border-bottom:2px solid transparent;background:transparent;
+  color:#918398;font-size:10px;font-weight:900;padding:0 2px
+}
+.rankTabs button.active{color:var(--gold);border-bottom-color:var(--gold)}
+.rankList{padding:8px}
+.rankRow{
+  min-height:64px;display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:center;
+  padding:9px 10px;margin-bottom:7px;border:1px solid var(--line);border-radius:10px;background:#392b3f
+}
+.rankRow:last-child{margin-bottom:0}
+.rankAvatar{
+  width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:900;
+  background:linear-gradient(145deg,#cf915d,#9655c4);color:#fff
+}
+.rankMeta{min-width:0}
+.rankMeta b{display:block;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rankMeta span{display:block;margin-top:5px;color:#b8aabd;font-size:8px}
+.rankValue{text-align:right}
+.rankValue b{display:block;color:#ffe586;font-size:13px}.rankValue span{display:block;margin-top:4px;color:#8f8296;font-size:7px}
+
+.overlay{
+  position:fixed;inset:0;z-index:50;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.67)
+}
+.overlay.show{display:flex}
+.sheet{
+  width:min(430px,100%);background:#170b1f;border:1px solid rgba(242,208,113,.12);
+  border-radius:20px 20px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom))
+}
+.handle{width:42px;height:4px;border-radius:99px;background:#5c4a62;margin:0 auto 12px}
+.sheetHead{display:grid;grid-template-columns:36px 1fr 36px;align-items:center}
+.sheetHead b{text-align:center;font-size:14px}.sheetHead button{border:0;background:transparent;color:#cfc2d3;font-size:22px}
+.monthNav{display:flex;align-items:center;justify-content:space-between;margin:13px 0 10px}
+.monthNav button{width:36px;height:34px;border:0;border-radius:9px;background:#2c1834;color:#e2d7e5;font-size:18px}
+.monthNav b{font-size:12px}
+.weekdays,.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.weekdays span{text-align:center;padding:4px 0;color:#786b7f;font-size:8px}
+.day{
+  height:38px;border:0;border-radius:9px;background:transparent;color:#d8cddc;font-size:10px
+}
+.day.out{color:#554a59}
+.day.today{box-shadow:inset 0 0 0 1px rgba(242,208,113,.35)}
+.day.selected{background:#64406e;color:#fff0b3;font-weight:900}
+.day.inWeek{background:rgba(104,63,113,.45);border-radius:0}
+.day.weekStart{border-radius:9px 0 0 9px}
+.day.weekEnd{border-radius:0 9px 9px 0}
+.selectedBar{
+  margin-top:10px;padding:9px 10px;border-radius:10px;background:#21132a;text-align:center;
+  color:#9f92a5;font-size:9px
+}
+.selectedBar b{color:var(--gold)}
+.sheetActions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.sheetActions button{height:42px;border:0;border-radius:10px;background:#3a2b40;color:#e4dbe7;font-size:10px;font-weight:900}
+.sheetActions .confirm{background:linear-gradient(#fff0a2,#ffbd17);color:#5a2a00}
+
+.rulesPage{display:none;padding:14px 16px 30px}
+.rulesPage.active{display:block}
+.rulesCard{border:1px solid var(--line);border-radius:15px;background:rgba(33,16,43,.92);overflow:hidden}
+.ruleRow{padding:13px 14px;border-bottom:1px solid var(--line)}
+.ruleRow:last-child{border-bottom:0}
+.ruleRow b{display:block;color:var(--gold);font-size:11px}
+.ruleRow p{margin:6px 0 0;color:#b3a4b9;font-size:9px;line-height:1.55}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <button class="iconBtn" id="backBtn" onclick="goBack()">‹</button>
+    <h1 id="pageTitle">Room data</h1>
+    <button class="iconBtn">×</button>
+  </header>
+
+  <main class="page">
+    <div class="roomCard">
+      <div class="roomCover">M</div>
+      <div class="roomInfo">
+        <b>Moonlight Voice Room</b>
+        <span>Room ID: <strong>382994</strong></span>
+      </div>
+    </div>
+
+    <div class="timeCard">
+      <div class="modeTabs">
+        <button id="weekTab" class="active" onclick="setMode('week')">Week</button>
+        <button id="dayTab" onclick="setMode('day')">Day</button>
+      </div>
+      <button class="timeSelector" onclick="openPicker()">
+        <div><span id="timeLabel">Selected week</span><b id="timeValue"></b></div>
+        <i>›</i>
+      </button>
+    </div>
+
+    <div class="sectionTitle">
+      <b>Room data</b>
+      <div class="sectionTitleRight"><span id="periodHint"></span><button class="helpBtn" onclick="openRules()">?</button></div>
+    </div>
+    <section class="dataCard">
+      <div class="micHero"><b id="ownerMicValue">0</b><span>Owner Mic Time</span></div>
+      <div class="ownerMetric"><span>Room Mic Time</span><b id="roomMicValue">0</b></div>
+      <div class="metricGrid">
+        <div class="metric"><b id="coinsValue">0</b><span>Total coins<br>(Lucky gift included)</span></div>
+        <div class="metric"><b id="luckyCoinsValue">0</b><span>Lucky gift coins</span></div>
+        <div class="metric"><b id="diamondValue">0</b><span>Total gift diamond</span></div>
+        <div class="metric"><b id="luckyDiamondValue">0</b><span>Total lucky gift diamond</span></div>
+      </div>
+    </section>
+
+    <div class="sectionTitle"><b>Top 10 Ranking</b></div>
+    <section class="rankCard">
+      <div class="rankTabs">
+        <button id="senderTab" class="active" onclick="setRank('senders')">Gift Senders</button>
+        <button id="receiverTab" onclick="setRank('receivers')">Gift Receivers</button>
+      </div>
+      <div id="rankList" class="rankList"></div>
+    </section>
+  </main>
+
+  <main id="rulesPage" class="rulesPage">
+    <div class="rulesCard">
+      <div class="ruleRow"><b>Room Mic Time</b><p>Total on-mic time of all users in the room during the selected period, including the room owner. Concurrent users are accumulated separately.</p></div>
+      <div class="ruleRow"><b>Owner Mic Time</b><p>Total on-mic time of the room owner during the selected period.</p></div>
+      <div class="ruleRow"><b>Total coins</b><p>Total gift Coins received in the room during the selected period, including Lucky Gift Coins.</p></div>
+      <div class="ruleRow"><b>Lucky gift coins</b><p>Total Coins generated by Lucky Gifts during the selected period.</p></div>
+      <div class="ruleRow"><b>Total gift diamond</b><p>Total gift Diamonds generated in the room during the selected period.</p></div>
+      <div class="ruleRow"><b>Total lucky gift diamond</b><p>Total Diamonds generated by Lucky Gifts during the selected period.</p></div>
+      <div class="ruleRow"><b>Gift Senders</b><p>Top 10 users ranked by gift Coins sent in the room during the selected period.</p></div>
+      <div class="ruleRow"><b>Gift Receivers</b><p>Top 10 users ranked by gift Coins received in the room during the selected period.</p></div>
+    </div>
+  </main>
+</div>
+
+<div id="pickerOverlay" class="overlay" onclick="if(event.target===this)closePicker()">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="handle"></div>
+    <div class="sheetHead"><span></span><b id="pickerTitle">Select Week</b><button onclick="closePicker()">×</button></div>
+    <div class="monthNav"><button onclick="shiftMonth(-1)">‹</button><b id="monthLabel"></b><button onclick="shiftMonth(1)">›</button></div>
+    <div class="weekdays"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+    <div id="calendarGrid" class="calendar"></div>
+    <div class="selectedBar" id="selectedBar"></div>
+    <div class="sheetActions"><button onclick="closePicker()">Cancel</button><button class="confirm" onclick="confirmPicker()">Confirm</button></div>
+  </div>
+</div>
+
+<script>
+const TZ='UTC+5';
+let mode='week';
+let rankType='senders';
+let selectedDate=new Date();
+let selectedWeek=mondayOf(new Date());
+let tempDate=new Date(selectedDate);
+let tempWeek=new Date(selectedWeek);
+let viewYear=new Date().getFullYear();
+let viewMonth=new Date().getMonth();
+
+const senders=[
+ ['Ahsan King','10048216',78210],['Rayan VIP','10881502',62722],['Noor Support','10264491',44681],
+ ['Khan 007','10973125',35622],['Ali Star','10395428',28678],['Sara Moon','10422913',24350],
+ ['Zain Voice','10184620',21944],['Hamza Pro','10762513',18406],['Maya Love','10674280',16235],['Arif King','10539344',14822]
+];
+const receivers=[
+ ['Sajjadul Km5312','10364025',95405],['Ayesha Live','10826491',72739],['Mariam Star','10261488',61864],
+ ['Noor Party','10987211',53420],['Lina Voice','10597320',47215],['Luna Waves','10482115',40166],
+ ['Mia Voice','10411802',36790],['Kai Night','10931345',31980],['Rafi Live','10745190',28640],['Sana Room','10257283',24318]
+];
+
+function pad(n){return String(n).padStart(2,'0')}
+function fmtDate(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+function mondayOf(d){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());const n=(x.getDay()+6)%7;x.setDate(x.getDate()-n);return x}
+function sameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+function formatNum(v){return Number(v).toLocaleString()}
+
+let currentView='main';
+function openRules(){
+  currentView='rules';
+  document.querySelector('.page').style.display='none';
+  rulesPage.classList.add('active');
+  pageTitle.textContent='Room Data Rules';
+}
+function goBack(){
+  if(currentView==='rules'){
+    currentView='main';
+    rulesPage.classList.remove('active');
+    document.querySelector('.page').style.display='block';
+    pageTitle.textContent='Room data';
+  }
+}
+
+function setMode(m){
+  mode=m;
+  weekTab.classList.toggle('active',m==='week');
+  dayTab.classList.toggle('active',m==='day');
+  renderAll();
+}
+function setRank(t){
+  rankType=t;
+  senderTab.classList.toggle('active',t==='senders');
+  receiverTab.classList.toggle('active',t==='receivers');
+  renderRanking();
+}
+function currentKey(){
+  const d=mode==='week'?selectedWeek:selectedDate;
+  return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()+(mode==='week'?31:7);
+}
+function roomData(){
+  const k=currentKey()%23;
+  if(mode==='week') return {
+    roomMic:`${168+k*4}h ${12+(k*3)%47}m`,
+    ownerMic:`${46+k}h ${12+(k*3)%47}m`,
+    coins:4385200+k*17640,lucky:634800+k*4280,diamonds:1315560+k*5292,luckyDiamonds:190440+k*1284
+  };
+  return {
+    roomMic:`${18+k%10}h ${8+(k*5)%50}m`,
+    ownerMic:`${4+k%8}h ${8+(k*5)%50}m`,
+    coins:426300+k*7250,lucky:58400+k*1940,diamonds:127890+k*2175,luckyDiamonds:17520+k*582
+  };
+}
+function renderTime(){
+  if(mode==='week'){
+    const end=addDays(selectedWeek,6);
+    timeLabel.textContent='Selected week';
+    timeValue.textContent=`${fmtDate(selectedWeek)} ~ ${fmtDate(end)} (${TZ})`;
+    periodHint.textContent='';
+  }else{
+    timeLabel.textContent='Selected day';
+    timeValue.textContent=`${fmtDate(selectedDate)} (${TZ})`;
+    periodHint.textContent='';
+  }
+}
+function renderData(){
+  const d=roomData();
+  roomMicValue.textContent=d.roomMic;
+  ownerMicValue.textContent=d.ownerMic;
+  coinsValue.textContent=formatNum(d.coins);
+  luckyCoinsValue.textContent=formatNum(d.lucky);
+  diamondValue.textContent=formatNum(d.diamonds);
+  luckyDiamondValue.textContent=formatNum(d.luckyDiamonds);
+}
+function renderRanking(){
+  const base=rankType==='senders'?senders:receivers;
+  const factor=mode==='week'?1:0.16;
+  const n=currentKey()%9;
+  rankList.innerHTML=base.map((x,i)=>{
+    const v=Math.max(0,Math.round((x[2]+n*(850-i*37))*factor));
+    return `<div class="rankRow">
+      <div class="rankAvatar">${x[0][0]}</div>
+      <div class="rankMeta"><b>${x[0]}</b><span>ID: ${x[1]}</span></div>
+      <div class="rankValue"><b>${formatNum(v)}</b><span>Coins</span></div>
+    </div>`
+  }).join('');
+}
+function renderAll(){renderTime();renderData();renderRanking()}
+
+function openPicker(){
+  if(mode==='week'){
+    tempWeek=new Date(selectedWeek);viewYear=tempWeek.getFullYear();viewMonth=tempWeek.getMonth();pickerTitle.textContent='Select Week';
+  }else{
+    tempDate=new Date(selectedDate);viewYear=tempDate.getFullYear();viewMonth=tempDate.getMonth();pickerTitle.textContent='Select Date';
+  }
+  renderCalendar();pickerOverlay.classList.add('show');
+}
+function closePicker(){pickerOverlay.classList.remove('show')}
+function shiftMonth(n){const d=new Date(viewYear,viewMonth+n,1);viewYear=d.getFullYear();viewMonth=d.getMonth();renderCalendar()}
+function pickIso(s){
+  const [y,m,d]=s.split('-').map(Number);const x=new Date(y,m-1,d);
+  if(mode==='week') tempWeek=mondayOf(x); else tempDate=x;
+  viewYear=x.getFullYear();viewMonth=x.getMonth();renderCalendar();
+}
+function renderCalendar(){
+  const first=new Date(viewYear,viewMonth,1), start=mondayOf(first), today=new Date();
+  monthLabel.textContent=first.toLocaleString('en-US',{month:'long',year:'numeric'});
+  let h='';
+  const weekEnd=mode==='week'?addDays(tempWeek,6):null;
+  for(let i=0;i<42;i++){
+    const d=addDays(start,i), iso=fmtDate(d), cls=['day'];
+    if(d.getMonth()!==viewMonth)cls.push('out');
+    if(sameDay(d,today))cls.push('today');
+    if(mode==='day'&&sameDay(d,tempDate)) cls.push('selected');
+    if(mode==='week'&&d>=tempWeek&&d<=weekEnd){
+      cls.push('inWeek');
+      if(sameDay(d,tempWeek))cls.push('weekStart');
+      if(sameDay(d,weekEnd))cls.push('weekEnd');
+    }
+    h+=`<button class="${cls.join(' ')}" onclick="pickIso('${iso}')">${d.getDate()}</button>`;
+  }
+  calendarGrid.innerHTML=h;
+  if(mode==='week'){
+    selectedBar.innerHTML=`Selected week · <b>${fmtDate(tempWeek)} ~ ${fmtDate(addDays(tempWeek,6))}</b>`;
+  }else{
+    selectedBar.innerHTML=`Selected date · <b>${fmtDate(tempDate)}</b>`;
+  }
+}
+function confirmPicker(){
+  if(mode==='week') selectedWeek=new Date(tempWeek); else selectedDate=new Date(tempDate);
+  closePicker();renderAll();
+}
+renderAll();
+</script>
+</body>
+</html>
