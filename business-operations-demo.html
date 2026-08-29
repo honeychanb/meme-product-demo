@@ -2553,3 +2553,165 @@ renderData();
   renderSettlement();updatePendingCounters();
 })();
 </script>
+
+<style id="v38-bd-weekly-status-actions-style">
+.settlementManagementWeeklyTable{width:3450px!important;min-width:3450px!important}
+</style>
+<script id="v38-bd-weekly-status-actions-script">
+/* v38 — BD+ weekly settlement now uses the same status/action workflow as BD+ monthly settlement. */
+(function(){
+  function settlementKindV38(amount){return Number(amount||0)<20?'金币':'现金'}
+  function hostIsEffectiveV38(x){return Number(x.validDays||0)>=4 && Number(x.validHours||0)>=10}
+
+  /* Preserve v36 filters and make BD+ weekly a billable settlement table. */
+  syncSettlementFilterVisibility=function(){
+    const tab=state.settlementTab, queue=!!state.settlementQueueStatus;
+    const role=document.getElementById('settlementManagementRole');
+    const finance=document.getElementById('financeStatus');
+    const bill=document.getElementById('billStatus');
+    const payout=document.getElementById('payoutStatus');
+    const pay=document.getElementById('settlementPaymentMethod');
+    const country=document.getElementById('settlementCountry');
+    const newHost=document.getElementById('settlementNewHost');
+    const stype=document.getElementById('settlementType');
+    const mgmt=tab==='managementWeekly'||tab==='managementMonthly';
+    const billable=tab==='agencyWeekly'||tab==='managementWeekly'||tab==='managementMonthly'||queue;
+    if(country)country.style.display='';
+    if(newHost)newHost.style.display=(!queue&&tab==='hostWeekly')?'':'none';
+    if(stype)stype.style.display=((tab==='agencyWeekly'||tab==='managementMonthly'||queue))?'':'none';
+    if(role)role.style.display=(!queue&&mgmt)?'':'none';
+    if(finance)finance.style.display=billable?'':'none';
+    if(bill)bill.style.display=billable?'':'none';
+    if(payout)payout.style.display=billable?'':'none';
+    if(pay)pay.style.display=((tab==='agencyWeekly'||tab==='managementMonthly'||queue))?'':'none';
+    const q=document.getElementById('settlementSearch');
+    if(q){
+      q.placeholder=tab==='hostWeekly'?'输入主播 / 代理 UID、昵称':tab==='agencyWeekly'?'输入代理 UID、昵称或收款地址':mgmt?'输入成员 UID、昵称':'搜索';
+    }
+  };
+
+  settlementFilter=function(rows){
+    const finance=document.getElementById('financeStatus')?.value||'All Finance Status';
+    const bill=document.getElementById('billStatus')?.value||'All Bill Status';
+    const payout=document.getElementById('payoutStatus')?.value||'All Payout Status';
+    const pay=document.getElementById('settlementPaymentMethod')?.value||'All Payment Types';
+    const role=document.getElementById('settlementManagementRole')?.value||'All Management Roles';
+    const country=document.getElementById('settlementCountry')?.value||'All Countries';
+    const newHost=document.getElementById('settlementNewHost')?.value||'All New Host';
+    const stype=document.getElementById('settlementType')?.value||'All Settlement Types';
+    const q=(document.getElementById('settlementSearch')?.value||'').toLowerCase();
+    const tab=state.settlementTab;
+    const mgmt=tab==='managementWeekly'||tab==='managementMonthly';
+    const billable=tab==='agencyWeekly'||tab==='managementWeekly'||tab==='managementMonthly';
+    return rows.filter(x=>{
+      const rowCountry=tab==='hostWeekly'?(x.hostCountry||x.country):(x.country||'—');
+      const countryOk=country==='All Countries'||rowCountry===country;
+      const newHostOk=tab!=='hostWeekly'||newHost==='All New Host'||(newHost==='Yes'&&!!x.newHost)||(newHost==='No'&&!x.newHost);
+      const typeOk=(tab!=='agencyWeekly'&&tab!=='managementMonthly')||stype==='All Settlement Types'||x.settlementType===stype;
+      return countryOk&&newHostOk&&typeOk
+        &&(finance==='All Finance Status'||x.finance===finance)
+        &&(!billable||bill==='All Bill Status'||x.bill===bill)
+        &&(!billable||payout==='All Payout Status'||x.payout===payout)
+        &&((tab!=='agencyWeekly'&&tab!=='managementMonthly')||pay==='All Payment Types'||x.payType===pay)
+        &&(!mgmt||role==='All Management Roles'||x.role===role)
+        &&(!q||String(x.uid||'').includes(q)||String(x.name||'').toLowerCase().includes(q)||String(x.agency||'').toLowerCase().includes(q)||String(x.agencyUid||'').includes(q)||String(x.payAddress||'').toLowerCase().includes(q));
+    });
+  };
+
+  /* Restore v36 Host weekly column after the v35 late override. */
+  hostWeeklyTable=function(){
+    const rows=settlementFilter(hostWeeklySettlement);
+    const body=rows.map(x=>`<tr>
+      <td>${x.uid}</td><td><b>${x.name}</b></td><td>${displayCountry(x.hostCountry)}</td><td>${x.newHost?'是':'否'}</td><td>${hostIsEffectiveV38(x)?'<span class="badge active">是</span>':'<span class="badge rejected">否</span>'}</td>
+      <td>${x.agencyUid}</td><td><b>${x.agency}</b></td>
+      <td class="money">${fmt(x.totalCoins)}</td><td class="money">${fmt(x.totalDiamonds)}</td><td class="money">${fmt(x.diamondBalance)}</td>
+      <td>${Number(x.validHours).toFixed(2)}</td><td>${x.validDays}</td><td>${x.level}</td><td>${money(x.tierSalary)}</td><td>${money(x.diamondSalary)}</td>
+      <td>${money(x.hostSalary)}</td><td title="该 Host 对应的 Agent Salary；Working Time 未达标时按该 Coins Tier 标准的 70% 计算。">${money(x.agentSalary)}${x.agentSalaryRate===0.7?'<span class="settlementReadonlyState">按 70%</span>':''}</td>
+      <td class="${hostRowAdjustment(x)<0?'redTxt':hostRowAdjustment(x)>0?'greenTxt':''}">${hostRowAdjustment(x)?((hostRowAdjustment(x)>0?'+':'')+money(hostRowAdjustment(x))):'$0.00'}</td>
+      <td class="money">${money(hostFinalSalary(x))}</td><td class="money">${money(hostFinalSalary(x)+Number(x.agentSalary||0))}</td>
+      <td>${settlementKindV38(hostFinalSalary(x))}</td><td>代理代收</td><td>${x.agencyUid}</td><td class="money">${fmt(x.excessCoins)}</td>
+    </tr>`).join('');
+    return `<div class="memberRelationNote"><b>主播周结算 = 代理周账单的逐 Host 构成。</b> 主播需调整只由财务修改；有效主播按 4 个有效天 + 10 小时有效上麦时长判断；Host 不单独生成用户账单。</div>
+    <div class="table-responsive tableWrap"><table class="table settlementHostWeeklyTable"><thead><tr>
+      <th>主播 UID</th><th>昵称</th><th>国家</th><th>是否新主播</th><th>是否有效主播</th><th>代理 UID</th><th>代理昵称</th>
+      <th>总金币</th><th>总钻石</th><th>钻石余额</th><th>有效上麦时长(h)</th><th>有效天</th><th>等级</th><th>等级薪资</th><th>钻石薪资</th>
+      <th>主播总薪资</th><th>代理本人薪资</th><th>主播需调整</th><th>主播总结算</th><th>代理总结算</th><th>结算类型</th><th>收款类型</th><th>收款地址</th><th>超出档位金币</th>
+    </tr></thead><tbody>${body||'<tr><td colspan="24"><div class="empty">暂无符合条件的主播周结算数据。</div></td></tr>'}</tbody></table></div>`;
+  };
+
+  managementWeeklySettlement.forEach(x=>{
+    x.settlementType=x.settlementType||settlementKindV38(x.final);
+  });
+
+  managementWeeklyActions=function(x){
+    const detail=`<button class="op view" onclick="openBill('managementWeekly','${x.uid}')">详情</button>`;
+    if(x.finance==='Pending Finance Review')return `<div class="opCell">${detail}<button class="op gold" onclick="openAdjustment('managementWeekly','${x.uid}')">财务调整</button><button class="op good" onclick="financeConfirm('managementWeekly','${x.uid}')">财务确认</button></div>`;
+    if(x.finance==='Ready to Publish')return `<div class="opCell">${detail}<button class="op gold" onclick="openAdjustment('managementWeekly','${x.uid}')">财务调整</button><button class="op good" onclick="publishBill('managementWeekly','${x.uid}')">发布</button></div>`;
+    if(x.bill==='Pending Confirmation')return `<div class="opCell">${detail}<span class="muted">等待用户确认</span></div>`;
+    if(x.bill==='Confirmed')return `<div class="opCell">${detail}<span class="muted">已锁定</span></div>`;
+    if(x.bill==='Rejected')return `<div class="opCell">${detail}<button class="op gold" onclick="openAdjustment('managementWeekly','${x.uid}')">财务调整</button><button class="op good" onclick="financeConfirm('managementWeekly','${x.uid}')">财务确认</button></div>`;
+    return `<div class="opCell">${detail}</div>`;
+  };
+
+  managementWeeklyTable=function(){
+    const rows=settlementFilter(managementWeeklySettlement);
+    return `<div class="memberRelationNote"><b>BD+ 周结算。</b> 提成薪资 = 代理总结算 × 提成比例；总薪资 = 提成薪资 + 等级底薪；总结算 = 总薪资 + 需调整。周结算与月结算均展示完整财务、用户账单及付款状态。</div>
+    <div class="table-responsive tableWrap"><table class="table settlementManagementWeeklyTable"><thead><tr>
+      <th>UID</th><th>昵称</th><th>角色</th><th>国家</th><th>总代理数</th><th>总主播数</th><th>有效主播数</th><th>代理总薪资</th><th>代理总结算</th><th>等级</th><th>提成比例</th><th>提成薪资</th><th>等级底薪</th><th>总薪资</th><th>需调整</th><th>总结算</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>操作</th>
+    </tr></thead><tbody>${rows.map(x=>`<tr>
+      <td>${x.uid}</td><td><b>${x.name}</b></td><td>${x.role}</td><td>${displayCountry(x.country)}</td><td>${x.totalAgents}</td><td>${x.totalHosts}</td><td>${x.effectiveHosts}</td>
+      <td>${money(x.agentTotalSalary)}</td><td>${money(x.agentSettlement)}</td><td>${x.level}</td><td>${x.rate}%</td><td>${money(x.commission)}</td><td>${money(x.base)}</td><td>${money(x.calc)}</td>
+      <td class="${x.adj<0?'redTxt':x.adj>0?'greenTxt':''}">${x.adj?((x.adj>0?'+':'')+money(x.adj)):'$0.00'}</td><td class="money">${money(x.final)}</td>
+      <td>${statusBadge(x.finance)}</td><td>${statusBadge(x.bill)}</td><td>${statusBadge(x.payout)}</td><td>${rejectReasonCell(x.rejectReason)}</td><td>${managementWeeklyActions(x)}</td>
+    </tr>`).join('')||'<tr><td colspan="21"><div class="empty">暂无 BD+ 周结算数据。</div></td></tr>'}</tbody></table></div>`;
+  };
+
+  /* BD+ weekly now supports publish just like BD+ monthly. */
+  publishBill=function(type,uid){
+    if(type!=='agencyWeekly'&&type!=='managementWeekly'&&type!=='managementMonthly'){toast('该结算表不直接发布用户账单');return}
+    const x=getBill(type,uid);if(!x)return;
+    openModal('发布账单',`<div class="note"><b>发布后用户即可在前端看到此账单。</b><br>用户可确认或拒绝；发布后在用户操作前后台不可修改金额。</div><div class="confirmBox"><div>成员</div><b>${x.name} · UID ${x.uid}</b><div>结算金额</div><b>${money(x.final)}</b></div>`,'确认发布',()=>{x.finance='Published';x.bill='Pending Confirmation';x.payout='—';closeModal();renderSettlement();updatePendingCounters();toast('账单已发布给用户')});
+  };
+
+  /* Weekly details also expose the same status fields. */
+  const openBillBeforeV38=openBill;
+  openBill=function(type,uid){
+    if(type!=='managementWeekly')return openBillBeforeV38(type,uid);
+    const x=getBill(type,uid);if(!x)return;
+    openDrawer('BD+ 周结算详情',`<div class="detailHero"><div class="avatar">${initials(x.name)}</div><div><h3>${x.name}</h3><p>${x.role} · ${x.level} · UID ${x.uid}</p></div></div><div class="detailSec"><div class="kv"><div><span>代理总薪资</span><b>${money(x.agentTotalSalary)}</b></div><div><span>代理总结算</span><b>${money(x.agentSettlement)}</b></div><div><span>提成比例</span><b>${x.rate}%</b></div><div><span>提成薪资</span><b>${money(x.commission)}</b></div><div><span>等级底薪</span><b>${money(x.base)}</b></div><div><span>总薪资</span><b>${money(x.calc)}</b></div><div><span>需调整</span><b>${money(x.adj)}</b></div><div><span>总结算</span><b>${money(x.final)}</b></div><div><span>财务状态</span><b>${displayStatus(x.finance)}</b></div><div><span>用户账单状态</span><b>${displayStatus(x.bill)}</b></div><div><span>付款状态</span><b>${displayStatus(x.payout)}</b></div><div><span>拒绝原因</span><b>${x.rejectReason||'—'}</b></div></div></div>`);
+  };
+
+  settlementQueueTable=function(status){
+    const q=(document.getElementById('settlementSearch')?.value||'').toLowerCase();
+    const payout=document.getElementById('payoutStatus')?.value||'All Payout Status';
+    const finance=document.getElementById('financeStatus')?.value||'All Finance Status';
+    const pay=document.getElementById('settlementPaymentMethod')?.value||'All Payment Types';
+    const country=document.getElementById('settlementCountry')?.value||'All Countries';
+    const stype=document.getElementById('settlementType')?.value||'All Settlement Types';
+    refreshAgencyWeeklyTotals();
+    const rows=[
+      ...agencyWeeklySettlement.map(x=>({...x,_type:'agencyWeekly',_label:'代理周结算'})),
+      ...managementWeeklySettlement.map(x=>({...x,_type:'managementWeekly',_label:'BD+ 周结算'})),
+      ...managementMonthlySettlement.map(x=>({...x,_type:'managementMonthly',_label:'BD+ 月结算'}))
+    ].filter(x=>x.bill===status
+      &&(finance==='All Finance Status'||x.finance===finance)
+      &&(payout==='All Payout Status'||x.payout===payout)
+      &&(pay==='All Payment Types'||x.payType===pay)
+      &&(country==='All Countries'||x.country===country)
+      &&(stype==='All Settlement Types'||x.settlementType===stype)
+      &&(!q||String(x.uid||'').includes(q)||String(x.name||'').toLowerCase().includes(q)||String(x.payAddress||'').toLowerCase().includes(q)));
+    return `<div class="settlementQueueHint"><b>${status==='Rejected'?'用户已拒绝账单':'待用户确认账单'}</b><span>${status==='Rejected'?'由财务查看拒绝原因并处理后重新发布。':'展示代理周结算、BD+ 周结算与 BD+ 月结算中已发布给用户的账单。'}</span></div><div class="table-responsive tableWrap"><table class="table settlementQueueTable"><thead><tr><th>类型</th><th>成员</th><th>国家</th><th>结算类型</th><th>收款类型</th><th>收款地址</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>结算金额</th><th>操作</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${x._label}</td><td>${memberCell(x.name,x.uid)}</td><td>${displayCountry(x.country)}</td><td>${x.settlementType||'—'}</td><td>${x.payType||'—'}</td><td>${paymentAddressCell(x._type,x)}</td><td>${statusBadge(x.finance)}</td><td>${statusBadge(x.bill)}</td><td>${statusBadge(x.payout)}</td><td>${rejectReasonCell(x.rejectReason)}</td><td class="money">${money(x.final)}</td><td>${x._type==='agencyWeekly'?agencyWeeklyActions(x):x._type==='managementWeekly'?managementWeeklyActions(x):monthlyManagementActions(x)}</td></tr>`).join('')||'<tr><td colspan="12"><div class="empty">暂无符合条件的账单。</div></td></tr>'}</tbody></table></div>`;
+  };
+
+  updatePendingCounters=function(){
+    refreshExpiredApplications();refreshAgencyWeeklyTotals();
+    const app=applications.filter(x=>x.status==='Pending').length;
+    const all=[...agencyWeeklySettlement,...managementWeeklySettlement,...managementMonthlySettlement];
+    const pending=all.filter(x=>x.bill==='Pending Confirmation').length,rejected=all.filter(x=>x.bill==='Rejected').length;
+    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};
+    set('appNavPending',app);set('pendingApplicationsCount',app);set('pendingBillsCount',pending);set('rejectedBillsCount',rejected);
+  };
+
+  renderSettlement();updatePendingCounters();
+})();
+</script>
