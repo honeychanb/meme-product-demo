@@ -456,6 +456,8 @@ body{font-size:14px!important}
 
 /* v5 finalized dashboard */
 .dashboardKpiGrid{grid-template-columns:repeat(7,minmax(0,1fr))}
+.managementBreakdown{margin-top:7px;display:grid;grid-template-columns:1fr 1fr;gap:3px 8px;font-size:11px;color:var(--muted);line-height:1.35}
+.managementBreakdown span{white-space:nowrap}.managementBreakdown b{color:var(--text);font-size:12px;margin-left:3px}
 @media(max-width:1380px){.dashboardKpiGrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:1100px){.dashboardKpiGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.dashboardKpiGrid{grid-template-columns:1fr 1fr}}
@@ -540,6 +542,24 @@ html,body{font-size:14px}
 /* v25 member-action restore */
 .addAccountPreview{display:grid;grid-template-columns:42px minmax(0,1fr);gap:10px;align-items:center}.addAccountPreview .avatar{width:42px;height:42px}.addAccountPreview b{display:block;font-size:14px;color:#1f2d3d}.addAccountPreview small{display:block;margin-top:4px;font-size:12px;color:#6d7b8d}.promotionHostBox{border:1px solid #d9e3f0;border-radius:12px;background:#f8fbff;padding:12px}.promotionHostTitle{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}.promotionHostTitle b{font-size:13px}.promotionHostTitle span{font-size:11px;color:#6d7b8d}.promotionHostRow{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(260px,1.2fr);gap:12px;align-items:center;padding:9px 0;border-top:1px solid #e5ebf3}.promotionHostRow:first-of-type{border-top:0}.promotionHostRow b{display:block;font-size:13px}.promotionHostRow small{display:block;margin-top:3px;font-size:11px;color:#7c8998}.promotionHostRow select{width:100%;height:42px;border:1px solid #d7dfeb;border-radius:9px;background:#fff;color:#1f2d3d;padding:0 10px;font-size:13px}@media(max-width:760px){.promotionHostRow{grid-template-columns:1fr}}
 </style>
+
+<style>
+/* v43 — copy hierarchy cleanup: one page title, one persistent rule line, contextual notes only */
+.topbar{height:58px!important;justify-content:flex-end!important;padding-top:0!important;padding-bottom:0!important}
+.topbar .pageTitle{display:none!important}
+.content{padding-top:22px!important}
+.pageHead{margin-bottom:14px!important}
+.pageHead p{margin-top:4px!important;color:#728198!important}
+#view-data .scopeHint{display:flex!important;align-items:center;gap:8px 18px;flex-wrap:wrap;padding:10px 14px!important;background:#f7faff!important}
+#view-data .scopeHint b{color:#29496f!important}
+#view-data .scopeHint span{position:relative;white-space:nowrap}
+#view-data .scopeHint span+span:before{content:'·';position:absolute;left:-11px;color:#a8b4c5}
+#view-data .forecastHint.compactHint{display:flex;align-items:center;gap:8px 18px;flex-wrap:wrap;margin:0 0 12px;padding:9px 12px;background:#fbfdff;border-color:#e3ebf6;color:#667890}
+#view-data .forecastHint.compactHint b{color:#29496f}
+#view-data .forecastHint.compactHint span{white-space:nowrap}
+.memberRelationNote{line-height:1.5!important}
+@media(max-width:760px){.topbar{display:none!important}.content{padding-top:16px!important}#view-data .scopeHint span,#view-data .forecastHint.compactHint span{white-space:normal}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -578,7 +598,7 @@ html,body{font-size:14px}
           <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">本周 Diamonds</span><span class="metricHelp" tabindex="0" data-tip="当前结算周期内，当前账号数据权限范围下实时发放给 Host 的 Diamonds 合计。">?</span></span><span class="kpiIcon">◆</span></div><div class="kpiValue">46.6M</div><div class="kpiMeta"><span>当前结算周期</span></div></div>
           <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">Host 总数</span><span class="metricHelp" tabindex="0" data-tip="当前数据权限范围内，仍处于当前合作周期的 Host 总人数。业务资格封禁仍计入；解约后移除。">?</span></span><span class="kpiIcon">H</span></div><div class="kpiValue">2,846</div><div class="kpiMeta"><span>当前实时存量</span></div></div>
           <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">Agency 数</span><span class="metricHelp" tabindex="0" data-tip="当前数据权限范围内，仍处于当前合作周期的 Agent / Agency 数量。业务资格封禁仍计入；解约后移除。">?</span></span><span class="kpiIcon">A</span></div><div class="kpiValue">316</div><div class="kpiMeta"><span>当前实时存量</span></div></div>
-          <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">管理线成员</span><span class="metricHelp" tabindex="0" data-tip="当前数据权限范围内 BD / Admin / Super Admin / Manager 的当前成员数，不包含 Agent 和 Host。业务资格封禁仍计入。">?</span></span><span class="kpiIcon">M</span></div><div class="kpiValue">62</div><div class="kpiMeta"><span>BD / Admin / Super Admin / Manager</span></div></div>
+          <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">管理线成员</span><span class="metricHelp" tabindex="0" data-tip="当前数据权限范围内 BD / Admin / Super Admin / Manager 的当前成员数及角色构成，不包含 Agent 和 Host。业务资格封禁仍计入。">?</span></span><span class="kpiIcon">M</span></div><div class="kpiValue">62</div><div class="managementBreakdown"><span>BD <b>38</b></span><span>Admin <b>14</b></span><span>Super Admin <b>6</b></span><span>Manager <b>4</b></span></div></div>
           <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">新增 Host</span><span class="metricHelp" tabindex="0" data-tip="当前结算周期 内首次成为平台 Host 的用户数。解约后重新加入、重新绑定或修改直属上级均不重复计入。">?</span></span><span class="kpiIcon">N</span></div><div class="kpiValue">128</div><div class="kpiMeta"><span>首次成为 Host</span></div></div>
           <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">有效 Host</span><span class="metricHelp" tabindex="0" data-tip="截至当前已经满足有效天数 ≥ 4 且有效工作时长 ≥ 10h 的 Host 数，不做预测。封禁状态本身不自动排除，具体违规规则另行影响有效数据。">?</span></span><span class="kpiIcon">✓</span></div><div class="kpiValue">1,934</div><div class="kpiMeta"><span>截至当前已达标 · 不预测</span></div></div>
         </div>
@@ -594,7 +614,7 @@ html,body{font-size:14px}
 
       <!-- MEMBERS -->
       <section class="view" id="view-members">
-        <div class="pageHead"><div><h2>成员管理</h2><p>仅管理当前合作周期内的业务成员；解约成员从当前列表移除，历史数据由底层保留用于追溯。</p></div><div class="actions"><button class="btn gold" onclick="openAddMember()">+ 新增成员</button></div></div>
+        <div class="pageHead"><div><h2>成员管理</h2><p>管理当前合作周期内的业务成员。</p></div><div class="actions"><button class="btn gold" onclick="openAddMember()">+ 新增成员</button></div></div>
         <div class="panel">
           <div class="tabs" id="memberTabs"><button class="tabBtn active" data-membertab="list">成员列表</button><button class="tabBtn" data-membertab="pending">待生效调整</button><button class="tabBtn" data-membertab="records">变更记录</button></div>
           <div id="memberListContent" class="memberTabBody">
@@ -607,7 +627,7 @@ html,body{font-size:14px}
 
       <!-- APPLICATIONS -->
       <section class="view" id="view-applications">
-        <div class="pageHead"><div><h2>申请审核</h2><p>审核通过后业务身份立即生效；申请 24 小时未审核自动失效，审核时再次校验邀请码与邀请权限。</p></div></div>
+        <div class="pageHead"><div><h2>申请审核</h2><p>审核新的业务角色申请。</p></div></div>
         <div class="panel">
           <div class="tabs" id="appRoleTabs"></div>
           <div class="memberRelationNote">同一 UID 同一时间仅允许 1 条待审核申请；驳回 / 失效后可重新使用有效邀请码提交，新申请生成新记录。</div>
@@ -618,25 +638,53 @@ html,body{font-size:14px}
 
       <!-- DATA CENTER -->
       <section class="view" id="view-data">
-        <div class="pageHead"><div><h2>数据中心</h2><p>当前优先开放主播日数据，按 UTC+0 自然日统计；其他周收益数据暂时隐藏，后续再开放。</p></div></div>
+        <div class="pageHead"><div><h2>数据中心</h2><p>业务数据查询与组织下钻。</p></div></div>
         <div class="panel">
-          <div class="tabs dataFourTabs" id="dataTabs"><button class="tabBtn active" data-data="hostDaily">主播日数据</button><button class="tabBtn dataTabDeferred" data-data="management">管理线周收益数据</button><button class="tabBtn dataTabDeferred" data-data="agency">代理周收益数据</button><button class="tabBtn dataTabDeferred" data-data="hostWeekly">主播周收益数据</button></div>
+          <div class="tabs dataFourTabs" id="dataTabs"><button class="tabBtn active" data-data="host">主播数据</button><button class="tabBtn" data-data="agency">代理周数据</button><button class="tabBtn" data-data="management">管理线周数据</button></div>
+          <div class="hostDataModeTabs" id="hostDataModeTabs"><button class="hostModeBtn active" data-hostmode="daily">按日</button><button class="hostModeBtn" data-hostmode="weekly">按周</button></div>
           <div class="filterBar dataFilterBar">
-            <select class="select" id="dataTime" onchange="onDataTimeChange()"><option value="This Week" selected>本周</option><option value="Last Week">上周</option><option value="2026-W33">2026-W33 · 8月10日 - 8月16日</option><option value="2026-W32">2026-W32 · 8月3日 - 8月9日</option></select>
-            <span class="timeRangeText" id="dataRangeText">2026-08-24 ~ 2026-08-30 · UTC+0</span>
-            <select class="select dataDailyOnly" id="dataDailyDate" onchange="resetDataPage();renderData()" style="display:none"><option value="2026-08-28">2026-08-28 · UTC+0</option><option value="2026-08-27">2026-08-27 · UTC+0</option><option value="2026-08-26">2026-08-26 · UTC+0</option><option value="2026-08-25">2026-08-25 · UTC+0</option><option value="2026-08-24">2026-08-24 · UTC+0</option></select>
+            <div class="dataPeriodPicker v44WeekPicker" id="dataWeeklyPeriodPicker">
+              <button class="dateStepBtn" id="dataWeekPrev" type="button" aria-label="上一周期" onclick="shiftDataWeeklyPeriod(-1)">‹</button>
+              <button class="weekPickerMain" id="dataWeekPickerMain" type="button" onclick="toggleDataWeekMenu(event)" aria-haspopup="listbox" aria-expanded="false">
+                <span class="pickerCalendar" aria-hidden="true">▦</span>
+                <span class="weekPickerLabel" id="dataWeekLabel">本周</span>
+                <span class="periodDivider"></span>
+                <span class="periodRange" id="dataRangeText">2026-08-24 ~ 2026-08-30</span>
+                <span class="weekChevron" aria-hidden="true">⌄</span>
+              </button>
+              <button class="dateStepBtn" id="dataWeekNext" type="button" aria-label="下一周期" onclick="shiftDataWeeklyPeriod(1)">›</button>
+              <span class="timezoneChip">UTC+0</span>
+              <div class="weekPeriodMenu hidden" id="dataWeekMenu" role="listbox">
+                <button type="button" data-period="This Week" onclick="selectDataWeeklyPeriod('This Week')"><b>本周</b><span>2026-08-24 ~ 2026-08-30</span></button>
+                <button type="button" data-period="Last Week" onclick="selectDataWeeklyPeriod('Last Week')"><b>上周</b><span>2026-08-17 ~ 2026-08-23</span></button>
+                <button type="button" data-period="2026-W33" onclick="selectDataWeeklyPeriod('2026-W33')"><b>2026-W33</b><span>2026-08-10 ~ 2026-08-16</span></button>
+                <button type="button" data-period="2026-W32" onclick="selectDataWeeklyPeriod('2026-W32')"><b>2026-W32</b><span>2026-08-03 ~ 2026-08-09</span></button>
+              </div>
+              <select id="dataTime" class="v44HiddenPeriodSelect" aria-hidden="true" tabindex="-1"><option value="This Week" selected>本周</option><option value="Last Week">上周</option><option value="2026-W33">2026-W33</option><option value="2026-W32">2026-W32</option></select>
+            </div>
+            <div class="dataDailyDatePicker" id="dataDailyDatePicker" style="display:none">
+              <button class="dateStepBtn" type="button" aria-label="前一天" onclick="shiftDataDailyDate(-1)">‹</button>
+              <label class="dateInputWrap" title="选择统计日期" onclick="openDataDailyPicker(event)">
+                <span class="pickerCalendar" aria-hidden="true">▦</span>
+                <input type="date" id="dataDailyDate" value="2026-08-28" onchange="resetDataPage();renderData()">
+              </label>
+              <button class="dateStepBtn" type="button" aria-label="后一天" onclick="shiftDataDailyDate(1)">›</button>
+              <span class="timezoneChip">UTC+0</span>
+            </div>
             <select class="select" id="dataCountry" onchange="resetDataPage();renderData()"><option value="All Countries">全部国家/地区</option></select>
+            <select class="select dataManagementOnly v44RoleFilter" id="dataRole" onchange="resetDataPage();renderData()"><option value="All Roles">角色：全部</option><option value="BD">BD</option><option value="Admin">Admin</option><option value="Super Admin">Super Admin</option><option value="Manager">Manager</option></select>
             <input class="input" id="dataMember" placeholder="输入 UID 或昵称" oninput="resetDataPage();renderData()">
-            <select class="select dataManagementOnly" id="dataRole" onchange="resetDataPage();renderData()"><option value="All Roles">全部角色</option><option>BD</option><option>Admin</option><option>Super Admin</option><option>Manager</option></select>
             <input class="input dataManagementAgencyOnly" id="dataSuperior" placeholder="输入直属上级 UID 或昵称" oninput="resetDataPage();renderData()">
             <select class="select dataAgencyOnly" id="dataScope" onchange="resetDataPage();renderData()"><option value="All">全部范围</option><option value="Direct Team">直属团队</option><option value="Total Team">全部团队</option></select>
-            <select class="select dataHostOnly" id="dataAgencyFilter" onchange="resetDataPage();renderData()"><option value="All Agencies">全部代理</option></select>
+            <select class="select dataHostOnly" id="dataAgencyFilter" onchange="resetDataPage();renderData()" style="display:none"><option value="All Agencies">全部代理</option></select>
+            <input class="input dataHostOnly" id="dataHostAgencySearch" placeholder="输入代理 ID 或昵称" oninput="resetDataPage();renderData()">
+            <select class="select dataHostWeeklyOnly" id="dataHostNewStatus" onchange="resetDataPage();renderData()"><option value="All">是否新主播</option><option value="Yes">新主播</option><option value="No">非新主播</option></select>
             <select class="select dataHostOnly" id="dataEffectiveStatus" onchange="resetDataPage();renderData()"><option value="All">全部有效状态</option><option value="Yes">有效</option><option value="No">未达有效</option></select>
             <select class="select dataHostOnly" id="dataActiveStatus" onchange="resetDataPage();renderData()"><option value="All">全部活跃状态</option><option value="Yes">活跃</option><option value="No">未活跃</option></select>
             <select class="select dataHostOnly" id="dataGiftedStatus" onchange="resetDataPage();renderData()"><option value="All">全部收礼状态</option><option value="Yes">已收礼</option><option value="No">未收礼</option></select>
             <button class="btn" onclick="resetDataPage();renderData();toast('筛选已应用')">查询</button>
           </div>
-          <div class="scopeHint"><b>统一口径：</b>团队规模、直属上级与团队构成按所查询结算周期的周期末组织快照；本周使用当前组织快照。Coins / Diamonds / 有效时长等流水按实际发生时组织关系归属。</div>
+          <div class="scopeHint"><b>数据口径</b><span>按日：UTC+0 自然日</span><span>按周：每 30 分钟刷新，薪资为预估值</span><span>最终金额以「结算对账」为准</span></div>
           <div id="dataDrillScope"></div>
           <div id="dataContent"></div>
         </div>
@@ -644,10 +692,9 @@ html,body{font-size:14px}
 
       <!-- SETTLEMENT -->
       <section class="view" id="view-settlement">
-        <div class="pageHead"><div><h2>结算对账</h2><p>周期结束生成结算快照 → 财务审核/调整 → 手动发布 → 用户确认/拒绝 → 付款。</p></div><div class="actions"><button class="btn" onclick="exportSettlement()">导出 CSV</button></div></div>
+        <div class="pageHead"><div><h2>结算对账</h2><p>完整周期账单的财务审核、发布与付款管理。</p></div><div class="actions"><button class="btn" onclick="exportSettlement()">导出 CSV</button></div></div>
         <div class="panel">
           <div class="tabs" id="settlementTabs"><button class="tabBtn active" data-settlement="hostWeekly">主播周结算</button><button class="tabBtn" data-settlement="agencyWeekly">代理周结算</button><button class="tabBtn" data-settlement="managementWeekly">管理线周结算</button><button class="tabBtn" data-settlement="managementMonthly">管理线月结算</button></div>
-          <div class="settlementFlowNote"><b>正式账单仅在完整结算周期结束后生成。</b><span>发布前用户不可见；金额只能由财务通过「财务调整 / 更正」修改，系统原始计算金额不可覆盖。</span></div>
           <div class="filterBar settlementFilters">
             <select class="select" id="settlementPeriod"><option>2026-W34 · 8月17日 - 8月23日 · UTC+0</option><option>2026-W33 · 8月10日 - 8月16日 · UTC+0</option></select>
             <select class="select" id="settlementCountry" onchange="renderSettlement()"><option value="All Countries">全部国家/地区</option><option value="Pakistan">巴基斯坦</option><option value="UAE">阿联酋</option><option value="Philippines">菲律宾</option><option value="India">印度</option><option value="Singapore">新加坡</option></select>
@@ -666,7 +713,7 @@ html,body{font-size:14px}
 
       <!-- REWARDS -->
       <section class="view" id="view-rewards">
-        <div class="pageHead"><div><h2 id="rewardPageTitle">邀请奖励</h2><p id="rewardPageDesc">按奖励周期查询邀请奖励结果；奖励计算与发放由奖励服务处理。</p></div><div class="actions"><button class="btn" onclick="exportRewards()">导出 CSV</button></div></div>
+        <div class="pageHead"><div><h2 id="rewardPageTitle">邀请奖励</h2><p id="rewardPageDesc">按奖励周期查询奖励结果。</p></div><div class="actions"><button class="btn" onclick="exportRewards()">导出 CSV</button></div></div>
         <div class="panel">
           <div id="rewardContent"></div>
         </div>
@@ -861,7 +908,7 @@ function initials(name){return name.split(/\s+/).slice(0,2).map(x=>x[0]).join(''
 function statusBadge(s){if(!s||s==='—')return '<span class="muted">—</span>';const cls=s==='Active'||s==='Effective'?'active':s==='Pending'||s==='Pending Confirmation'||s==='Unpaid'||s==='Unissued'||s==='Unclaimed'||s==='Scheduled'||s==='Pending Finance Review'||s==='Ready to Publish'?'pending':s==='Rejected'?'rejected':s==='Paid'?'paid':s==='Issued'||s==='Claimed'?'issued':s==='Failed'?'failed':s==='Confirmed'||s==='Published'?'confirmed':s==='Cancelled'||s==='Expired'?'rejected':'';return `<span class="badge ${cls}">${displayStatus(s)}</span>`}
 function memberCell(name,id){return `<div class="nameCell"><div class="avatar">${initials(name)}</div><div><b>${name}</b><small>UID ${id}</small></div></div>`}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('show'),1700)}
-function goView(v,rewardMain=null){if(v==='rewards'&&rewardMain)state.rewardMain=rewardMain;state.view=v;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));document.querySelectorAll('.navBtn').forEach(x=>{const active=v==='rewards'?x.dataset.view==='rewards'&&x.dataset.rewardmain===state.rewardMain:x.dataset.view===v;x.classList.toggle('active',active)});let title=titles[v][0],subtitle=titles[v][1];if(v==='rewards'){title=state.rewardMain==='invitation'?'邀请奖励':'房间贡献奖励';subtitle=state.rewardMain==='invitation'?'按领奖人 / Host 查询邀请奖励结果':'按 Room + 奖励周期 查询达标与自动发放结果'}document.getElementById('topTitle').textContent=title;document.getElementById('topSubtitle').textContent=subtitle;if(v==='members')renderMembers();if(v==='applications')renderApplications();if(v==='data')renderData();if(v==='settlement')renderSettlement();if(v==='rewards')renderRewards();if(v==='dashboard')updatePendingCounters();window.scrollTo(0,0)}
+function goView(v,rewardMain=null){if(v==='rewards'&&rewardMain)state.rewardMain=rewardMain;state.view=v;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));document.querySelectorAll('.navBtn').forEach(x=>{const active=v==='rewards'?x.dataset.view==='rewards'&&x.dataset.rewardmain===state.rewardMain:x.dataset.view===v;x.classList.toggle('active',active)});let title=titles[v][0],subtitle=titles[v][1];if(v==='rewards'){title=state.rewardMain==='invitation'?'邀请奖励':'房间贡献奖励';subtitle=state.rewardMain==='invitation'?'邀请奖励查询':'房间贡献奖励查询'}document.getElementById('topTitle').textContent=title;document.getElementById('topSubtitle').textContent=subtitle;if(v==='members')renderMembers();if(v==='applications')renderApplications();if(v==='data')renderData();if(v==='settlement')renderSettlement();if(v==='rewards')renderRewards();if(v==='dashboard')updatePendingCounters();window.scrollTo(0,0)}
 document.querySelectorAll('.navBtn').forEach(b=>b.onclick=()=>{if(b.dataset.view==='settlement'){state.settlementQueueStatus=null;const period=document.getElementById('settlementPeriod');if(period)period.style.display=''}goView(b.dataset.view,b.dataset.rewardmain||null)});
 document.querySelectorAll('#memberTabs .tabBtn').forEach(b=>b.onclick=()=>{state.memberTab=b.dataset.membertab;renderMembers()});
 function memberAffiliationType(m){return !m.superior||m.superior==='Platform-direct'?'Platform Direct':'Role Affiliated'}
@@ -1423,8 +1470,8 @@ function openManagementDrill(uid){
    <h4>查看团队数据</h4>
    <div class="note">Billing Cycle、国家/地区等现有筛选条件继续保留；下钻自动带入该成员 Total Team 范围。</div>
    <div class="drawerActions">
-    <button class="btn" onclick="drillManagementTo('agency','${x.uid}')">查看代理周收益数据</button>
-    <button class="btn" onclick="drillManagementTo('host','${x.uid}')">查看主播周收益数据</button>
+    <button class="btn" onclick="drillManagementTo('agency','${x.uid}')">查看代理周数据</button>
+    <button class="btn" onclick="drillManagementTo('host','${x.uid}')">查看主播周数据</button>
    </div>
   </div>`)
 }
@@ -1435,7 +1482,7 @@ function drillManagementTo(tab,uid){
 }
 function openAgencyDrill(uid){
  const x=agencyData.find(a=>a.uid===uid);if(!x)return;const p=dataPeriodInfo(),f=p.factor;
- openDrawer('代理周收益数据',`<div class="detailHero"><div class="avatar">${initials(x.name)}</div><div><h3>${x.name}</h3><p>Agent · UID ${x.uid}</p></div></div><div class="detailSec"><h4>${p.range}</h4><div class="kv"><div><span>本周 Coins</span><b>${fmt(periodNum(x.coins,f))}</b></div><div><span>本周 Diamonds</span><b>${fmt(periodNum(x.diamonds,f))}</b></div><div><span>有效时长</span><b>${periodNum(x.validHours,f,1)}h</b></div><div><span>Host 总数</span><b>${snapshotCount(x.hosts,p)}</b></div><div><span>新增 Host</span><b>${periodNum(x.newHosts,f)}</b></div><div><span>有效 Host</span><b>${periodNum(x.effective,f)}</b></div><div><span>活跃 Host</span><b>${periodNum(x.active,f)}</b></div><div><span>收礼 Host</span><b>${periodNum(x.gifted,f)}</b></div></div></div><div class="detailSec"><div class="note">Weekly Coins / Diamonds / 有效时长 按发生时 Agency 归属；周结算型结果仍以周期结束时最终组织归属为准。</div></div><div class="drawerActions"><button class="btn" onclick="drillAgencyToHosts('${x.uid}')">查看主播周收益数据</button></div>`)
+ openDrawer('代理周数据',`<div class="detailHero"><div class="avatar">${initials(x.name)}</div><div><h3>${x.name}</h3><p>Agent · UID ${x.uid}</p></div></div><div class="detailSec"><h4>${p.range}</h4><div class="kv"><div><span>本周 Coins</span><b>${fmt(periodNum(x.coins,f))}</b></div><div><span>本周 Diamonds</span><b>${fmt(periodNum(x.diamonds,f))}</b></div><div><span>有效时长</span><b>${periodNum(x.validHours,f,1)}h</b></div><div><span>Host 总数</span><b>${snapshotCount(x.hosts,p)}</b></div><div><span>新增 Host</span><b>${periodNum(x.newHosts,f)}</b></div><div><span>有效 Host</span><b>${periodNum(x.effective,f)}</b></div><div><span>活跃 Host</span><b>${periodNum(x.active,f)}</b></div><div><span>收礼 Host</span><b>${periodNum(x.gifted,f)}</b></div></div></div><div class="detailSec"><div class="note">Weekly Coins / Diamonds / 有效时长 按发生时 Agency 归属；周结算型结果仍以周期结束时最终组织归属为准。</div></div><div class="drawerActions"><button class="btn" onclick="drillAgencyToHosts('${x.uid}')">查看主播周数据</button></div>`)
 }
 function drillAgencyToHosts(uid){
  closeDrawer();state.dataAgencyUid=uid;state.dataTab='host';syncTabs('dataTabs','data','host');
@@ -1623,7 +1670,7 @@ function dcSyncFilterVisibility(){
  document.querySelectorAll('.dataAgencyOnly').forEach(el=>el.style.display=ag?'':'none');
  document.querySelectorAll('.dataHostOnly').forEach(el=>el.style.display=ho?'':'none');
 }
-function syncDataTimeRange(){const el=document.getElementById('dataRangeText');if(el)el.textContent=`${dataPeriodInfo().range} · UTC+0`}
+function syncDataTimeRange(){const el=document.getElementById('dataRangeText');if(el)el.textContent=dataPeriodInfo().range}
 onDataTimeChange=function(){resetDataPage();syncDataTimeRange();renderData()}
 function dcInPeriodEndSnapshot(x){
  const k=selectedDataPeriodKey(),explicit=dcSnapshotIncluded[String(x.uid)]?.[k];
@@ -1996,8 +2043,8 @@ renderData();
 </script>
 
 
-<style id="v37-data-center-host-daily-first">
-#dataTabs .dataTabDeferred{display:none!important}
+<style id="v39-data-center-weekly-tabs-restored">
+/* 数据中心 Tab 顺序：主播日数据 → 主播周数据 → 代理周数据 → 管理线周数据；主播日数据为默认入口。 */
 </style>
 <style id="v27-data-four-tabs-style">
 .dataFourTabs{overflow-x:auto;flex-wrap:nowrap}
@@ -2357,6 +2404,314 @@ goView=function(v,rewardMain=null){
 };
 renderData();
 </script>
+
+<style id="v41-data-center-forecast-style">
+#view-data .hostDataModeTabs{display:flex;gap:8px;padding:12px 0 14px;border-bottom:0;background:transparent}
+#view-data .hostDataModeTabs.hidden{display:none!important}
+#view-data .forecastTable{min-width:2100px!important}
+#view-data .forecastHostWeekly{min-width:2780px!important}
+#view-data .forecastAgencyWeekly{min-width:2520px!important}
+#view-data .forecastManagementWeekly{min-width:3180px!important}
+#view-data .forecastTable th,#view-data .forecastTable td{white-space:nowrap;vertical-align:middle}
+#view-data .identityPlain{display:flex;flex-direction:column;gap:2px;min-width:150px}
+#view-data .identityPlain b{font-size:13px;color:#17233a}.identityPlain small{font-size:11px;color:#7c8da8}
+#view-data .forecastHint{margin:0 0 12px;padding:10px 12px;border:1px solid #dce8f8;background:#f7faff;border-radius:9px;color:#5f7290;font-size:12px;line-height:1.6}
+#view-data .forecastHint b{color:#264f8e}
+#view-data .forecastMoney{font-weight:800;color:#17345f}
+#view-data .forecastSubtle{color:#6f829e}
+#view-data .dataPeriodPicker,#view-data .dataDailyDatePicker{height:40px;display:inline-flex;align-items:center;gap:8px;border:1px solid #d7e2f0;background:#fff;border-radius:9px;padding:0 9px;box-shadow:0 1px 2px rgba(22,50,86,.03)}
+#view-data .dataPeriodPicker:focus-within,#view-data .dataDailyDatePicker:focus-within{border-color:#8ab4ef;box-shadow:0 0 0 3px rgba(52,120,218,.10)}
+#view-data .pickerCalendar{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;color:#6481a8;font-size:15px;line-height:1}
+#view-data .periodSelect{height:38px;border:0;background:transparent;color:#1f3657;font-size:13px;font-weight:700;outline:none;padding:0 20px 0 0;min-width:70px;cursor:pointer}
+#view-data .periodDivider{width:1px;height:18px;background:#dce6f2}
+#view-data .periodRange{font-size:13px;color:#4f6685;white-space:nowrap;font-variant-numeric:tabular-nums}
+#view-data .timezoneChip{display:inline-flex;align-items:center;height:22px;padding:0 7px;border-radius:6px;background:#f1f6fc;color:#69809f;font-size:11px;font-weight:700;white-space:nowrap}
+#view-data .dataDailyDatePicker{padding:0 7px 0 5px;gap:5px}
+#view-data .dateStepBtn{width:30px;height:30px;border:0;border-radius:7px;background:transparent;color:#506c92;font-size:22px;line-height:28px;padding:0;cursor:pointer}
+#view-data .dateStepBtn:hover{background:#f0f5fb;color:#275fa9}
+#view-data .dateInputWrap{height:38px;display:inline-flex;align-items:center;gap:7px;padding:0 8px;border-left:1px solid transparent;border-right:1px solid transparent;cursor:pointer}
+#view-data .dateInputWrap input[type=date]{width:132px;height:36px;border:0;background:transparent;color:#1f3657;font-size:13px;font-weight:700;outline:none;font-variant-numeric:tabular-nums;cursor:pointer}
+#view-data .dateInputWrap input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.65}
+@media(max-width:900px){#view-data .dataPeriodPicker{max-width:100%}#view-data .periodRange{display:none}#view-data .periodDivider{display:none}}
+</style>
+<script id="v41-data-center-forecast-script">
+/* v41 — Data Center: Host Daily/Weekly consolidated. Weekly tables are 30-minute forecast views; final settlement remains in Settlement Center. */
+(function(){
+  /* Demo-only forecast dimensions. */
+  const hostForecastMeta={
+    '10364025':{isNew:'No',givers:46,agentOwnSalary:8.32,overflowCoins:0},
+    '10828491':{isNew:'Yes',givers:39,agentOwnSalary:5.47,overflowCoins:0},
+    '10567320':{isNew:'No',givers:21,agentOwnSalary:3.18,overflowCoins:50000},
+    '10930018':{isNew:'Yes',givers:63,agentOwnSalary:11.10,overflowCoins:50000},
+    '10110000':{isNew:'No',givers:0,agentOwnSalary:0,overflowCoins:0}
+  };
+  hostData.forEach(x=>Object.assign(x,hostForecastMeta[x.uid]||{isNew:'No',givers:0,agentOwnSalary:0,overflowCoins:0}));
+  const agencyGivers={'310001':318,'310017':226,'310042':149,'310099':64};
+  agencyData.forEach(x=>{x.givers=agencyGivers[x.uid]||0});
+  const managementGivers={'540001':2140,'530088':901,'520044':596,'510026':744,'520119':126};
+  managementData.forEach(x=>{x.givers=managementGivers[x.uid]||0});
+
+  function identityPlain(name,uid){return `<div class="identityPlain"><b>${name||'—'}</b><small>ID ${uid||'—'}</small></div>`}
+  function forecastStatusInIdentity(x){return x?.status==='Terminated'?'<span class="badge rejected" style="margin-left:6px">已解约</span>':''}
+  function forecastScaleMoney(v,p){return Number(v||0)*Number(p?.factor||1)}
+  function hostWeeklyMetrics(x,p){
+    const f=p.factor,days=Math.max(0,periodNum(x.days,f)),hours=periodNum(x.hours,f,1),coins=periodNum(x.coins,f),diamonds=periodNum(x.diamonds,f);
+    const effective=days>=4&&hours>=10?'Yes':'No';
+    return {
+      coins,diamonds,days,hours,effective,
+      diamondBalance:Math.round(Number(x.diamondBalance||0)*f),
+      givers:Math.round(Number(x.givers||0)*f),
+      level:x.tier||'—',
+      levelSalary:forecastScaleMoney(x.target,p),
+      diamondSalary:forecastScaleMoney(x.diamondSalary,p),
+      hostSalary:forecastScaleMoney(x.final,p),
+      agentOwnSalary:forecastScaleMoney(x.agentOwnSalary,p),
+      overflowCoins:Math.round(Number(x.overflowCoins||0)*f),
+      isNew:x.isNew||'No'
+    };
+  }
+
+  /* New three first-level tabs. */
+  window.syncDataTabsV41=function(){
+    document.querySelectorAll('#dataTabs .tabBtn').forEach(btn=>btn.classList.toggle('active',btn.dataset.data===state.dataTab));
+    const host=state.dataTab==='host';
+    const modes=document.getElementById('hostDataModeTabs');if(modes)modes.classList.toggle('hidden',!host);
+    document.querySelectorAll('#hostDataModeTabs .hostModeBtn').forEach(btn=>btn.classList.toggle('active',btn.dataset.hostmode===state.hostDataMode));
+  };
+  window.setDataCenterTabV41=function(key){
+    state.dataTab=['host','agency','management'].includes(key)?key:'host';
+    state.dataManagementScopeUid=null;state.dataAgencyUid=null;state.dataPage=1;state.dataSortKey='coins';state.dataSortDir='desc';
+    const q=document.getElementById('dataMember');if(q)q.value='';
+    const sc=document.getElementById('dataScope');if(sc)sc.value='All';
+    renderData();
+  };
+  document.querySelectorAll('#dataTabs .tabBtn').forEach(btn=>btn.onclick=()=>setDataCenterTabV41(btn.dataset.data));
+  document.querySelectorAll('#hostDataModeTabs .hostModeBtn').forEach(btn=>btn.onclick=()=>{
+    state.hostDataMode=btn.dataset.hostmode;state.dataPage=1;state.dataSortKey='coins';state.dataSortDir='desc';
+    const eff=document.getElementById('dataEffectiveStatus');if(eff)eff.value='All';
+    const nh=document.getElementById('dataHostNewStatus');if(nh)nh.value='All';
+    renderData();
+  });
+
+  /* Filter behavior follows current table granularity. */
+  window.dcSyncFilterVisibility=function(){
+    const mg=state.dataTab==='management',ag=state.dataTab==='agency',ho=state.dataTab==='host',daily=ho&&state.hostDataMode==='daily',weeklyHost=ho&&!daily;
+    document.querySelectorAll('.dataManagementOnly').forEach(el=>el.style.display=mg?'':'none');
+    document.querySelectorAll('.dataManagementAgencyOnly').forEach(el=>el.style.display=(mg||ag)?'':'none');
+    document.querySelectorAll('.dataAgencyOnly').forEach(el=>el.style.display=ag?'':'none');
+    document.querySelectorAll('.dataHostOnly').forEach(el=>el.style.display=ho?'':'none');
+    document.querySelectorAll('.dataHostWeeklyOnly').forEach(el=>el.style.display=weeklyHost?'':'none');
+    const weeklyPicker=document.getElementById('dataWeeklyPeriodPicker'),dailyPicker=document.getElementById('dataDailyDatePicker');
+    if(weeklyPicker)weeklyPicker.style.display=daily?'none':'inline-flex';
+    if(dailyPicker)dailyPicker.style.display=daily?'inline-flex':'none';
+    const oldAgencySelect=document.getElementById('dataAgencyFilter');if(oldAgencySelect)oldAgencySelect.style.display='none';
+    ['dataActiveStatus','dataGiftedStatus'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none'});
+    const member=document.getElementById('dataMember');if(member)member.placeholder=ho?'输入主播 ID 或昵称':ag?'输入代理 ID 或昵称':'输入 UID 或昵称';
+    const eff=document.getElementById('dataEffectiveStatus');
+    if(eff){
+      const val=eff.value||'All';
+      eff.innerHTML=daily?'<option value="All">是否有效天</option><option value="Yes">有效天</option><option value="No">非有效天</option>':'<option value="All">是否有效主播</option><option value="Yes">有效主播</option><option value="No">非有效主播</option>';
+      eff.value=['All','Yes','No'].includes(val)?val:'All';
+      eff.style.display=ho?'':'none';
+    }
+    syncDataTabsV41();
+  };
+
+  window.shiftDataDailyDate=function(delta){
+    const el=document.getElementById('dataDailyDate');if(!el||!el.value)return;
+    const d=new Date(el.value+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+Number(delta||0));
+    el.value=d.toISOString().slice(0,10);resetDataPage();renderData();
+  };
+
+  /* Host daily filters: date / country / host / agent / valid day. */
+  window.hostDailyEnrichedRows=function(){
+    const date=document.getElementById('dataDailyDate')?.value||'2026-08-28';
+    const q=(document.getElementById('dataMember')?.value||'').trim().toLowerCase();
+    const aq=(document.getElementById('dataHostAgencySearch')?.value||'').trim().toLowerCase();
+    const country=document.getElementById('dataCountry')?.value||'All Countries';
+    const eff=document.getElementById('dataEffectiveStatus')?.value||'All';
+    return hostDailyData.filter(r=>r.date===date).map(r=>{
+      const h=hostData.find(x=>String(x.uid)===String(r.uid));if(!h)return null;
+      const a=hostAgencyRecord(h),snap=hostSnapshotAgent(h);
+      return {...r,name:h.name,status:h.status,country:h.country,agency:snap.name,agencyUid:snap.uid,agencyRecord:a,validDay:r.micHours>=2?'Yes':'No'};
+    }).filter(Boolean).filter(x=>(!q||String(x.uid).includes(q)||String(x.name).toLowerCase().includes(q))&&(country==='All Countries'||x.country===country)&&(!aq||String(x.agencyUid).toLowerCase().includes(aq)||String(x.agency).toLowerCase().includes(aq))&&(eff==='All'||x.validDay===eff)&&(!state.dataAgencyUid||String(x.agencyUid)===String(state.dataAgencyUid))&&(!state.dataManagementScopeUid||agencyInManagementScope(x.agencyRecord,state.dataManagementScopeUid,'Total Team')));
+  };
+
+  window.hostDailyTable=function(){
+    const all=hostDailyEnrichedRows(),sorted=hostDailySorted(all),meta=dcPaginate(sorted),rows=meta.rows,date=document.getElementById('dataDailyDate')?.value||'2026-08-28';
+    const note=`<div class="forecastHint compactHint"><b>按日口径</b><span>送礼人数按 UID 去重</span><span>有效上麦次数：单次 ≥60 秒</span><span>有效天：有效上麦时长 ≥2h</span></div>`;
+    return `${note}${hostDailySummary(all)}<div class="table-responsive tableWrap"><table class="table hostDailyTable forecastTable"><thead><tr><th>主播头像、昵称、ID</th><th>国家/地区</th><th>代理昵称、ID</th><th>${dcSortHeader('送礼人数','givers')}</th><th>${dcSortHeader('总金币','coins')}</th><th>${dcSortHeader('总钻石','diamonds')}</th><th>${dcSortHeader('有效上麦次数','micSessions')}</th><th>${dcSortHeader('有效上麦时长(h)','micHours')}</th><th>${dcSortHeader('是否有效天','validDay')}</th><th>${dcSortHeader('兑换钻石数','exchanged')}</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${memberCell(x.name,x.uid)}</td><td>${displayCountry(x.country)}</td><td>${identityPlain(x.agency,x.agencyUid)}</td><td>${x.givers}</td><td>${fmt(x.coins)}</td><td>${fmt(x.diamonds)}</td><td>${x.micSessions}</td><td>${x.micHours.toFixed(2)}</td><td>${yesNo(x.validDay)}</td><td>${fmt(x.exchangedDiamonds)}</td></tr>`).join('')||'<tr><td colspan="10"><div class="empty">暂无符合条件的日统计数据。</div></td></tr>'}</tbody></table></div>${dcPager(meta)}`;
+  };
+
+  /* Host weekly filters and sorting. */
+  window.dcHostRows=function(){
+    const q=(document.getElementById('dataMember')?.value||'').trim().toLowerCase(),aq=(document.getElementById('dataHostAgencySearch')?.value||'').trim().toLowerCase(),country=document.getElementById('dataCountry')?.value||'All Countries',effFilter=document.getElementById('dataEffectiveStatus')?.value||'All',newFilter=document.getElementById('dataHostNewStatus')?.value||'All';
+    const p=dataPeriodInfo();
+    return hostData.filter(x=>dataRowAvailable(x)&&(!q||String(x.uid).includes(q)||String(x.name).toLowerCase().includes(q))).filter(h=>{
+      const a=hostAgencyRecord(h),snap=hostSnapshotAgent(h),m=hostWeeklyMetrics(h,p);
+      if(state.dataAgencyUid&&String(snap.uid)!==String(state.dataAgencyUid))return false;
+      if(state.dataManagementScopeUid&&(!a||!agencyInManagementScope(a,state.dataManagementScopeUid,'Total Team')))return false;
+      if(country!=='All Countries'&&h.country!==country)return false;
+      if(aq&&!String(snap.uid).toLowerCase().includes(aq)&&!String(snap.name||'').toLowerCase().includes(aq))return false;
+      if(effFilter!=='All'&&m.effective!==effFilter)return false;
+      if(newFilter!=='All'&&m.isNew!==newFilter)return false;
+      return true;
+    });
+  };
+
+  const oldSortValue=dcSortValue;
+  window.dcSortValue=function(x,key,tab,p=dataPeriodInfo()){
+    if(tab==='host'){const m=hostWeeklyMetrics(x,p);const map={coins:m.coins,diamonds:m.diamonds,givers:m.givers,diamondBalance:m.diamondBalance,hours:m.hours,days:m.days,eff:m.effective==='Yes'?1:0,levelSalary:m.levelSalary,diamondSalary:m.diamondSalary,hostSalary:m.hostSalary,agentOwnSalary:m.agentOwnSalary,overflowCoins:m.overflowCoins};if(key in map)return Number(map[key]||0)}
+    if(tab==='agency'){const map={givers:periodNum(x.givers,p.factor),hostSalary:forecastScaleMoney(x.hostSalary,p),agentOwnSalary:forecastScaleMoney(x.agentGross,p),agentTotalSalary:forecastScaleMoney(Number(x.hostSalary||0)+Number(x.agentGross||0),p)};if(key in map)return Number(map[key]||0)}
+    if(tab==='management'){const agentTotal=forecastScaleMoney(x.agencySalary,p),commission=agentTotal*Number(x.rate||0)/100,total=commission+forecastScaleMoney(x.actualBase,p);const map={givers:periodNum(x.givers,p.factor),agencySalary:agentTotal,commission,totalSalary:total};if(key in map)return Number(map[key]||0)}
+    return oldSortValue(x,key,tab,p);
+  };
+
+  window.hostTable=function(){
+    const p=dataPeriodInfo(),all=dcHostRows(),sorted=dcSortRows(all,'host'),meta=dcPaginate(sorted),rows=meta.rows;
+    const totalHostSalary=dcSum(all,x=>hostWeeklyMetrics(x,p).hostSalary),effective=all.filter(x=>hostWeeklyMetrics(x,p).effective==='Yes').length;
+    const note=`<div class="forecastHint compactHint"><b>${p.range}</b><span>等级及薪资按当前周期累计数据动态预估</span></div>`;
+    const summary=dcSummary([['主播数',all.filter(dcInPeriodEndSnapshot).length],['总金币',fmt(dcSum(all,x=>hostWeeklyMetrics(x,p).coins))],['有效主播',effective],['总钻石',fmt(dcSum(all,x=>hostWeeklyMetrics(x,p).diamonds))],['预计主播总薪资',money(totalHostSalary)]]);
+    return `${note}${summary}<div class="table-responsive tableWrap"><table class="table forecastTable forecastHostWeekly"><thead><tr><th>主播头像、昵称、ID</th><th>国家/地区</th><th>是否新主播</th><th>代理昵称、ID</th><th>${dcSortHeader('送礼人数','givers')}</th><th>${dcSortHeader('总金币','coins')}</th><th>${dcSortHeader('总钻石','diamonds')}</th><th>${dcSortHeader('钻石余额','diamondBalance')}</th><th>${dcSortHeader('有效上麦时长(h)','hours')}</th><th>${dcSortHeader('有效天','days')}</th><th>${dcSortHeader('是否有效主播','eff')}</th><th>等级</th><th>${dcSortHeader('等级薪资','levelSalary')}</th><th>${dcSortHeader('钻石薪资','diamondSalary')}</th><th>${dcSortHeader('主播总薪资','hostSalary')}</th><th>${dcSortHeader('代理本人薪资','agentOwnSalary')}</th><th>${dcSortHeader('超出档位金币','overflowCoins')}</th></tr></thead><tbody>${rows.map(x=>{const m=hostWeeklyMetrics(x,p),snap=hostSnapshotAgent(x);return `<tr><td>${memberCell(x.name,x.uid)}${forecastStatusInIdentity(x)}</td><td>${displayCountry(x.country)}</td><td>${yesNo(m.isNew)}</td><td>${identityPlain(snap.name,snap.uid)}</td><td>${m.givers}</td><td>${fmt(m.coins)}</td><td>${fmt(m.diamonds)}</td><td>${fmt(m.diamondBalance)}</td><td>${m.hours.toFixed(1)}h</td><td>${m.days}</td><td>${yesNo(m.effective)}</td><td>${m.level}</td><td class="forecastMoney">${money(m.levelSalary)}</td><td class="forecastMoney">${money(m.diamondSalary)}</td><td class="forecastMoney">${money(m.hostSalary)}</td><td class="forecastMoney">${money(m.agentOwnSalary)}</td><td>${fmt(m.overflowCoins)}</td></tr>`}).join('')||'<tr><td colspan="17"><div class="empty">暂无符合条件的主播周数据。</div></td></tr>'}</tbody></table></div>${dcPager(meta)}`;
+  };
+
+  window.agencyTable=function(){
+    const p=dataPeriodInfo(),all=dcAgencyRows(),sorted=dcSortRows(all,'agency'),meta=dcPaginate(sorted),rows=meta.rows;
+    const note=`<div class="forecastHint compactHint"><b>${p.range}</b><span>代理总薪资 = 主播总薪资 + 代理本人总薪资</span></div>`;
+    const summary=dcSummary([['代理数',all.filter(dcInPeriodEndSnapshot).length],['总主播数',fmt(dcSum(all,x=>dcInPeriodEndSnapshot(x)?snapshotCount(x.hosts,p):0))],['有效主播数',fmt(dcSum(all,x=>dcStatusSnapshotMetric(x,x.effective,p)))],['总金币',fmt(dcSum(all,x=>periodNum(x.coins,p.factor)))],['预计代理总薪资',money(dcSum(all,x=>forecastScaleMoney(Number(x.hostSalary||0)+Number(x.agentGross||0),p)))]]);
+    return `${note}${summary}<div class="table-responsive tableWrap"><table class="table forecastTable forecastAgencyWeekly"><thead><tr><th>代理头像、昵称、ID</th><th>国家/地区</th><th>直属上级昵称、ID</th><th>${dcSortHeader('总主播数','hosts')}</th><th>${dcSortHeader('新主播数','newHosts')}</th><th>${dcSortHeader('有效主播数','eff')}</th><th>${dcSortHeader('活跃主播数','active')}</th><th>${dcSortHeader('收礼主播数','gifted')}</th><th>${dcSortHeader('送礼人数','givers')}</th><th>${dcSortHeader('总金币','coins')}</th><th>${dcSortHeader('总钻石','diamonds')}</th><th>${dcSortHeader('总有效上麦时长(h)','validHours')}</th><th>${dcSortHeader('主播总薪资','hostSalary')}</th><th>${dcSortHeader('代理本人总薪资','agentOwnSalary')}</th><th>${dcSortHeader('代理总薪资','agentTotalSalary')}</th></tr></thead><tbody>${rows.map(x=>{const hostSalary=forecastScaleMoney(x.hostSalary,p),own=forecastScaleMoney(x.agentGross,p),total=hostSalary+own;const sup=snapshotSuperior(x);const sm=String(sup).match(/^(.*) · (\d+)$/);return `<tr><td>${memberCell(x.name,x.uid)}${forecastStatusInIdentity(x)}</td><td>${displayCountry(x.country)}</td><td>${sm?identityPlain(sm[1],sm[2]):displaySuperior(sup)}</td><td>${dcInPeriodEndSnapshot(x)?snapshotCount(x.hosts,p):0}</td><td>${periodNum(x.newHosts,p.factor)}</td><td>${dcStatusSnapshotMetric(x,x.effective,p)}</td><td>${dcStatusSnapshotMetric(x,x.active,p)}</td><td>${dcStatusSnapshotMetric(x,x.gifted,p)}</td><td>${periodNum(x.givers,p.factor)}</td><td>${fmt(periodNum(x.coins,p.factor))}</td><td>${fmt(periodNum(x.diamonds,p.factor))}</td><td>${periodNum(x.validHours,p.factor,1).toFixed(1)}h</td><td class="forecastMoney">${money(hostSalary)}</td><td class="forecastMoney">${money(own)}</td><td class="forecastMoney">${money(total)}</td></tr>`}).join('')||'<tr><td colspan="15"><div class="empty">暂无符合条件的代理周数据。</div></td></tr>'}</tbody></table></div>${dcPager(meta)}`;
+  };
+
+  window.managementTable=function(){
+    const p=dataPeriodInfo(),all=dcManagementRows(),sorted=dcSortRows(all,'management'),meta=dcPaginate(sorted),rows=meta.rows;
+    const note=`<div class="forecastHint compactHint"><b>${p.range}</b><span>提成薪资 = 代理总薪资 × 提成比例</span><span>总薪资 = 提成薪资 + 等级底薪</span></div>`;
+    const summary=dcSummary([['管理成员',all.filter(dcInPeriodEndSnapshot).length],['总代理数',fmt(dcSum(all,x=>dcInPeriodEndSnapshot(x)?snapshotCount(x.agencies,p):0))],['总主播数',fmt(dcSum(all,x=>dcInPeriodEndSnapshot(x)?snapshotCount(x.hosts,p):0))],['总金币',fmt(dcSum(all,x=>periodNum(x.coins,p.factor)))],['预计管理线总薪资',money(dcSum(all,x=>{const ag=forecastScaleMoney(x.agencySalary,p),com=ag*Number(x.rate||0)/100;return com+forecastScaleMoney(x.actualBase,p)}))]]);
+    return `${note}${summary}<div class="table-responsive tableWrap"><table class="table forecastTable forecastManagementWeekly"><thead><tr><th>头像、昵称、ID</th><th>角色</th><th>等级</th><th>国家/地区</th><th>直属上级昵称、ID</th><th>${dcSortHeader('总代理数','agencies')}</th><th>${dcSortHeader('总主播数','hosts')}</th><th>${dcSortHeader('新主播数','newHosts')}</th><th>${dcSortHeader('有效主播数','eff')}</th><th>${dcSortHeader('活跃主播数','active')}</th><th>${dcSortHeader('收礼主播数','gifted')}</th><th>${dcSortHeader('送礼人数','givers')}</th><th>${dcSortHeader('总金币','coins')}</th><th>${dcSortHeader('总钻石','diamonds')}</th><th>${dcSortHeader('总有效上麦时长(h)','validHours')}</th><th>${dcSortHeader('代理总薪资','agencySalary')}</th><th>提成比例</th><th>${dcSortHeader('提成薪资','commission')}</th><th>等级底薪</th><th>${dcSortHeader('总薪资','totalSalary')}</th></tr></thead><tbody>${rows.map(x=>{const ag=forecastScaleMoney(x.agencySalary,p),rate=Number(x.rate||0),commission=ag*rate/100,base=forecastScaleMoney(x.actualBase,p),total=commission+base,sup=snapshotSuperior(x),sm=String(sup).match(/^(.*) · (\d+)$/);return `<tr><td>${memberCell(x.name,x.uid)}${forecastStatusInIdentity(x)}</td><td><span class="roleText">${x.role}</span></td><td>${x.level||'—'}</td><td>${displayCountry(x.country)}</td><td>${sm?identityPlain(sm[1],sm[2]):displaySuperior(sup)}</td><td>${dcInPeriodEndSnapshot(x)?snapshotCount(x.agencies,p):0}</td><td>${dcInPeriodEndSnapshot(x)?snapshotCount(x.hosts,p):0}</td><td>${periodNum(x.newHosts,p.factor)}</td><td>${dcStatusSnapshotMetric(x,x.eff,p)}</td><td>${dcStatusSnapshotMetric(x,x.active,p)}</td><td>${dcStatusSnapshotMetric(x,x.gifted,p)}</td><td>${periodNum(x.givers,p.factor)}</td><td>${fmt(periodNum(x.coins,p.factor))}</td><td>${fmt(periodNum(x.diamonds,p.factor))}</td><td>${periodNum(x.validHours,p.factor,1).toFixed(1)}h</td><td class="forecastMoney">${money(ag)}</td><td>${rate}%</td><td class="forecastMoney">${money(commission)}</td><td class="forecastMoney">${money(base)}</td><td class="forecastMoney">${money(total)}</td></tr>`}).join('')||'<tr><td colspan="20"><div class="empty">暂无符合条件的管理线周数据。</div></td></tr>'}</tbody></table></div>${dcPager(meta)}`;
+  };
+
+  window.renderData=function(){
+    if(!['management','agency','host'].includes(state.dataTab))state.dataTab='host';
+    syncDataTimeRange();dcPopulateCountries();dcPopulateAgencies();dcSyncFilterVisibility();renderDataDrillScope();
+    let body='';
+    if(state.dataTab==='host'&&state.hostDataMode==='daily'){
+      if(!['coins','diamonds','givers','micSessions','micHours','validDay','exchanged'].includes(state.dataSortKey)){state.dataSortKey='coins';state.dataSortDir='desc'}
+      body=hostDailyTable();
+    }else if(state.dataTab==='host'){body=hostTable()}
+    else if(state.dataTab==='agency'){body=agencyTable()}
+    else{body=managementTable()}
+    document.getElementById('dataContent').innerHTML=body;syncDataTabsV41();
+  };
+
+  /* Drilldowns always open Host weekly when drilling from higher levels. */
+  window.drillAgencyToHosts=function(uid){closeDrawer();state.dataAgencyUid=uid;state.dataTab='host';state.hostDataMode='weekly';const q=document.getElementById('dataMember');if(q)q.value='';renderData();toast('已带入该代理范围')};
+  window.drillManagementTo=function(tab,uid){closeDrawer();state.dataManagementScopeUid=uid;state.dataAgencyUid=null;state.dataTab=tab==='agency'?'agency':'host';if(state.dataTab==='host')state.hostDataMode='weekly';const sc=document.getElementById('dataScope');if(sc)sc.value='Total Team';const q=document.getElementById('dataMember');if(q)q.value='';renderData();toast('已带入该成员 Total Team 范围')};
+
+  state.dataTab='host';state.hostDataMode=state.hostDataMode||'daily';
+  renderData();
+})();
+</script>
+
+<style>
+/* v44 — Data Center filter + time picker fixes */
+#view-data .v44WeekPicker{position:relative;padding:0 7px 0 5px;gap:5px;overflow:visible;z-index:8}
+#view-data .v44HiddenPeriodSelect{display:none!important}
+#view-data .weekPickerMain{height:38px;min-width:310px;display:inline-flex;align-items:center;gap:8px;border:0;background:transparent;padding:0 8px;color:#1f3657;cursor:pointer;text-align:left;border-radius:7px}
+#view-data .weekPickerMain:hover{background:#f5f8fc}
+#view-data .weekPickerMain:focus-visible{outline:2px solid #8ab4ef;outline-offset:1px}
+#view-data .weekPickerLabel{font-size:13px;font-weight:750;white-space:nowrap;min-width:58px}
+#view-data .weekChevron{margin-left:auto;color:#7087a5;font-size:14px;transition:transform .15s ease}
+#view-data .weekPickerMain[aria-expanded="true"] .weekChevron{transform:rotate(180deg)}
+#view-data .weekPeriodMenu{position:absolute;left:35px;top:45px;width:312px;padding:6px;background:#fff;border:1px solid #d8e2ef;border-radius:10px;box-shadow:0 12px 30px rgba(30,58,94,.16);z-index:100}
+#view-data .weekPeriodMenu.hidden{display:none!important}
+#view-data .weekPeriodMenu button{width:100%;border:0;background:#fff;border-radius:7px;display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:center;padding:10px 11px;cursor:pointer;color:#243c5d;text-align:left}
+#view-data .weekPeriodMenu button:hover{background:#f2f6fb}
+#view-data .weekPeriodMenu button.isSelected{background:#edf4ff;color:#246bd5}
+#view-data .weekPeriodMenu button b{font-size:13px}
+#view-data .weekPeriodMenu button span{font-size:12px;color:#7186a2;font-variant-numeric:tabular-nums}
+#view-data .dateStepBtn:disabled{opacity:.35;cursor:not-allowed;background:transparent!important}
+#view-data .v44RoleFilter{min-width:164px;font-weight:650;color:#25466f}
+#view-data .dataFilterBar{overflow:visible}
+@media(max-width:1100px){#view-data .weekPickerMain{min-width:255px}#view-data .periodRange{display:none}#view-data .weekPeriodMenu{width:270px}}
+</style>
+<script>
+(function(){
+  const V44_PERIODS=['2026-W32','2026-W33','Last Week','This Week'];
+  const V44_LABELS={'This Week':'本周','Last Week':'上周','2026-W33':'2026-W33','2026-W32':'2026-W32'};
+
+  window.syncDataTimeRange=function(){
+    const key=document.getElementById('dataTime')?.value||'This Week';
+    const info=dataPeriodInfo();
+    const range=document.getElementById('dataRangeText');if(range)range.textContent=info.range;
+    const label=document.getElementById('dataWeekLabel');if(label)label.textContent=V44_LABELS[key]||key;
+    document.querySelectorAll('#dataWeekMenu [data-period]').forEach(btn=>btn.classList.toggle('isSelected',btn.dataset.period===key));
+    const idx=V44_PERIODS.indexOf(key);
+    const prev=document.getElementById('dataWeekPrev'),next=document.getElementById('dataWeekNext');
+    if(prev)prev.disabled=idx<=0;
+    if(next)next.disabled=idx<0||idx>=V44_PERIODS.length-1;
+  };
+
+  window.toggleDataWeekMenu=function(e){
+    if(e)e.stopPropagation();
+    const menu=document.getElementById('dataWeekMenu'),main=document.getElementById('dataWeekPickerMain');if(!menu)return;
+    const willOpen=menu.classList.contains('hidden');
+    menu.classList.toggle('hidden',!willOpen);
+    if(main)main.setAttribute('aria-expanded',willOpen?'true':'false');
+  };
+
+  window.closeDataWeekMenu=function(){
+    const menu=document.getElementById('dataWeekMenu'),main=document.getElementById('dataWeekPickerMain');
+    if(menu)menu.classList.add('hidden');if(main)main.setAttribute('aria-expanded','false');
+  };
+
+  window.selectDataWeeklyPeriod=function(key){
+    const sel=document.getElementById('dataTime');if(!sel||!V44_PERIODS.includes(key))return;
+    sel.value=key;resetDataPage();closeDataWeekMenu();syncDataTimeRange();renderData();
+  };
+
+  window.shiftDataWeeklyPeriod=function(delta){
+    const sel=document.getElementById('dataTime');if(!sel)return;
+    let idx=V44_PERIODS.indexOf(sel.value);if(idx<0)idx=V44_PERIODS.length-1;
+    const next=Math.max(0,Math.min(V44_PERIODS.length-1,idx+Number(delta||0)));
+    if(next===idx)return;
+    selectDataWeeklyPeriod(V44_PERIODS[next]);
+  };
+
+  window.onDataTimeChange=function(){resetDataPage();syncDataTimeRange();renderData()};
+
+  window.openDataDailyPicker=function(e){
+    const input=document.getElementById('dataDailyDate');if(!input)return;
+    if(e&&e.target===input)return;
+    if(typeof input.showPicker==='function'){try{input.showPicker()}catch(err){input.focus()}}else input.focus();
+  };
+
+  /* Management weekly filtering is explicitly by formal management role. */
+  window.setDataRoleOptions=function(){
+    const sel=document.getElementById('dataRole');if(!sel)return;
+    const old=sel.value||'All Roles';
+    const opts=[['All Roles','角色：全部'],['BD','BD'],['Admin','Admin'],['Super Admin','Super Admin'],['Manager','Manager']];
+    sel.innerHTML=opts.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+    sel.value=opts.some(([v])=>v===old)?old:'All Roles';
+  };
+
+  const oldSyncVisibility=window.dcSyncFilterVisibility;
+  window.dcSyncFilterVisibility=function(){
+    if(oldSyncVisibility)oldSyncVisibility();
+    const mg=state.dataTab==='management';
+    const role=document.getElementById('dataRole');if(role){role.style.display=mg?'':'none';if(mg)setDataRoleOptions()}
+    syncDataTimeRange();
+  };
+
+  document.addEventListener('click',function(e){
+    const picker=document.getElementById('dataWeeklyPeriodPicker');
+    if(picker&&!picker.contains(e.target))closeDataWeekMenu();
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDataWeekMenu()});
+
+  syncDataTimeRange();
+  if(typeof renderData==='function')renderData();
+})();
+</script>
+
 </body>
 </html>
 <style>
