@@ -592,7 +592,7 @@ html,body{font-size:14px}
     <div class="content">
       <!-- DASHBOARD -->
       <section class="view active" id="view-dashboard">
-        <div class="pageHead"><div><h2>业务概览</h2><p><b>当前结算周期</b> · 2026年8月24日–8月30日 · UTC+0 <span class="muted">· 按当前账号数据权限范围统计</span></p></div><div class="actions"><button class="btn ghost" onclick="toast('数据已刷新')">刷新</button></div></div>
+        <div class="pageHead"><div><h2>业务概览</h2><p class="dashboardPeriodLine"><span class="readonlyPeriod"><span class="pickerCalendar" aria-hidden="true">▦</span><b>当前结算周期</b><span class="periodDivider"></span><span>2026-08-24 ~ 2026-08-30</span><span class="timezoneChip">UTC+0</span></span><span class="muted">按当前账号数据权限范围统计</span></p></div><div class="actions"><button class="btn ghost" onclick="toast('数据已刷新')">刷新</button></div></div>
         <div class="grid kpiGrid dashboardKpiGrid">
           <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">本周 Coins</span><span class="metricHelp" tabindex="0" data-tip="当前结算周期内，当前账号数据权限范围下全部 Host 的收礼 Coins 流水合计。">?</span></span><span class="kpiIcon">C</span></div><div class="kpiValue">186.4M</div><div class="kpiMeta"><span>当前结算周期</span></div></div>
           <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">本周 Diamonds</span><span class="metricHelp" tabindex="0" data-tip="当前结算周期内，当前账号数据权限范围下实时发放给 Host 的 Diamonds 合计。">?</span></span><span class="kpiIcon">◆</span></div><div class="kpiValue">46.6M</div><div class="kpiMeta"><span>当前结算周期</span></div></div>
@@ -3068,5 +3068,188 @@ renderData();
   };
 
   renderSettlement();updatePendingCounters();
+})();
+</script>
+
+
+<style id="v46-unified-period-style">
+/* v46 — one visual/interaction system for query periods across the backend */
+:root{--period-border:#d8e2ef;--period-text:#203a5f;--period-muted:#6f86a3;--period-hover:#f5f8fc;--period-selected:#edf4ff}
+.unifiedPeriodPicker,#view-data .dataPeriodPicker,#view-data .dataDailyDatePicker{
+  position:relative;display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:0 7px 0 5px;
+  border:1px solid var(--period-border);border-radius:10px;background:#fff;box-shadow:0 1px 2px rgba(32,58,95,.03);overflow:visible;z-index:12
+}
+.unifiedPeriodPicker .dateStepBtn,#view-data .dateStepBtn{
+  width:30px;height:30px;display:inline-grid;place-items:center;border:0;border-radius:7px;background:transparent;color:#56708f;font-size:20px;line-height:1;padding:0
+}
+.unifiedPeriodPicker .dateStepBtn:hover:not(:disabled),#view-data .dateStepBtn:hover:not(:disabled){background:var(--period-hover);color:#215fae}
+.unifiedPeriodPicker .dateStepBtn:disabled,#view-data .dateStepBtn:disabled{opacity:.3;cursor:not-allowed;background:transparent!important}
+.unifiedPeriodPicker .periodMain,#view-data .weekPickerMain{
+  min-width:285px;height:38px;display:inline-flex;align-items:center;gap:8px;border:0;border-radius:7px;background:transparent;padding:0 8px;color:var(--period-text);text-align:left
+}
+.unifiedPeriodPicker .periodMain:hover,#view-data .weekPickerMain:hover{background:var(--period-hover)}
+.unifiedPeriodPicker .periodMain:focus-visible,#view-data .weekPickerMain:focus-visible{outline:2px solid #8ab4ef;outline-offset:1px}
+.unifiedPeriodPicker .pickerCalendar,#view-data .pickerCalendar,.readonlyPeriod .pickerCalendar{font-size:14px;color:#6281a8}
+.unifiedPeriodPicker .periodLabel,#view-data .weekPickerLabel{font-size:13px;font-weight:750;white-space:nowrap}
+.unifiedPeriodPicker .periodRange,#view-data .periodRange{font-size:13px;color:#4a6280;white-space:nowrap;font-variant-numeric:tabular-nums}
+.unifiedPeriodPicker .periodDivider,#view-data .periodDivider,.readonlyPeriod .periodDivider{width:1px;height:18px;background:#dce5ef;flex:0 0 auto}
+.unifiedPeriodPicker .periodChevron,#view-data .weekChevron{margin-left:auto;color:#7087a5;font-size:14px;transition:transform .15s ease}
+.unifiedPeriodPicker .periodMain[aria-expanded="true"] .periodChevron,#view-data .weekPickerMain[aria-expanded="true"] .weekChevron{transform:rotate(180deg)}
+.unifiedPeriodPicker .timezoneChip,#view-data .timezoneChip,.readonlyPeriod .timezoneChip{
+  height:28px;display:inline-flex;align-items:center;padding:0 9px;border-radius:7px;background:#f0f4fa;color:#5a718e;font-size:12px;font-weight:750;white-space:nowrap
+}
+.unifiedPeriodPicker .periodMenu,#view-data .weekPeriodMenu{
+  position:absolute;left:35px;top:46px;width:312px;padding:6px;background:#fff;border:1px solid var(--period-border);border-radius:10px;box-shadow:0 12px 30px rgba(30,58,94,.16);z-index:160
+}
+.unifiedPeriodPicker .periodMenu.hidden,#view-data .weekPeriodMenu.hidden{display:none!important}
+.unifiedPeriodPicker .periodMenu button,#view-data .weekPeriodMenu button{
+  width:100%;border:0;background:#fff;border-radius:7px;display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:center;padding:10px 11px;color:#243c5d;text-align:left
+}
+.unifiedPeriodPicker .periodMenu button:hover,#view-data .weekPeriodMenu button:hover{background:#f2f6fb}
+.unifiedPeriodPicker .periodMenu button.isSelected,#view-data .weekPeriodMenu button.isSelected{background:var(--period-selected);color:#246bd5}
+.unifiedPeriodPicker .periodMenu button b,#view-data .weekPeriodMenu button b{font-size:13px;white-space:nowrap}
+.unifiedPeriodPicker .periodMenu button span,#view-data .weekPeriodMenu button span{font-size:12px;color:var(--period-muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.unifiedHiddenPeriodSelect{display:none!important}
+/* Daily picker uses exactly the same shell as the period pickers. */
+#view-data .dataDailyDatePicker{padding-right:7px!important}
+#view-data .dateInputWrap{height:38px;min-width:225px;display:inline-flex;align-items:center;gap:8px;padding:0 8px;border:0!important;border-radius:7px;background:transparent!important;cursor:pointer}
+#view-data .dateInputWrap:hover{background:var(--period-hover)!important}
+#view-data .dateInputWrap input[type="date"]{border:0!important;background:transparent!important;box-shadow:none!important;color:var(--period-text)!important;font-size:13px!important;font-weight:700!important;padding:0!important;outline:0!important;cursor:pointer;min-width:145px}
+/* Settlement and Rewards now use the same period component as Data Center. */
+#view-settlement .settlementFilters,#view-rewards .filterBar{overflow:visible}
+#view-settlement .unifiedPeriodPicker,#view-rewards .unifiedPeriodPicker{flex:0 0 auto}
+/* Workbench/read-only periods share the same typography but are not fake controls. */
+.dashboardPeriodLine{display:flex!important;align-items:center;gap:10px;flex-wrap:wrap;margin-top:7px!important}
+.readonlyPeriod{display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:3px 7px 3px 10px;border:1px solid var(--period-border);border-radius:9px;background:#fff;color:var(--period-text);font-size:13px;font-variant-numeric:tabular-nums}
+.dashboardPeriodLine>.muted{font-size:12px}
+@media(max-width:1100px){
+  .unifiedPeriodPicker .periodMain,#view-data .weekPickerMain{min-width:235px}
+  .unifiedPeriodPicker .periodRange,#view-data .periodRange{display:none}
+  .unifiedPeriodPicker .periodMenu,#view-data .weekPeriodMenu{width:275px}
+}
+</style>
+<script id="v46-unified-period-script">
+(function(){
+  const $=id=>document.getElementById(id);
+  const esc=s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const registry={};
+
+  function normalizeSettlementOption(text){
+    const t=String(text||'').replace(/\s*·\s*UTC\+0\s*$/,'').trim();
+    if(/^2026-\d{2}\s*·/.test(t)){
+      const parts=t.split('·').map(x=>x.trim());
+      return {label:parts[0],range:parts.slice(1).join(' · ')};
+    }
+    const m=t.match(/^(2026-W\d+)\s*·\s*(.+)$/);
+    if(m)return {label:m[1],range:m[2].replace(/(\d+)月(\d+)日\s*-\s*(\d+)月(\d+)日/,(_,m1,d1,m2,d2)=>`2026-${String(m1).padStart(2,'0')}-${String(d1).padStart(2,'0')} ~ 2026-${String(m2).padStart(2,'0')}-${String(d2).padStart(2,'0')}`)};
+    return {label:t,range:''};
+  }
+  function makePicker(id,options,selected,onChange){
+    const box=document.createElement('div');box.className='unifiedPeriodPicker';box.id=id;
+    box.innerHTML=`<button class="dateStepBtn periodPrev" type="button" aria-label="上一周期">‹</button>
+      <button class="periodMain" type="button" aria-haspopup="listbox" aria-expanded="false"><span class="pickerCalendar" aria-hidden="true">▦</span><span class="periodLabel"></span><span class="periodDivider"></span><span class="periodRange"></span><span class="periodChevron" aria-hidden="true">⌄</span></button>
+      <button class="dateStepBtn periodNext" type="button" aria-label="下一周期">›</button><span class="timezoneChip">UTC+0</span><div class="periodMenu hidden" role="listbox"></div>`;
+    registry[id]={box,options:options.slice(),selected,onChange};
+    box.querySelector('.periodMain').onclick=e=>{e.stopPropagation();togglePicker(id)};
+    box.querySelector('.periodPrev').onclick=e=>{e.stopPropagation();shiftPicker(id,1)}; // older
+    box.querySelector('.periodNext').onclick=e=>{e.stopPropagation();shiftPicker(id,-1)}; // newer
+    renderPicker(id);
+    return box;
+  }
+  function renderPicker(id){
+    const r=registry[id];if(!r)return;let idx=r.options.findIndex(x=>x.value===r.selected);if(idx<0)idx=0;
+    const cur=r.options[idx]||{label:'—',range:'',value:''};r.selected=cur.value;
+    r.box.querySelector('.periodLabel').textContent=cur.label;
+    r.box.querySelector('.periodRange').textContent=cur.range||'';
+    r.box.querySelector('.periodDivider').style.display=cur.range?'':'none';
+    r.box.querySelector('.periodRange').style.display=cur.range?'':'none';
+    r.box.querySelector('.periodPrev').disabled=idx>=r.options.length-1;
+    r.box.querySelector('.periodNext').disabled=idx<=0;
+    const menu=r.box.querySelector('.periodMenu');
+    menu.innerHTML=r.options.map(x=>`<button type="button" data-value="${esc(x.value)}" class="${x.value===r.selected?'isSelected':''}"><b>${esc(x.label)}</b><span>${esc(x.range||'')}</span></button>`).join('');
+    menu.querySelectorAll('button').forEach(btn=>btn.onclick=e=>{e.stopPropagation();selectPicker(id,btn.dataset.value)});
+  }
+  function togglePicker(id){
+    Object.keys(registry).forEach(k=>{if(k!==id)closePicker(k)});const r=registry[id];if(!r)return;
+    const menu=r.box.querySelector('.periodMenu'),main=r.box.querySelector('.periodMain'),open=menu.classList.contains('hidden');
+    menu.classList.toggle('hidden',!open);main.setAttribute('aria-expanded',String(open));
+  }
+  function closePicker(id){const r=registry[id];if(!r)return;r.box.querySelector('.periodMenu').classList.add('hidden');r.box.querySelector('.periodMain').setAttribute('aria-expanded','false')}
+  function selectPicker(id,value,fire=true){const r=registry[id];if(!r||!r.options.some(x=>x.value===value))return;r.selected=value;renderPicker(id);closePicker(id);if(fire&&typeof r.onChange==='function')r.onChange(value)}
+  function shiftPicker(id,delta){const r=registry[id];if(!r)return;let idx=r.options.findIndex(x=>x.value===r.selected);if(idx<0)idx=0;const ni=Math.max(0,Math.min(r.options.length-1,idx+delta));if(ni!==idx)selectPicker(id,r.options[ni].value)}
+  function updatePicker(id,options,selected){const r=registry[id];if(!r)return;r.options=options.slice();r.selected=selected||options[0]?.value||'';renderPicker(id)}
+  window.v46ClosePeriodMenus=()=>Object.keys(registry).forEach(closePicker);
+  document.addEventListener('click',()=>window.v46ClosePeriodMenus());
+
+  /* Data Center: keep the working logic, align both day/week shells to the global component. */
+  const dataWeek=$('dataWeeklyPeriodPicker'),dataDay=$('dataDailyDatePicker');
+  if(dataWeek)dataWeek.classList.add('unifiedPeriodPicker');
+  if(dataDay)dataDay.classList.add('unifiedPeriodPicker');
+
+  /* Settlement: hide the legacy select, use a real period picker with dropdown + previous/next. */
+  const settlementSelect=$('settlementPeriod');
+  function settlementPickerOptions(){
+    if(!settlementSelect)return[];
+    return Array.from(settlementSelect.options).map((o,i)=>{const p=normalizeSettlementOption(o.textContent);return {value:o.value||o.textContent,label:p.label,range:p.range,idx:i}});
+  }
+  function ensureSettlementPicker(){
+    if(!settlementSelect)return;
+    settlementSelect.classList.add('unifiedHiddenPeriodSelect');settlementSelect.style.display='none';
+    let picker=$('settlementUnifiedPeriod');
+    const opts=settlementPickerOptions();const current=opts[settlementSelect.selectedIndex]?.value||opts[0]?.value||'';
+    if(!picker){
+      picker=makePicker('settlementUnifiedPeriod',opts,current,value=>{
+        const list=settlementPickerOptions();const idx=list.findIndex(x=>x.value===value);if(idx>=0)settlementSelect.selectedIndex=idx;
+        if(typeof renderSettlement==='function')renderSettlement();
+      });
+      settlementSelect.parentNode.insertBefore(picker,settlementSelect);
+    }else updatePicker('settlementUnifiedPeriod',opts,current);
+    picker.style.display=state.settlementQueueStatus?'none':'';
+  }
+  const syncSettlementPeriodOptionsV45=window.syncSettlementPeriodOptions;
+  window.syncSettlementPeriodOptions=function(){
+    if(typeof syncSettlementPeriodOptionsV45==='function')syncSettlementPeriodOptionsV45();
+    if(settlementSelect){
+      if(state.settlementTab==='managementMonthly'){
+        settlementSelect.innerHTML='<option value="2026-08">2026-08 · W31–W34 · UTC+0</option><option value="2026-07">2026-07 · W27–W30 · UTC+0</option><option value="2026-06">2026-06 · W23–W26 · UTC+0</option>';
+      }else{
+        settlementSelect.innerHTML='<option value="2026-W34">2026-W34 · 8月17日 - 8月23日 · UTC+0</option><option value="2026-W33">2026-W33 · 8月10日 - 8月16日 · UTC+0</option><option value="2026-W32">2026-W32 · 8月3日 - 8月9日 · UTC+0</option><option value="2026-W31">2026-W31 · 7月27日 - 8月2日 · UTC+0</option>';
+      }
+    }
+    ensureSettlementPicker();
+  };
+  const setSettlementTabV45=window.setSettlementTab;
+  window.setSettlementTab=function(tab){if(typeof setSettlementTabV45==='function')setSettlementTabV45(tab);ensureSettlementPicker()};
+  const renderSettlementV45=window.renderSettlement;
+  window.renderSettlement=function(){const v=renderSettlementV45.apply(this,arguments);ensureSettlementPicker();return v};
+  const openSettlementQueueV45=window.openSettlementQueue;
+  window.openSettlementQueue=function(status){const v=openSettlementQueueV45.apply(this,arguments);ensureSettlementPicker();return v};
+  const billStatusChangeV45=window.onSettlementBillStatusChange;
+  window.onSettlementBillStatusChange=function(){const v=billStatusChangeV45.apply(this,arguments);ensureSettlementPicker();return v};
+  window.syncSettlementPeriodOptions();
+
+  /* Rewards: query periods use the same component. The demo keeps current reward data, while the picker itself is fully interactive. */
+  state.rewardPeriodByMain=state.rewardPeriodByMain||{invitation:'2026-W35',room:'2026-W35'};
+  const rewardOptions=[
+    {value:'2026-W35',label:'2026-W35',range:'2026-08-24 ~ 2026-08-30'},
+    {value:'2026-W34',label:'2026-W34',range:'2026-08-17 ~ 2026-08-23'},
+    {value:'2026-W33',label:'2026-W33',range:'2026-08-10 ~ 2026-08-16'}
+  ];
+  function enhanceRewardPeriod(){
+    const root=$('rewardContent');if(!root)return;
+    const filter=root.querySelector('.filterBar');if(!filter)return;
+    let legacy=filter.querySelector('.rewardPeriodSelect')||filter.querySelector('select');if(!legacy)return;
+    legacy.classList.add('unifiedHiddenPeriodSelect');legacy.style.display='none';
+    const key=state.rewardMain==='invitation'?'invitation':'room';
+    let picker=$('rewardUnifiedPeriod');
+    if(!picker){
+      picker=makePicker('rewardUnifiedPeriod',rewardOptions,state.rewardPeriodByMain[key],value=>{state.rewardPeriodByMain[key]=value;toast('奖励周期已切换')});
+      filter.insertBefore(picker,legacy);
+    }else updatePicker('rewardUnifiedPeriod',rewardOptions,state.rewardPeriodByMain[key]);
+  }
+  const renderRewardsV45=window.renderRewards;
+  window.renderRewards=function(){const v=renderRewardsV45.apply(this,arguments);const old=$('rewardUnifiedPeriod');if(old){delete registry.rewardUnifiedPeriod;old.remove()}enhanceRewardPeriod();return v};
+  window.renderRewards();
+  ensureSettlementPicker();
 })();
 </script>
