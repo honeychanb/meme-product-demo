@@ -560,6 +560,20 @@ html,body{font-size:14px}
 .memberRelationNote{line-height:1.5!important}
 @media(max-width:760px){.topbar{display:none!important}.content{padding-top:16px!important}#view-data .scopeHint span,#view-data .forecastHint.compactHint span{white-space:normal}}
 </style>
+
+<style id="v49-global-identity-style">
+/* v49 — One identity pattern across list/table views: nickname on first line, ID on second line. */
+.identityMerged{display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:145px;line-height:1.22}
+.identityMerged b{display:block;font-size:14px;font-weight:700;color:#17233a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.identityMerged small{display:block;font-size:12px;color:#7c8da8;white-space:nowrap}
+.nameCell>div:last-child{min-width:0}.nameCell b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.nameCell small{white-space:nowrap}
+.memberSuperiorIdentity{display:none!important}
+.relationSubLabel{margin-top:7px;margin-bottom:3px;font-size:11px;color:#8a99ad}.kv .identityMerged{margin-top:5px}.confirmBox .identityMerged{min-width:0}
+#view-members .applicationListTable th:nth-child(4),#view-members .applicationListTable td:nth-child(4),#view-members .applicationListTable th:nth-child(5),#view-members .applicationListTable td:nth-child(5){min-width:190px}
+#view-applications .applicationListTable th:nth-child(4),#view-applications .applicationListTable td:nth-child(4),#view-applications .applicationListTable th:nth-child(5),#view-applications .applicationListTable td:nth-child(5){min-width:190px}
+#view-settlement .settlementHostWeeklyTable th:first-child,#view-settlement .settlementHostWeeklyTable td:first-child,#view-settlement .settlementAgencyWeeklyTable th:first-child,#view-settlement .settlementAgencyWeeklyTable td:first-child,#view-settlement .settlementManagementWeeklyTable th:first-child,#view-settlement .settlementManagementWeeklyTable td:first-child,#view-settlement .settlementManagementMonthlyTable th:first-child,#view-settlement .settlementManagementMonthlyTable td:first-child{min-width:190px!important}
+#view-settlement .settlementHostWeeklyTable th:nth-child(5),#view-settlement .settlementHostWeeklyTable td:nth-child(5){min-width:190px!important}
+</style>
 </head>
 <body>
 <div class="app">
@@ -619,7 +633,7 @@ html,body{font-size:14px}
           <div class="tabs" id="memberTabs"><button class="tabBtn active" data-membertab="list">成员列表</button><button class="tabBtn" data-membertab="pending">待生效调整</button><button class="tabBtn" data-membertab="records">变更记录</button></div>
           <div id="memberListContent" class="memberTabBody">
             <div class="filterBar"><input class="input" id="memberSearch" placeholder="输入 UID 或昵称" oninput="renderMembers()"><select class="select" id="memberRole" onchange="renderMembers()"><option value="All Roles">全部角色</option><option>Host</option><option>Agent</option><option>BD</option><option>Admin</option><option>Super Admin</option><option>Manager</option></select><select class="select" id="memberAffiliation" onchange="renderMembers()"><option value="All Affiliation">全部归属类型</option><option value="Platform Direct">平台直属</option><option value="Role Affiliated">角色归属</option></select><select class="select" id="memberCountry" onchange="renderMembers()"><option value="All Countries">全部国家/地区</option><option value="Pakistan">巴基斯坦</option><option value="UAE">阿联酋</option><option value="Philippines">菲律宾</option><option value="India">印度</option></select><select class="select" id="memberStatus" onchange="renderMembers()"><option value="All Status">全部状态</option><option value="Active">有效</option><option value="Suspended">已封禁</option></select><span class="filterSpacer"></span><span class="countText" id="memberCount"></span></div>
-            <div class="table-responsive tableWrap"><table class="table memberListTable"><colgroup><col style="width:240px"><col style="width:145px"><col style="width:160px"><col style="width:105px"><col style="width:230px"><col style="width:360px"><col style="width:205px"><col style="width:300px"></colgroup><thead><tr><th>成员</th><th>角色 / 等级</th><th>国家 / 地区</th><th>状态</th><th>直属上级</th><th>团队构成</th><th>加入时间</th><th>操作</th></tr></thead><tbody id="memberRows"></tbody></table></div>
+            <div class="table-responsive tableWrap"><table class="table memberListTable"><colgroup><col style="width:240px"><col style="width:145px"><col style="width:160px"><col style="width:105px"><col style="width:230px"><col style="width:360px"><col style="width:205px"><col style="width:300px"></colgroup><thead><tr><th>成员头像、昵称、ID</th><th>角色 / 等级</th><th>国家 / 地区</th><th>状态</th><th>直属上级昵称、ID</th><th>团队构成</th><th>加入时间</th><th>操作</th></tr></thead><tbody id="memberRows"></tbody></table></div>
           </div>
           <div id="memberRelationContent" class="memberTabBody hidden"></div>
         </div>
@@ -632,7 +646,7 @@ html,body{font-size:14px}
           <div class="tabs" id="appRoleTabs"></div>
           <div class="memberRelationNote">同一 UID 同一时间仅允许 1 条待审核申请；驳回 / 失效后可重新使用有效邀请码提交，新申请生成新记录。</div>
           <div class="filterBar"><input class="input" id="appSearch" placeholder="输入 UID 或昵称" oninput="renderApplications()"><select class="select" id="appStatus" onchange="renderApplications()"><option value="Pending">待审核</option><option value="Approved">已通过</option><option value="Rejected">已驳回</option><option value="Expired">已失效</option><option value="All Status">全部状态</option></select><span class="filterSpacer"></span><span class="countText" id="appCount"></span></div>
-          <div class="table-responsive tableWrap"><table class="table applicationListTable"><colgroup><col style="width:250px"><col style="width:140px"><col style="width:170px"><col style="width:230px"><col style="width:230px"><col style="width:220px"><col style="width:130px"><col style="width:240px"></colgroup><thead><tr><th>申请人</th><th>申请角色</th><th>国家 / 地区</th><th>邀请人</th><th>直属上级</th><th>申请时间</th><th>状态</th><th>操作</th></tr></thead><tbody id="applicationRows"></tbody></table></div>
+          <div class="table-responsive tableWrap"><table class="table applicationListTable"><colgroup><col style="width:250px"><col style="width:140px"><col style="width:170px"><col style="width:230px"><col style="width:230px"><col style="width:220px"><col style="width:130px"><col style="width:240px"></colgroup><thead><tr><th>申请人头像、昵称、ID</th><th>申请角色</th><th>国家 / 地区</th><th>邀请人昵称、ID</th><th>直属上级昵称、ID</th><th>申请时间</th><th>状态</th><th>操作</th></tr></thead><tbody id="applicationRows"></tbody></table></div>
         </div>
       </section>
 
@@ -906,7 +920,10 @@ function fmt(n){return Number(n).toLocaleString(undefined,{maximumFractionDigits
 function money(n){return '$'+Number(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}
 function initials(name){return name.split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase()}
 function statusBadge(s){if(!s||s==='—')return '<span class="muted">—</span>';const cls=s==='Active'||s==='Effective'?'active':s==='Pending'||s==='Pending Confirmation'||s==='Unpaid'||s==='Unissued'||s==='Unclaimed'||s==='Scheduled'||s==='Pending Finance Review'||s==='Ready to Publish'?'pending':s==='Rejected'?'rejected':s==='Paid'?'paid':s==='Issued'||s==='Claimed'?'issued':s==='Failed'?'failed':s==='Confirmed'||s==='Published'?'confirmed':s==='Cancelled'||s==='Expired'?'rejected':'';return `<span class="badge ${cls}">${displayStatus(s)}</span>`}
-function memberCell(name,id){return `<div class="nameCell"><div class="avatar">${initials(name)}</div><div><b>${name}</b><small>UID ${id}</small></div></div>`}
+function identityMerged(name,id,extra=''){if(!name||name==='—')return '<span class="muted">—</span>';return `<div class="identityMerged"><b>${name}</b>${id?`<small>ID ${id}${extra?` · ${extra}`:''}</small>`:(extra?`<small>${extra}</small>`:'')}</div>`}
+function relationIdentity(v){const raw=String(v||'—');if(raw==='Platform-direct'||raw==='无上级')return '<span class="muted">无上级</span>';const m=raw.match(/^(.*) · (?:UID )?(\d+)$/);return m?identityMerged(m[1],m[2]):`<span>${raw}</span>`}
+function memberCell(name,id){return `<div class="nameCell"><div class="avatar">${initials(name)}</div><div><b>${name}</b><small>ID ${id}</small></div></div>`}
+function superiorIdentity(v){return relationIdentity(v)}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.remove('show'),1700)}
 function goView(v,rewardMain=null){if(v==='rewards'&&rewardMain)state.rewardMain=rewardMain;state.view=v;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${v}`));document.querySelectorAll('.navBtn').forEach(x=>{const active=v==='rewards'?x.dataset.view==='rewards'&&x.dataset.rewardmain===state.rewardMain:x.dataset.view===v;x.classList.toggle('active',active)});let title=titles[v][0],subtitle=titles[v][1];if(v==='rewards'){title=state.rewardMain==='invitation'?'邀请奖励':'房间贡献奖励';subtitle=state.rewardMain==='invitation'?'邀请奖励查询':'房间贡献奖励查询'}document.getElementById('topTitle').textContent=title;document.getElementById('topSubtitle').textContent=subtitle;if(v==='members')renderMembers();if(v==='applications')renderApplications();if(v==='data')renderData();if(v==='settlement')renderSettlement();if(v==='rewards')renderRewards();if(v==='dashboard')updatePendingCounters();window.scrollTo(0,0)}
 document.querySelectorAll('.navBtn').forEach(b=>b.onclick=()=>{if(b.dataset.view==='settlement'){state.settlementQueueStatus=null;const period=document.getElementById('settlementPeriod');if(period)period.style.display=''}goView(b.dataset.view,b.dataset.rewardmain||null)});
@@ -931,14 +948,14 @@ function renderMembers(){
    const q=(document.getElementById('memberSearch')?.value||'').toLowerCase(),role=document.getElementById('memberRole')?.value||'All Roles',aff=document.getElementById('memberAffiliation')?.value||'All Affiliation',country=document.getElementById('memberCountry')?.value||'All Countries',status=document.getElementById('memberStatus')?.value||'All Status';
    const rows=members.filter(m=>{const affiliation=memberAffiliationType(m);return (!q||m.id.includes(q)||m.name.toLowerCase().includes(q))&&(role==='All Roles'||m.role===role)&&(aff==='All Affiliation'||affiliation===aff)&&(country==='All Countries'||m.country===country)&&(status==='All Status'||m.status===status)});
    document.getElementById('memberCount').textContent=`共 ${rows.length} 名当前成员`;
-   document.getElementById('memberRows').innerHTML=rows.map(m=>`<tr><td><button class="memberNameBtn" onclick="openMember('${m.id}')">${memberCell(m.name,m.id)}</button></td><td><span class="memberRoleText">${m.role}</span>${m.level&&m.level!=='—'?` <span class="muted">${m.level}</span>`:''}</td><td>${displayCountry(m.country)}<div class="muted" style="font-size:11px;margin-top:4px">${m.tz}</div></td><td>${statusBadge(m.status)}</td><td>${displaySuperior(m.superior)}</td><td>${memberTeamComposition(m)}</td><td class="nowrapValue">${memberJoinTime(m)}</td><td><div class="opCell"><button class="op view" onclick="openMember('${m.id}')">查看详情</button><button class="op ${m.status==='Active'?'bad':'good'}" onclick="toggleMember('${m.id}')">${m.status==='Active'?'封禁':'解封'}</button><button class="op gold" onclick="openRoleChange('${m.id}')">角色变更</button><button class="op warn" onclick="openSuperior('${m.id}')">修改直属上级</button><button class="op bad" onclick="openTermination('${m.id}')">解约</button></div></td></tr>`).join('')||`<tr><td colspan="8"><div class="empty">暂无符合条件的当前业务成员。</div></td></tr>`;
+   document.getElementById('memberRows').innerHTML=rows.map(m=>`<tr><td><button class="memberNameBtn" onclick="openMember('${m.id}')">${memberCell(m.name,m.id)}</button></td><td><span class="memberRoleText">${m.role}</span>${m.level&&m.level!=='—'?` <span class="muted">${m.level}</span>`:''}</td><td>${displayCountry(m.country)}<div class="muted" style="font-size:11px;margin-top:4px">${m.tz}</div></td><td>${statusBadge(m.status)}</td><td>${superiorIdentity(m.superior)}</td><td>${memberTeamComposition(m)}</td><td class="nowrapValue">${memberJoinTime(m)}</td><td><div class="opCell"><button class="op view" onclick="openMember('${m.id}')">查看详情</button><button class="op ${m.status==='Active'?'bad':'good'}" onclick="toggleMember('${m.id}')">${m.status==='Active'?'封禁':'解封'}</button><button class="op gold" onclick="openRoleChange('${m.id}')">角色变更</button><button class="op warn" onclick="openSuperior('${m.id}')">修改直属上级</button><button class="op bad" onclick="openTermination('${m.id}')">解约</button></div></td></tr>`).join('')||`<tr><td colspan="8"><div class="empty">暂无符合条件的当前业务成员。</div></td></tr>`;
    return;
  }
  listBox.classList.add('hidden');relBox.classList.remove('hidden');
  if(state.memberTab==='pending'){
-   relBox.innerHTML=`<div class="memberRelationNote"><b>同一成员同一时间仅允许 1 条待生效调整。</b> 待生效记录不可编辑；如需修改，先取消原记录再重新提交。</div><div class="table-responsive tableWrap"><table class="table"><thead><tr><th>成员</th><th>变更类型</th><th>当前</th><th>变更后</th><th>生效周期</th><th>状态</th><th>操作</th></tr></thead><tbody>${orgPending.map(x=>`<tr><td>${x.member}</td><td>${x.type==='Role Change'?`角色变更 · ${roleChangeDirection(x.current,x.after)}`:displayType(x.type)}</td><td>${x.type==='Role Change'?`${x.current}${x.relationFrom?` · 上级 ${displaySuperior(x.relationFrom)}`:''}`:displaySuperior(x.current)}</td><td>${x.type==='Role Change'?`${x.after}${x.relationTo?` · 上级 ${displaySuperior(x.relationTo)}`:''}`:displaySuperior(x.after)}</td><td>${x.period}</td><td>${statusBadge('Scheduled')}</td><td><button class="op bad" onclick="cancelPendingAdjustment('${x.id}')">取消调整</button></td></tr>`).join('')||`<tr><td colspan="7"><div class="empty">暂无待生效调整。</div></td></tr>`}</tbody></table></div>`;
+   relBox.innerHTML=`<div class="memberRelationNote"><b>同一成员同一时间仅允许 1 条待生效调整。</b> 待生效记录不可编辑；如需修改，先取消原记录再重新提交。</div><div class="table-responsive tableWrap"><table class="table"><thead><tr><th>成员昵称、ID</th><th>变更类型</th><th>当前</th><th>变更后</th><th>生效周期</th><th>状态</th><th>操作</th></tr></thead><tbody>${orgPending.map(x=>`<tr><td>${relationIdentity(x.member)}</td><td>${x.type==='Role Change'?`角色变更 · ${roleChangeDirection(x.current,x.after)}`:displayType(x.type)}</td><td>${x.type==='Role Change'?`${x.current}${x.relationFrom?`<div class="relationSubLabel">上级</div>${relationIdentity(x.relationFrom)}`:''}`:relationIdentity(x.current)}</td><td>${x.type==='Role Change'?`${x.after}${x.relationTo?`<div class="relationSubLabel">上级</div>${relationIdentity(x.relationTo)}`:''}`:relationIdentity(x.after)}</td><td>${x.period}</td><td>${statusBadge('Scheduled')}</td><td><button class="op bad" onclick="cancelPendingAdjustment('${x.id}')">取消调整</button></td></tr>`).join('')||`<tr><td colspan="7"><div class="empty">暂无待生效调整。</div></td></tr>`}</tbody></table></div>`;
  }else{
-   relBox.innerHTML=`<div class="memberRelationNote">仅展示变更事实与结果。历史业务数据按数据发生时的实际组织关系 / Organization Snapshot 追溯，不因后续调整而回溯改写。</div><div class="table-responsive tableWrap"><table class="table"><thead><tr><th>成员</th><th>变更类型</th><th>变更前</th><th>变更后</th><th>生效时间 / 周期</th><th>状态</th><th>操作人</th></tr></thead><tbody>${orgRecords.map(x=>`<tr><td>${x.member}</td><td>${x.type==='Role Change'?`角色变更 · ${roleChangeDirection(x.from,x.to)}`:displayType(x.type)}</td><td>${displaySuperior(x.from)}</td><td>${displaySuperior(x.to)}</td><td>${x.effective}</td><td>${statusBadge(x.status||'Effective')}</td><td>${displayType(x.operator)}</td></tr>`).join('')}</tbody></table></div>`;
+   relBox.innerHTML=`<div class="memberRelationNote">仅展示变更事实与结果。历史业务数据按数据发生时的实际组织关系 / Organization Snapshot 追溯，不因后续调整而回溯改写。</div><div class="table-responsive tableWrap"><table class="table"><thead><tr><th>成员昵称、ID</th><th>变更类型</th><th>变更前</th><th>变更后</th><th>生效时间 / 周期</th><th>状态</th><th>操作人</th></tr></thead><tbody>${orgRecords.map(x=>`<tr><td>${relationIdentity(x.member)}</td><td>${x.type==='Role Change'?`角色变更 · ${roleChangeDirection(x.from,x.to)}`:displayType(x.type)}</td><td>${x.type==='Role Change'?x.from:relationIdentity(x.from)}</td><td>${x.type==='Role Change'?x.to:relationIdentity(x.to)}</td><td>${x.effective}</td><td>${statusBadge(x.status||'Effective')}</td><td>${displayType(x.operator)}</td></tr>`).join('')}</tbody></table></div>`;
  }
 }
 function hasPendingAdjustment(id){return orgPending.some(x=>String(x.memberId)===String(id))}
@@ -968,6 +985,8 @@ function memberInvitedBy(m){
  const name=String(m.invite||'—');if(!name||name==='—')return '—';
  const inviter=members.find(x=>x.name===name);return inviter?`${name} · UID ${inviter.id}`:`${name} · 已解约`;
 }
+function memberInvitedByIdentity(m){const name=String(m.invite||'—');if(!name||name==='—')return '<span class="muted">—</span>';const inviter=members.find(x=>x.name===name);return inviter?identityMerged(name,inviter.id):identityMerged(name,'','已解约')}
+function memberDirectSuperiorIdentity(m){const raw=String(m.superior||'');if(!raw||raw==='Platform-direct')return '<span class="muted">无上级</span>';const parts=raw.split(' · '),sid=parts[1],sp=members.find(x=>x.id===sid);return sp?identityMerged(sp.name,sp.id,sp.role):relationIdentity(raw)}
 function memberJoinTime(m){
  if(m.joinAt)return m.joinAt;
  const tail=Number(String(m.id).slice(-4))||0;
@@ -1037,7 +1056,7 @@ function openMember(id){
     <div><span>邀请码</span><b class="memberCodeLine">${code} <button title="复制邀请码" onclick="navigator.clipboard?.writeText('${code}');toast('已复制')">⧉</button></b></div>
     <div><span>加入时间</span><b class="nowrapValue">${memberJoinTime(m)}</b></div>
     <div class="wide"><span>收款方式</span><b class="paymentValue"><span>${memberContactInfo(m).payType} · ${memberContactInfo(m).payAddress}</span><button class="miniAction" onclick="openMemberPayment('${m.id}')">查看详情</button></b></div>
-    <div class="wide"><span>直属上级</span><b>${memberDirectSuperior(m)}</b></div>
+    <div class="wide"><span>直属上级</span>${memberDirectSuperiorIdentity(m)}</div>
     <div class="wide"><span>管理路径</span><b>${memberManagementPath(m)}</b></div>
    </div>
   </div>
@@ -1308,12 +1327,12 @@ function renderApplications(){
  const q=(document.getElementById('appSearch')?.value||'').toLowerCase(),status=document.getElementById('appStatus')?.value||'Pending';
  const rows=applications.filter(a=>(state.appRole==='All'||a.role===state.appRole)&&(!q||a.uid.includes(q)||a.name.toLowerCase().includes(q))&&(status==='All Status'||a.status===status));
  document.getElementById('appCount').textContent=`共 ${rows.length} 条申请`;
- document.getElementById('applicationRows').innerHTML=rows.map(a=>{const iv=applicationInviteState(a);const inviteText=a.inviteUid?(iv.inviter?`${a.invite} · UID ${a.inviteUid}`:`${a.invite} · 已解约`):a.invite;return `<tr><td>${memberCell(a.name,a.uid)}</td><td><span class="roleText">${a.role}</span></td><td>${displayCountry(a.country)}</td><td>${inviteText}</td><td>${displaySuperior(a.superior)}</td><td>${a.time}</td><td>${statusBadge(a.status)}</td><td>${a.status==='Pending'?`<div class="opCell"><button class="op view" onclick="reviewApplication(${a.id})">查看</button><button class="op good" onclick="approveApplication(${a.id})">通过</button><button class="op bad" onclick="rejectApplication(${a.id})">驳回</button></div>`:'—'}</td></tr>`}).join('')||`<tr><td colspan="8"><div class="empty">当前筛选暂无申请。</div></td></tr>`;
+ document.getElementById('applicationRows').innerHTML=rows.map(a=>{const iv=applicationInviteState(a);const inviteText=a.inviteUid?identityMerged(a.invite,a.inviteUid,iv.inviter?'':'已解约'):(a.invite==='Platform'?'<span class="muted">平台</span>':`<span>${a.invite}</span>`);return `<tr><td>${memberCell(a.name,a.uid)}</td><td><span class="roleText">${a.role}</span></td><td>${displayCountry(a.country)}</td><td>${inviteText}</td><td>${relationIdentity(a.superior)}</td><td>${a.time}</td><td>${statusBadge(a.status)}</td><td>${a.status==='Pending'?`<div class="opCell"><button class="op view" onclick="reviewApplication(${a.id})">查看</button><button class="op good" onclick="approveApplication(${a.id})">通过</button><button class="op bad" onclick="rejectApplication(${a.id})">驳回</button></div>`:'—'}</td></tr>`}).join('')||`<tr><td colspan="8"><div class="empty">当前筛选暂无申请。</div></td></tr>`;
 }
 function reviewApplication(id){
  const a=applications.find(x=>x.id===id);if(!a)return;refreshExpiredApplications();const iv=applicationInviteState(a);
  const inviteAlert=!iv.valid&&a.status==='Pending'?`<div class="note" style="margin-bottom:12px"><b>${iv.reason}。</b> 当前申请不能通过，用户需使用新的有效邀请码重新提交申请。</div>`:'';
- openDrawer('申请审核',`${inviteAlert}<div class="detailHero"><div class="avatar">${initials(a.name)}</div><div><h3>${a.name}</h3><p>UID ${a.uid} · 申请角色：${a.role}</p></div></div><div class="detailSec"><h4>申请信息</h4><div class="kv"><div><span>国家 / 地区</span><b>${displayCountry(a.country)}</b></div><div><span>申请角色</span><b>${a.role}</b></div><div><span>邀请码</span><b>${a.inviteCode}</b></div><div><span>提交时间</span><b>${a.time}</b></div><div><span>邀请人</span><b>${a.inviteUid?`${a.invite} · UID ${a.inviteUid}`:a.invite}</b></div><div><span>状态</span><b>${displayStatus(a.status)}</b></div><div><span>直属上级</span><b>${displaySuperior(a.superior)}</b></div></div></div><div class="detailSec"><div class="note"><b>首次直属关系不可在审核页修改。</b> 角色由申请入口决定；邀请码只识别邀请人。通过前系统会再次校验邀请人的当前角色与邀请权限。</div></div>${a.status==='Pending'?`<div class="drawerActions"><button class="btn red" onclick="rejectApplication(${a.id});closeDrawer()">驳回</button><button class="btn green" ${iv.valid?'': 'disabled'} onclick="approveApplication(${a.id});closeDrawer()">通过</button></div>`:''}`)
+ openDrawer('申请审核',`${inviteAlert}<div class="detailHero"><div class="avatar">${initials(a.name)}</div><div><h3>${a.name}</h3><p>UID ${a.uid} · 申请角色：${a.role}</p></div></div><div class="detailSec"><h4>申请信息</h4><div class="kv"><div><span>国家 / 地区</span><b>${displayCountry(a.country)}</b></div><div><span>申请角色</span><b>${a.role}</b></div><div><span>邀请码</span><b>${a.inviteCode}</b></div><div><span>提交时间</span><b>${a.time}</b></div><div><span>邀请人</span>${a.inviteUid?identityMerged(a.invite,a.inviteUid):`<b>${a.invite}</b>`}</div><div><span>状态</span><b>${displayStatus(a.status)}</b></div><div><span>直属上级</span>${relationIdentity(a.superior)}</div></div></div><div class="detailSec"><div class="note"><b>首次直属关系不可在审核页修改。</b> 角色由申请入口决定；邀请码只识别邀请人。通过前系统会再次校验邀请人的当前角色与邀请权限。</div></div>${a.status==='Pending'?`<div class="drawerActions"><button class="btn red" onclick="rejectApplication(${a.id});closeDrawer()">驳回</button><button class="btn green" ${iv.valid?'': 'disabled'} onclick="approveApplication(${a.id});closeDrawer()">通过</button></div>`:''}`)
 }
 function approveApplication(id){
  const a=applications.find(x=>x.id===id);if(!a)return;refreshExpiredApplications();
@@ -1557,7 +1576,7 @@ function saveFinanceAdjustment(type,uid){
  closeDrawer();renderSettlement();updatePendingCounters();toast('调整已保存，请财务确认');
 }
 function financeConfirm(type,uid){const x=getBill(type,uid);x.finance='Ready to Publish';x.payout='—';renderSettlement();toast('财务已确认，账单待发布')}
-function publishBill(type,uid){const x=getBill(type,uid);openModal('发布账单',`<div class="note"><b>发布后用户即可在前端看到此账单。</b><br>用户可确认或拒绝；发布后在用户操作前后台不可修改金额。</div><div class="confirmBox"><div>成员</div><b>${x.name} · UID ${x.uid}</b><div>结算金额</div><b>${money(x.final)}</b></div>`,`确认发布`,()=>{x.finance='Published';x.bill='Pending Confirmation';x.payout='—';closeModal();renderSettlement();updatePendingCounters();toast('账单已发布给用户')})}
+function publishBill(type,uid){const x=getBill(type,uid);openModal('发布账单',`<div class="note"><b>发布后用户即可在前端看到此账单。</b><br>用户可确认或拒绝；发布后在用户操作前后台不可修改金额。</div><div class="confirmBox"><div>成员</div>${identityMerged(x.name,x.uid)}<div>结算金额</div><b>${money(x.final)}</b></div>`,`确认发布`,()=>{x.finance='Published';x.bill='Pending Confirmation';x.payout='—';closeModal();renderSettlement();updatePendingCounters();toast('账单已发布给用户')})}
 function exportSettlement(){const rows=state.settlementTab==='agencyHost'?agencyHostSettlement:managementSettlement;downloadCSV(`settlement-${state.settlementTab}.csv`,rows)}
 
 function updatePendingCounters(){
@@ -1943,10 +1962,10 @@ openMember=function(id){
   <div class="detailSec"><h4>成员信息</h4><div class="kv memberInfoGrid">
    <div><span>国家 / 地区</span><b>${displayCountry(m.country)}</b></div><div><span>时区</span><b>${m.tz||'—'}</b></div>
    <div><span>WhatsApp</span><b class="whatsappValue">${memberContactInfo(m).whatsapp}</b></div><div><span>加入类型</span><b>${memberJoinedType(m)}</b></div>
-   <div><span>邀请人</span><b>${memberInvitedBy(m)}</b></div><div><span>邀请码</span><b class="memberCodeLine">${code} <button title="复制邀请码" onclick="navigator.clipboard?.writeText('${code}');toast('已复制')">⧉</button></b></div>
+   <div><span>邀请人</span>${memberInvitedByIdentity(m)}</div><div><span>邀请码</span><b class="memberCodeLine">${code} <button title="复制邀请码" onclick="navigator.clipboard?.writeText('${code}');toast('已复制')">⧉</button></b></div>
    <div><span>加入时间</span><b class="nowrapValue">${memberJoinTime(m)}</b></div>
    <div class="wide"><span>收款方式</span><b class="paymentValue"><span class="paySummary"><span>${memberAllPaymentMethods(m).length} 个已保存 · 星标：${star.type} · ${star.address}</span><em class="starredPay">★ 星标</em></span><button class="miniAction" onclick="openMemberPayment('${m.id}')">查看全部</button></b></div>
-   <div class="wide"><span>直属上级</span><b>${memberDirectSuperior(m)}</b></div><div class="wide"><span>管理路径</span><b>${memberManagementPath(m)}</b></div>
+   <div class="wide"><span>直属上级</span>${memberDirectSuperiorIdentity(m)}</div><div class="wide"><span>管理路径</span><b>${memberManagementPath(m)}</b></div>
   </div></div>
   <div class="drawerActions"><button class="btn" onclick="openMemberData('${m.id}')">查看业务数据</button><button class="btn" onclick="closeDrawer();goView('settlement');setSettlementTab('${m.role==='Host'?'hostWeekly':m.role==='Agent'?'agencyWeekly':'managementWeekly'}')">查看结算</button></div>`)
 };
@@ -2249,7 +2268,7 @@ function openAgencyComposition(uid){
  refreshAgencyWeeklyTotals();const a=agencyWeeklySettlement.find(x=>x.uid===uid);if(!a)return;
  const rows=hostWeeklySettlement.filter(h=>h.agencyUid===uid);
  const body=rows.map(h=>`<tr><td>${h.name}<br><span class="muted">UID ${h.uid}</span></td><td>${h.tierQualified?'<span class="badge active">是</span>':'<span class="badge rejected">否</span>'}</td><td>${h.level}</td><td>${money(h.tierSalary)}</td><td>${money(h.diamondSalary)}</td><td>${money(h.hostSalary)}</td><td>${money(h.agentSalary)}${h.agentSalaryRate===0.7?'<span class="settlementReadonlyState">70%</span>':''}</td><td class="${hostRowAdjustment(h)<0?'redTxt':''}">${hostRowAdjustment(h)?money(hostRowAdjustment(h)):'$0.00'}</td><td>${money(hostFinalSalary(h))}</td></tr>`).join('');
- openDrawer('查看主播薪资',`<div class="detailHero"><div class="avatar">${initials(a.name)}</div><div><h3>${a.name}</h3><p>代理 UID ${a.uid}</p></div></div><div class="detailSec"><div class="memberRelationNote"><b>代理薪资按 Host 逐笔核算。</b> 每个 Host 的 Agent Salary 由 Coins Tier 决定；Working Time 未达标时按该 Host 对应 Agent Salary 的 70% 计入。</div><div class="table-responsive tableWrap"><table class="table" style="min-width:1350px"><thead><tr><th>Host</th><th>是否达标档位</th><th>档位</th><th>档位薪资</th><th>钻石薪资</th><th>主播薪资</th><th>代理薪资</th><th>主播调整</th><th>主播结算薪资</th></tr></thead><tbody>${body}</tbody></table></div><div class="compositionTotals"><div><span>主播总薪资</span><b>${money(a.hostSalary)}</b></div><div><span>主播总结算</span><b>${money(a.hostSettlement)}</b></div><div><span>代理本人总薪资</span><b>${money(a.agentOwnSalary)}</b></div><div><span>代理总薪资</span><b>${money(a.agentTotalSalary)}</b></div><div><span>代理总结算</span><b>${money(a.final)}</b></div></div></div>`)
+ openDrawer('查看主播薪资',`<div class="detailHero"><div class="avatar">${initials(a.name)}</div><div><h3>${a.name}</h3><p>ID ${a.uid}</p></div></div><div class="detailSec"><div class="memberRelationNote"><b>代理薪资按 Host 逐笔核算。</b> 每个 Host 的 Agent Salary 由 Coins Tier 决定；Working Time 未达标时按该 Host 对应 Agent Salary 的 70% 计入。</div><div class="table-responsive tableWrap"><table class="table" style="min-width:1350px"><thead><tr><th>Host</th><th>是否达标档位</th><th>档位</th><th>档位薪资</th><th>钻石薪资</th><th>主播薪资</th><th>代理薪资</th><th>主播调整</th><th>主播结算薪资</th></tr></thead><tbody>${body}</tbody></table></div><div class="compositionTotals"><div><span>主播总薪资</span><b>${money(a.hostSalary)}</b></div><div><span>主播总结算</span><b>${money(a.hostSettlement)}</b></div><div><span>代理本人总薪资</span><b>${money(a.agentOwnSalary)}</b></div><div><span>代理总薪资</span><b>${money(a.agentTotalSalary)}</b></div><div><span>代理总结算</span><b>${money(a.final)}</b></div></div></div>`)
 }
 
 function managementWeeklyTable(){const rows=settlementFilter(managementWeeklySettlement);return `<div class="memberRelationNote"><b>管理线周结算：</b>每周按结算时最终 Role / Lv 计算应计管理线收入，作为管理线月结算的构成数据；实际对用户发布与付款统一在「管理线月结算」。</div><div class="table-responsive tableWrap"><table class="table settlementManagementWeeklyTable"><thead><tr><th>成员</th><th>角色 / Lv</th><th>周 Agency Salary</th><th>提成</th><th>有效 Host</th><th>实际 Base</th><th>系统计算($)</th><th>需调整($)</th><th>周结算($)</th><th>财务状态</th><th>操作</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${memberCell(x.name,x.uid)}</td><td>${x.role} · ${x.level}</td><td>${money(x.weekly)}</td><td>${x.rate}% · ${money(x.commission)}</td><td>${x.eff}</td><td>${money(x.base)}</td><td>${money(x.calc)}</td><td>${x.adj?((x.adj>0?'+':'')+money(x.adj)):'$0.00'}</td><td class="money">${money(x.final)}</td><td>${x.weekFinance==='Pending Finance Review'?statusBadge('Pending Finance Review'):'<span class="badge confirmed">已财务确认</span>'}</td><td>${managementWeeklyActions(x)}</td></tr>`).join('')||'<tr><td colspan="11"><div class="empty">暂无管理线周结算数据。</div></td></tr>'}</tbody></table></div>`}
@@ -2270,7 +2289,7 @@ previewFinanceAdjustment=function(type,uid){const x=getBill(type,uid);if(!x)retu
 saveFinanceAdjustment=function(type,uid){const x=getBill(type,uid);if(!x)return;const reason=(document.getElementById('financeAdjReason')?.value||'').trim();if(!reason){toast('请填写调整原因');return}const amount=Number(document.getElementById('financeAdjAmount')?.value||0);if(!Number.isFinite(amount)){toast('请输入有效调整金额');return}if(type==='agencyWeekly')x.agentAdj=amount;else x.adj=amount;x.adjustmentType=document.getElementById('financeAdjType')?.value||'更正';x.adjustmentReason=reason;x.adjustmentNote=(document.getElementById('financeAdjNote')?.value||'').trim();if(type==='hostWeekly'){x.final=Number(x.hostSalary||0)+amount;const a=agencyWeeklySettlement.find(v=>v.uid===x.agencyUid);if(a){a.finance='Pending Finance Review';a.bill='—';a.payout='—'}refreshAgencyWeeklyTotals()}else{x.final=Number(x.calc||0)+amount;x.finance='Pending Finance Review';x.payout='—';if(type==='managementWeekly')x.weekFinance='Pending Finance Review'}closeDrawer();renderSettlement();updatePendingCounters();toast(type==='hostWeekly'?'主播调整已保存，代理周账单已重新计算':'调整已保存，请财务确认')}
 
 financeConfirm=function(type,uid){const x=getBill(type,uid);if(!x)return;if(type==='managementWeekly'){x.weekFinance='Ready to Publish';x.finance='Ready to Publish';renderSettlement();toast('管理线周结算已财务确认');return}x.finance='Ready to Publish';x.payout='—';renderSettlement();toast('财务已确认，账单待发布')}
-publishBill=function(type,uid){if(type!=='agencyWeekly'&&type!=='managementMonthly'){toast('该结算表不直接发布用户账单');return}const x=getBill(type,uid);openModal('发布账单',`<div class="note"><b>发布后用户即可在前端看到此账单。</b><br>用户可确认或拒绝；发布后在用户操作前后台不可修改金额。</div><div class="confirmBox"><div>成员</div><b>${x.name} · UID ${x.uid}</b><div>结算金额</div><b>${money(x.final)}</b></div>`,'确认发布',()=>{x.finance='Published';x.bill='Pending Confirmation';x.payout='—';closeModal();renderSettlement();updatePendingCounters();toast('账单已发布给用户')})}
+publishBill=function(type,uid){if(type!=='agencyWeekly'&&type!=='managementMonthly'){toast('该结算表不直接发布用户账单');return}const x=getBill(type,uid);openModal('发布账单',`<div class="note"><b>发布后用户即可在前端看到此账单。</b><br>用户可确认或拒绝；发布后在用户操作前后台不可修改金额。</div><div class="confirmBox"><div>成员</div>${identityMerged(x.name,x.uid)}<div>结算金额</div><b>${money(x.final)}</b></div>`,'确认发布',()=>{x.finance='Published';x.bill='Pending Confirmation';x.payout='—';closeModal();renderSettlement();updatePendingCounters();toast('账单已发布给用户')})}
 
 settlementQueueTable=function(status){const q=(document.getElementById('settlementSearch')?.value||'').toLowerCase(),payout=document.getElementById('payoutStatus')?.value||'All Payout Status',finance=document.getElementById('financeStatus')?.value||'All Finance Status',pay=document.getElementById('settlementPaymentMethod')?.value||'All Payment Types';refreshAgencyWeeklyTotals();const rows=[...agencyWeeklySettlement.map(x=>({...x,_type:'agencyWeekly',_label:'代理周结算'})),...managementMonthlySettlement.map(x=>({...x,_type:'managementMonthly',_label:'管理线月结算'}))].filter(x=>x.bill===status&&(finance==='All Finance Status'||x.finance===finance)&&(payout==='All Payout Status'||x.payout===payout)&&(pay==='All Payment Types'||x.payType===pay)&&(!q||String(x.uid||'').includes(q)||String(x.name||'').toLowerCase().includes(q)||String(x.payAddress||'').toLowerCase().includes(q)));return `<div class="settlementQueueHint"><b>${status==='Rejected'?'用户已拒绝账单':'待用户确认账单'}</b><span>${status==='Rejected'?'由财务查看拒绝原因并处理后重新发布。':'仅展示真正向用户发布的代理周账单与管理线月账单。'}</span></div><div class="table-responsive tableWrap"><table class="table settlementQueueTable"><thead><tr><th>类型</th><th>成员</th><th>收款类型</th><th>收款地址</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>结算金额</th><th>操作</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${x._label}</td><td>${memberCell(x.name,x.uid)}</td><td>${x.payType||'—'}</td><td>${paymentAddressCell(x._type,x)}</td><td>${statusBadge(x.finance)}</td><td>${statusBadge(x.bill)}</td><td>${statusBadge(x.payout)}</td><td>${rejectReasonCell(x.rejectReason)}</td><td class="money">${money(x.final)}</td><td>${x._type==='agencyWeekly'?agencyWeeklyActions(x):monthlyManagementActions(x)}</td></tr>`).join('')||'<tr><td colspan="10"><div class="empty">暂无符合条件的账单。</div></td></tr>'}</tbody></table></div>`}
 
@@ -2360,10 +2379,10 @@ syncSettlementPeriodOptions();renderSettlement();updatePendingCounters();
     </tr>`).join('');
     return `<div class="memberRelationNote"><b>主播周结算 = 代理周账单的逐 Host 构成。</b> 主播需调整只由财务修改；有效主播按 4 个有效天 + 10 小时有效上麦时长判断；Host 不单独生成用户账单。</div>
     <div class="table-responsive tableWrap"><table class="table settlementHostWeeklyTable"><thead><tr>
-      <th>主播 UID</th><th>昵称</th><th>国家</th><th>是否新主播</th><th>是否有效主播</th><th>代理 UID</th><th>代理昵称</th>
+      <th>主播昵称、ID</th><th>国家</th><th>是否新主播</th><th>是否有效主播</th><th>代理昵称、ID</th>
       <th>总金币</th><th>总钻石</th><th>钻石余额</th><th>有效上麦时长(h)</th><th>有效天</th><th>等级</th><th>等级薪资</th><th>钻石薪资</th>
       <th>主播总薪资</th><th>代理本人薪资</th><th>主播需调整</th><th>主播总结算</th><th>代理总结算</th><th>结算类型</th><th>收款类型</th><th>收款地址</th><th>超出档位金币</th>
-    </tr></thead><tbody>${body||'<tr><td colspan="24"><div class="empty">暂无符合条件的主播周结算数据。</div></td></tr>'}</tbody></table></div>`;
+    </tr></thead><tbody>${body||'<tr><td colspan="22"><div class="empty">暂无符合条件的主播周结算数据。</div></td></tr>'}</tbody></table></div>`;
   };
 
   /* Queue view also follows country / settlement type / payment type when present. */
@@ -2413,6 +2432,9 @@ renderData();
 #view-data .forecastAgencyWeekly{min-width:2520px!important}
 #view-data .forecastManagementWeekly{min-width:3180px!important}
 #view-data .forecastTable th,#view-data .forecastTable td{white-space:nowrap;vertical-align:middle}
+.memberListTable .memberSuperiorIdentity{display:flex;flex-direction:column;gap:4px;min-width:150px;line-height:1.25}
+.memberListTable .memberSuperiorIdentity b{font-size:14px;font-weight:700;color:#17233a}
+.memberListTable .memberSuperiorIdentity small{font-size:12px;color:#7c8da8}
 #view-data .identityPlain{display:flex;flex-direction:column;gap:2px;min-width:150px}
 #view-data .identityPlain b{font-size:13px;color:#17233a}.identityPlain small{font-size:11px;color:#7c8da8}
 #view-data .forecastHint{margin:0 0 12px;padding:10px 12px;border:1px solid #dce8f8;background:#f7faff;border-radius:9px;color:#5f7290;font-size:12px;line-height:1.6}
@@ -2451,7 +2473,7 @@ renderData();
   const managementGivers={'540001':2140,'530088':901,'520044':596,'510026':744,'520119':126};
   managementData.forEach(x=>{x.givers=managementGivers[x.uid]||0});
 
-  function identityPlain(name,uid){return `<div class="identityPlain"><b>${name||'—'}</b><small>ID ${uid||'—'}</small></div>`}
+  function identityPlain(name,uid){return identityMerged(name,uid)}
   function forecastStatusInIdentity(x){return x?.status==='Terminated'?'<span class="badge rejected" style="margin-left:6px">已解约</span>':''}
   function forecastScaleMoney(v,p){return Number(v||0)*Number(p?.factor||1)}
   function hostWeeklyMetrics(x,p){
@@ -2831,7 +2853,7 @@ renderData();
     refreshAgencyWeeklyTotals();
     const rows=settlementFilter(agencyWeeklySettlement);
     const body=rows.map(x=>`<tr>
-      <td>${x.uid}</td><td><b>${x.name}</b></td><td>${displayCountry(x.country)}</td><td>${x.hosts}</td><td>${x.effectiveHosts}</td>
+      <td>${identityMerged(x.name,x.uid)}</td><td>${displayCountry(x.country)}</td><td>${x.hosts}</td><td>${x.effectiveHosts}</td>
       <td class="money">${fmt(x.totalCoins)}</td><td class="money">${fmt(x.totalDiamonds)}</td>
       <td>${money(x.hostSalary)}</td><td>${money(x.hostSettlement)}</td><td>${money(x.agentOwnSalary)}</td><td>${money(x.agentTotalSalary)}</td>
       <td class="${x.agentAdj<0?'redTxt':x.agentAdj>0?'greenTxt':''}">${x.agentAdj?((x.agentAdj>0?'+':'')+money(x.agentAdj)):'$0.00'}</td><td class="money">${money(x.final)}</td>
@@ -2840,10 +2862,10 @@ renderData();
     </tr>`).join('');
     return `<div class="memberRelationNote"><b>代理周结算 = 实际向代理发布、确认与付款的周账单。</b> 代理总薪资 = 主播总薪资 + 代理本人总薪资；<b>代理总结算 = 主播总结算 + 代理本人总薪资 + 代理需调整。</b></div>
     <div class="table-responsive tableWrap"><table class="table settlementAgencyWeeklyTable"><thead><tr>
-      <th>代理 UID</th><th>昵称</th><th>国家</th><th>总主播数</th><th>有效主播数</th><th>总金币</th><th>总钻石</th>
+      <th>代理昵称、ID</th><th>国家</th><th>总主播数</th><th>有效主播数</th><th>总金币</th><th>总钻石</th>
       <th>主播总薪资</th><th>主播总结算</th><th>代理本人总薪资</th><th>代理总薪资</th><th>代理需调整</th><th>代理总结算</th>
       <th>结算类型</th><th>收款类型</th><th>收款地址</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>操作</th>
-    </tr></thead><tbody>${body||'<tr><td colspan="21"><div class="empty">暂无符合条件的代理周结算数据。</div></td></tr>'}</tbody></table></div>`;
+    </tr></thead><tbody>${body||'<tr><td colspan="20"><div class="empty">暂无符合条件的代理周结算数据。</div></td></tr>'}</tbody></table></div>`;
   };
 
   managementWeeklyTable=function(){
@@ -2862,20 +2884,20 @@ renderData();
     const rows=settlementFilter(managementMonthlySettlement);
     return `<div class="memberRelationNote"><b>BD+ 月结算 = 4 个已完成周结算的实际付款账单。</b> 月累计薪资 = Week 1 + Week 2 + Week 3 + Week 4；月总结算 = 月累计薪资 + 月需调整。</div>
     <div class="table-responsive tableWrap"><table class="table settlementManagementMonthlyTable"><thead><tr>
-      <th>UID</th><th>昵称</th><th>角色</th><th>国家</th><th>周期范围</th><th>Week 1</th><th>Week 2</th><th>Week 3</th><th>Week 4</th><th>月累计薪资</th><th>月需调整</th><th>月总结算</th><th>结算类型</th><th>收款类型</th><th>收款地址</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>操作</th>
+      <th>昵称、ID</th><th>角色</th><th>国家</th><th>周期范围</th><th>Week 1</th><th>Week 2</th><th>Week 3</th><th>Week 4</th><th>月累计薪资</th><th>月需调整</th><th>月总结算</th><th>结算类型</th><th>收款类型</th><th>收款地址</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>操作</th>
     </tr></thead><tbody>${rows.map(x=>`<tr>
-      <td>${x.uid}</td><td><b>${x.name}</b></td><td>${x.role}</td><td>${displayCountry(x.country)}</td><td>${x.period}</td>
+      <td>${identityMerged(x.name,x.uid)}</td><td>${x.role}</td><td>${displayCountry(x.country)}</td><td>${x.period}</td>
       <td>${money(x.week1)}</td><td>${money(x.week2)}</td><td>${money(x.week3)}</td><td>${money(x.week4)}</td><td>${money(x.weeklyTotal)}</td>
       <td class="${x.adj<0?'redTxt':x.adj>0?'greenTxt':''}">${x.adj?((x.adj>0?'+':'')+money(x.adj)):'$0.00'}</td><td class="money">${money(x.final)}</td><td>${x.settlementType}</td><td>${x.payType||'—'}</td><td>${paymentAddressCell('managementMonthly',x)}</td>
       <td>${statusBadge(x.finance)}</td><td>${statusBadge(x.bill)}</td><td>${statusBadge(x.payout)}</td><td>${rejectReasonCell(x.rejectReason)}</td><td>${monthlyManagementActions(x)}</td>
-    </tr>`).join('')||'<tr><td colspan="20"><div class="empty">暂无 BD+ 月结算账单。</div></td></tr>'}</tbody></table></div>`;
+    </tr>`).join('')||'<tr><td colspan="19"><div class="empty">暂无 BD+ 月结算账单。</div></td></tr>'}</tbody></table></div>`;
   };
 
   openAgencyComposition=function(uid){
     refreshAgencyWeeklyTotals();const a=agencyWeeklySettlement.find(x=>x.uid===uid);if(!a)return;
     const rows=hostWeeklySettlement.filter(h=>h.agencyUid===uid);
-    const body=rows.map(h=>`<tr><td>${h.name}<br><span class="muted">UID ${h.uid}</span></td><td>${h.level}</td><td>${money(h.tierSalary)}</td><td>${money(h.diamondSalary)}</td><td>${money(h.hostSalary)}</td><td>${money(h.agentSalary)}${h.agentSalaryRate===0.7?'<span class="settlementReadonlyState">70%</span>':''}</td><td>${hostRowAdjustment(h)?money(hostRowAdjustment(h)):'$0.00'}</td><td>${money(hostFinalSalary(h))}</td><td>${money(hostAgentSettlement(h))}</td></tr>`).join('');
-    openDrawer('查看主播薪资',`<div class="detailHero"><div class="avatar">${initials(a.name)}</div><div><h3>${a.name}</h3><p>代理 UID ${a.uid}</p></div></div><div class="detailSec"><div class="table-responsive tableWrap"><table class="table" style="min-width:1450px"><thead><tr><th>Host</th><th>等级</th><th>等级薪资</th><th>钻石薪资</th><th>主播总薪资</th><th>代理本人薪资</th><th>主播需调整</th><th>主播总结算</th><th>代理总结算</th></tr></thead><tbody>${body}</tbody></table></div><div class="compositionTotals"><div><span>主播总薪资</span><b>${money(a.hostSalary)}</b></div><div><span>主播总结算</span><b>${money(a.hostSettlement)}</b></div><div><span>代理本人总薪资</span><b>${money(a.agentOwnSalary)}</b></div><div><span>代理总薪资</span><b>${money(a.agentTotalSalary)}</b></div><div><span>代理总结算</span><b>${money(a.final)}</b></div></div></div>`)
+    const body=rows.map(h=>`<tr><td>${identityMerged(h.name,h.uid)}</td><td>${h.level}</td><td>${money(h.tierSalary)}</td><td>${money(h.diamondSalary)}</td><td>${money(h.hostSalary)}</td><td>${money(h.agentSalary)}${h.agentSalaryRate===0.7?'<span class="settlementReadonlyState">70%</span>':''}</td><td>${hostRowAdjustment(h)?money(hostRowAdjustment(h)):'$0.00'}</td><td>${money(hostFinalSalary(h))}</td><td>${money(hostAgentSettlement(h))}</td></tr>`).join('');
+    openDrawer('查看主播薪资',`<div class="detailHero"><div class="avatar">${initials(a.name)}</div><div><h3>${a.name}</h3><p>ID ${a.uid}</p></div></div><div class="detailSec"><div class="table-responsive tableWrap"><table class="table" style="min-width:1450px"><thead><tr><th>Host</th><th>等级</th><th>等级薪资</th><th>钻石薪资</th><th>主播总薪资</th><th>代理本人薪资</th><th>主播需调整</th><th>主播总结算</th><th>代理总结算</th></tr></thead><tbody>${body}</tbody></table></div><div class="compositionTotals"><div><span>主播总薪资</span><b>${money(a.hostSalary)}</b></div><div><span>主播总结算</span><b>${money(a.hostSettlement)}</b></div><div><span>代理本人总薪资</span><b>${money(a.agentOwnSalary)}</b></div><div><span>代理总薪资</span><b>${money(a.agentTotalSalary)}</b></div><div><span>代理总结算</span><b>${money(a.final)}</b></div></div></div>`)
   };
 
   /* Agency-level adjustment base is the pre-agent-adjustment settlement, not gross salary. */
@@ -2977,8 +2999,8 @@ renderData();
   hostWeeklyTable=function(){
     const rows=settlementFilter(hostWeeklySettlement);
     const body=rows.map(x=>`<tr>
-      <td>${x.uid}</td><td><b>${x.name}</b></td><td>${displayCountry(x.hostCountry)}</td><td>${x.newHost?'是':'否'}</td><td>${hostIsEffectiveV38(x)?'<span class="badge active">是</span>':'<span class="badge rejected">否</span>'}</td>
-      <td>${x.agencyUid}</td><td><b>${x.agency}</b></td>
+      <td>${identityMerged(x.name,x.uid)}</td><td>${displayCountry(x.hostCountry)}</td><td>${x.newHost?'是':'否'}</td><td>${hostIsEffectiveV38(x)?'<span class="badge active">是</span>':'<span class="badge rejected">否</span>'}</td>
+      <td>${identityMerged(x.agency,x.agencyUid)}</td>
       <td class="money">${fmt(x.totalCoins)}</td><td class="money">${fmt(x.totalDiamonds)}</td><td class="money">${fmt(x.diamondBalance)}</td>
       <td>${Number(x.validHours).toFixed(2)}</td><td>${x.validDays}</td><td>${x.level}</td><td>${money(x.tierSalary)}</td><td>${money(x.diamondSalary)}</td>
       <td>${money(x.hostSalary)}</td><td title="该 Host 对应的 Agent Salary；Working Time 未达标时按该 Coins Tier 标准的 70% 计算。">${money(x.agentSalary)}${x.agentSalaryRate===0.7?'<span class="settlementReadonlyState">按 70%</span>':''}</td>
@@ -2988,10 +3010,10 @@ renderData();
     </tr>`).join('');
     return `<div class="memberRelationNote"><b>主播周结算 = 代理周账单的逐 Host 构成。</b> 主播需调整只由财务修改；有效主播按 4 个有效天 + 10 小时有效上麦时长判断；Host 不单独生成用户账单。</div>
     <div class="table-responsive tableWrap"><table class="table settlementHostWeeklyTable"><thead><tr>
-      <th>主播 UID</th><th>昵称</th><th>国家</th><th>是否新主播</th><th>是否有效主播</th><th>代理 UID</th><th>代理昵称</th>
+      <th>主播昵称、ID</th><th>国家</th><th>是否新主播</th><th>是否有效主播</th><th>代理昵称、ID</th>
       <th>总金币</th><th>总钻石</th><th>钻石余额</th><th>有效上麦时长(h)</th><th>有效天</th><th>等级</th><th>等级薪资</th><th>钻石薪资</th>
       <th>主播总薪资</th><th>代理本人薪资</th><th>主播需调整</th><th>主播总结算</th><th>代理总结算</th><th>结算类型</th><th>收款类型</th><th>收款地址</th><th>超出档位金币</th>
-    </tr></thead><tbody>${body||'<tr><td colspan="24"><div class="empty">暂无符合条件的主播周结算数据。</div></td></tr>'}</tbody></table></div>`;
+    </tr></thead><tbody>${body||'<tr><td colspan="22"><div class="empty">暂无符合条件的主播周结算数据。</div></td></tr>'}</tbody></table></div>`;
   };
 
   managementWeeklySettlement.forEach(x=>{
@@ -3012,20 +3034,20 @@ renderData();
     const rows=settlementFilter(managementWeeklySettlement);
     return `<div class="memberRelationNote"><b>BD+ 周结算。</b> 提成薪资 = 代理总结算 × 提成比例；总薪资 = 提成薪资 + 等级底薪；总结算 = 总薪资 + 需调整。周结算与月结算均展示完整财务、用户账单及付款状态。</div>
     <div class="table-responsive tableWrap"><table class="table settlementManagementWeeklyTable"><thead><tr>
-      <th>UID</th><th>昵称</th><th>角色</th><th>国家</th><th>总代理数</th><th>总主播数</th><th>有效主播数</th><th>代理总薪资</th><th>代理总结算</th><th>等级</th><th>提成比例</th><th>提成薪资</th><th>等级底薪</th><th>总薪资</th><th>需调整</th><th>总结算</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>操作</th>
+      <th>昵称、ID</th><th>角色</th><th>国家</th><th>总代理数</th><th>总主播数</th><th>有效主播数</th><th>代理总薪资</th><th>代理总结算</th><th>等级</th><th>提成比例</th><th>提成薪资</th><th>等级底薪</th><th>总薪资</th><th>需调整</th><th>总结算</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>操作</th>
     </tr></thead><tbody>${rows.map(x=>`<tr>
-      <td>${x.uid}</td><td><b>${x.name}</b></td><td>${x.role}</td><td>${displayCountry(x.country)}</td><td>${x.totalAgents}</td><td>${x.totalHosts}</td><td>${x.effectiveHosts}</td>
+      <td>${identityMerged(x.name,x.uid)}</td><td>${x.role}</td><td>${displayCountry(x.country)}</td><td>${x.totalAgents}</td><td>${x.totalHosts}</td><td>${x.effectiveHosts}</td>
       <td>${money(x.agentTotalSalary)}</td><td>${money(x.agentSettlement)}</td><td>${x.level}</td><td>${x.rate}%</td><td>${money(x.commission)}</td><td>${money(x.base)}</td><td>${money(x.calc)}</td>
       <td class="${x.adj<0?'redTxt':x.adj>0?'greenTxt':''}">${x.adj?((x.adj>0?'+':'')+money(x.adj)):'$0.00'}</td><td class="money">${money(x.final)}</td>
       <td>${statusBadge(x.finance)}</td><td>${statusBadge(x.bill)}</td><td>${statusBadge(x.payout)}</td><td>${rejectReasonCell(x.rejectReason)}</td><td>${managementWeeklyActions(x)}</td>
-    </tr>`).join('')||'<tr><td colspan="21"><div class="empty">暂无 BD+ 周结算数据。</div></td></tr>'}</tbody></table></div>`;
+    </tr>`).join('')||'<tr><td colspan="20"><div class="empty">暂无 BD+ 周结算数据。</div></td></tr>'}</tbody></table></div>`;
   };
 
   /* BD+ weekly now supports publish just like BD+ monthly. */
   publishBill=function(type,uid){
     if(type!=='agencyWeekly'&&type!=='managementWeekly'&&type!=='managementMonthly'){toast('该结算表不直接发布用户账单');return}
     const x=getBill(type,uid);if(!x)return;
-    openModal('发布账单',`<div class="note"><b>发布后用户即可在前端看到此账单。</b><br>用户可确认或拒绝；发布后在用户操作前后台不可修改金额。</div><div class="confirmBox"><div>成员</div><b>${x.name} · UID ${x.uid}</b><div>结算金额</div><b>${money(x.final)}</b></div>`,'确认发布',()=>{x.finance='Published';x.bill='Pending Confirmation';x.payout='—';closeModal();renderSettlement();updatePendingCounters();toast('账单已发布给用户')});
+    openModal('发布账单',`<div class="note"><b>发布后用户即可在前端看到此账单。</b><br>用户可确认或拒绝；发布后在用户操作前后台不可修改金额。</div><div class="confirmBox"><div>成员</div>${identityMerged(x.name,x.uid)}<div>结算金额</div><b>${money(x.final)}</b></div>`,'确认发布',()=>{x.finance='Published';x.bill='Pending Confirmation';x.payout='—';closeModal();renderSettlement();updatePendingCounters();toast('账单已发布给用户')});
   };
 
   /* Weekly details also expose the same status fields. */
