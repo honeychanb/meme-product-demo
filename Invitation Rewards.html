@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Invitation Rewards - Clean State Demo</title>
+<style>
+:root{
+  --bg:#15091b; --panel:#25102f; --panel2:#2d1538; --line:rgba(255,255,255,.09);
+  --text:#fff8ff; --muted:#a99db0; --gold:#ffd04a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:#0f0614;color:var(--text);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.wrap{max-width:980px;margin:0 auto;padding:24px 16px 40px}
+h1{font-size:22px;margin:0 0 6px}
+.sub{font-size:13px;color:var(--muted);margin-bottom:18px}
+.controls{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px
+}
+.control{
+  padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)
+}
+.control-title{font-size:11px;font-weight:800;margin-bottom:8px;color:#e8ddeb}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tab{
+  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.035);
+  color:#b6a9bc;padding:7px 9px;border-radius:999px;font-size:10px;font-weight:800;cursor:pointer
+}
+.tab.active{
+  color:#322000;background:var(--gold);border-color:var(--gold)
+}
+.phone{
+  width:375px;max-width:100%;margin:0 auto;border-radius:24px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.11);
+  background:
+    radial-gradient(circle at 50% -10%,rgba(108,31,132,.34),transparent 34%),
+    linear-gradient(180deg,#210c29 0%,#170a1e 100%);
+}
+.topbar{
+  height:54px;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;
+  padding:0 10px;border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,#31113d,#250c2e)
+}
+.title{text-align:center;font-size:16px;font-weight:800}
+.icon{
+  width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:19px
+}
+.content{padding:12px}
+.card{
+  background:linear-gradient(180deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);border-radius:15px;margin-bottom:12px;overflow:hidden
+}
+.head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:13px 14px 8px;font-size:12px;font-weight:900
+}
+.period{font-size:9px;color:#8f8395;padding:0 14px 8px}
+.qual{
+  font-size:9px;font-weight:900;padding:4px 8px;border-radius:999px;
+  border:1px solid rgba(255,208,74,.34);background:rgba(255,208,74,.08);color:var(--gold)
+}
+.qual.off{color:#b7abbc;border-color:rgba(255,255,255,.13);background:rgba(255,255,255,.035)}
+.metrics{display:grid;grid-template-columns:1fr 1fr;padding:3px 14px 13px}
+.metric:first-child{border-right:1px solid var(--line)}
+.metric{padding-right:12px}.metric+.metric{padding-left:14px}
+.num{font-size:24px;font-weight:900;color:var(--gold);line-height:1}.num small{font-size:12px;color:#92869a}
+.label{font-size:10px;color:var(--muted);margin-top:6px}
+.hint{border-top:1px solid var(--line);padding:9px 14px 11px;font-size:9.5px;color:#918497;line-height:1.45}
+.reward{padding:14px 12px}
+.reward-title{text-align:center;font-size:15px;font-weight:900;color:var(--gold);margin-bottom:4px}
+.reward-sub{text-align:center;font-size:9.5px;color:var(--muted);line-height:1.45;margin-bottom:12px}
+.choices{display:grid;grid-template-columns:1fr 34px 1fr;gap:7px;align-items:center}
+.or{text-align:center;font-size:14px;font-weight:900}
+.option{
+  height:110px;border-radius:12px;border:1px solid rgba(255,208,74,.36);
+  background:rgba(255,255,255,.024);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative
+}
+.option.dim{opacity:.55;border-color:rgba(255,255,255,.12)}
+.ri{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:26px;margin-bottom:7px}
+.coin{background:linear-gradient(145deg,#ffdc55,#d59806)}
+.bean{background:linear-gradient(145deg,#ff9956,#e75330)}
+.rname{font-size:10px;color:#e8d8c8}.ramt{font-size:14px;font-weight:900;color:var(--gold);margin-top:2px}
+.bonus{position:absolute;right:-3px;top:-8px;background:#ff4f6e;color:#fff;font-size:8.5px;font-weight:900;padding:4px 7px;border-radius:10px 10px 10px 3px}
+.btn{
+  width:100%;height:41px;border:0;border-radius:11px;margin-top:14px;
+  background:linear-gradient(180deg,#ffda5e,#f0ad27);color:#382300;font-size:12.5px;font-weight:900
+}
+.btn.disabled{background:rgba(255,255,255,.09);color:#756a7a}
+.info{
+  margin-top:11px;padding:10px 11px;border-radius:10px;border:1px solid var(--line);
+  background:rgba(255,255,255,.025);text-align:center;color:#b2a6b8;font-size:9.5px;line-height:1.5
+}
+.records-title{padding:13px 14px 10px;border-bottom:1px solid var(--line);font-size:12px;font-weight:900}
+.row{display:grid;grid-template-columns:1.15fr 1.2fr .72fr;gap:7px;align-items:center;padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.055)}
+.row:last-child{border-bottom:none}
+.header{color:#8c8091;font-size:8.5px;font-weight:700;padding-top:9px;padding-bottom:8px}
+.date{font-size:9.5px;line-height:1.35;color:#e8dfea}
+.rcell{font-size:9.5px;line-height:1.35}.rcell strong{display:block;color:var(--gold);font-size:10.5px}.rcell span{display:block;color:#dfd0e4}
+.status{
+  justify-self:end;padding:4px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.04);font-size:8.5px;font-weight:900
+}
+.empty{padding:15px 12px;text-align:center;color:#8f8395;font-size:9.5px}
+.explain{
+  max-width:600px;margin:16px auto 0;padding:12px 14px;border:1px solid var(--line);
+  border-radius:12px;background:rgba(255,255,255,.025);font-size:11px;color:#b1a5b7;line-height:1.6
+}
+@media(max-width:700px){.controls{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Invitation Rewards · Clean State Demo</h1>
+  <div class="sub">This week’s progress + last week’s reward.</div>
+
+  <div class="controls">
+    <div class="control">
+      <div class="control-title">Progress State</div>
+      <div class="tabs" id="progressTabs">
+        <button class="tab active" data-progress="qualified">Qualified</button>
+        <button class="tab" data-progress="notqualified">Not Qualified</button>
+      </div>
+    </div>
+    <div class="control">
+      <div class="control-title">Reward State</div>
+      <div class="tabs" id="rewardTabs">
+        <button class="tab active" data-reward="claimable">Claimable</button>
+        <button class="tab" data-reward="claimed">Claimed</button>
+        <button class="tab" data-reward="expired">Expired</button>
+        <button class="tab" data-reward="calculating">Calculating</button>
+        <button class="tab" data-reward="none">No Reward</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="phone">
+    <div class="topbar">
+      <div class="icon">‹</div><div class="title">Invitation Rewards</div><div class="icon">×</div>
+    </div>
+    <div class="content">
+
+      <section class="card" id="progressCard">
+        <div class="head">
+          <span>This Week's Progress</span>
+          <span class="qual" id="qualTag">Qualified</span>
+        </div>
+        <div class="period">This Week: Aug 31 – Sep 6</div>
+        <div class="metrics">
+          <div class="metric">
+            <div class="num" id="newHosts">14</div>
+            <div class="label">New Hosts</div>
+          </div>
+          <div class="metric">
+            <div class="num"><span id="eligibleHosts">12</span> <small>/ 10</small></div>
+            <div class="label">Eligible Hosts</div>
+          </div>
+        </div>
+        <div class="hint" id="progressHint">Used to qualify for next week's reward.</div>
+      </section>
+
+      <section class="card" id="rewardCard"></section>
+
+      <section class="card">
+        <div class="records-title">Rewards Records</div>
+        <div class="row header">
+          <div>Statistical Time</div><div>Rewards</div><div style="text-align:right">Status</div>
+        </div>
+        <div class="row">
+          <div class="date">2026-08-17<br/>2026-08-23</div>
+          <div class="rcell"><strong>Beans</strong><span>180,000</span></div>
+          <div class="status">Claimed</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  
+</div>
+
+<script>
+const progressData = {
+  qualified:{tag:"Qualified", off:false, newHosts:"14", eligible:"12",
+    hint:"Used to qualify for next week's reward."},
+  notqualified:{tag:"Not Qualified", off:true, newHosts:"11", eligible:"9",
+    hint:"Reach 10 Eligible Hosts to qualify."}
+};
+
+const rewardTemplates = {
+  claimable: `
+    <div class="reward">
+      <div class="reward-title">Last Week's Reward</div>
+      <div class="reward-sub">Choose 1 reward. Beans +50%.</div>
+      <div class="period" style="padding:0;margin-bottom:12px">Last Week: Aug 24 – Aug 30</div>
+      <div class="choices">
+        <div class="option"><div class="ri coin">🪙</div><div class="rname">Coins</div><div class="ramt">120,000</div></div>
+        <div class="or">OR</div>
+        <div class="option"><div class="bonus">+50%</div><div class="ri bean">🫘</div><div class="rname">Beans</div><div class="ramt">180,000</div></div>
+      </div>
+      <button class="btn">One-click claim</button>
+      <div class="info">Claim by Sunday 24:00 (UTC+0).</div>
+    </div>`,
+  claimed: `
+    <div class="reward">
+      <div class="reward-title">Last Week's Reward</div>
+      <div class="reward-sub">Reward received.</div>
+      <div class="period" style="padding:0;margin-bottom:12px">Last Week: Aug 24 – Aug 30</div>
+      <div class="choices">
+        <div class="option dim"><div class="ri coin">🪙</div><div class="rname">Coins</div><div class="ramt">120,000</div></div>
+        <div class="or">OR</div>
+        <div class="option"><div class="bonus">+50%</div><div class="ri bean">🫘</div><div class="rname">Beans</div><div class="ramt">180,000</div></div>
+      </div>
+      <button class="btn disabled" disabled>Claimed</button>
+      <div class="info">Beans 180,000 credited.</div>
+    </div>`,
+  expired: `
+    <div class="reward">
+      <div class="reward-title">Last Week's Reward</div>
+      <div class="reward-sub">Claim period ended.</div>
+      <div class="period" style="padding:0;margin-bottom:12px">Last Week: Aug 24 – Aug 30</div>
+      <div class="choices">
+        <div class="option dim"><div class="ri coin">🪙</div><div class="rname">Coins</div><div class="ramt">120,000</div></div>
+        <div class="or">OR</div>
+        <div class="option dim"><div class="bonus">+50%</div><div class="ri bean">🫘</div><div class="rname">Beans</div><div class="ramt">180,000</div></div>
+      </div>
+      <button class="btn disabled" disabled>Expired</button>
+      <div class="info">Not claimed.</div>
+    </div>`,
+  calculating: `
+    <div class="reward">
+      <div class="reward-title">Last Week's Reward</div>
+      <div class="reward-sub">Calculating rewards...</div>
+      <div class="period" style="padding:0;margin-bottom:0">Last Week: Aug 24 – Aug 30</div>
+      <div class="info">Available after Tuesday 01:00 (UTC+0).</div>
+    </div>`,
+  none: `
+    <div class="reward">
+      <div class="reward-title">Last Week's Reward</div>
+      <div class="reward-sub">No rewards available.</div>
+      <div class="period" style="padding:0;margin-bottom:0">Last Week: Aug 24 – Aug 30</div>
+      <div class="info">Last week was not qualified.</div>
+    </div>`
+};
+
+function setProgress(key){
+  document.querySelectorAll("[data-progress]").forEach(x=>x.classList.toggle("active",x.dataset.progress===key));
+  const d=progressData[key];
+  const tag=document.getElementById("qualTag");
+  tag.textContent=d.tag; tag.classList.toggle("off",d.off);
+  document.getElementById("newHosts").textContent=d.newHosts;
+  document.getElementById("eligibleHosts").textContent=d.eligible;
+  document.getElementById("progressHint").textContent=d.hint;
+}
+function setReward(key){
+  document.querySelectorAll("[data-reward]").forEach(x=>x.classList.toggle("active",x.dataset.reward===key));
+  document.getElementById("rewardCard").innerHTML=rewardTemplates[key];
+}
+document.getElementById("progressTabs").onclick=e=>{
+  const b=e.target.closest("[data-progress]"); if(b) setProgress(b.dataset.progress);
+};
+document.getElementById("rewardTabs").onclick=e=>{
+  const b=e.target.closest("[data-reward]"); if(b) setReward(b.dataset.reward);
+};
+setProgress("qualified"); setReward("claimable");
+</script>
+</body>
+</html>
