@@ -166,14 +166,7 @@ h1{font-size:22px;margin:0 0 6px}
 
       <section class="card">
         <div class="records-title">Rewards Records</div>
-        <div class="row header">
-          <div>Statistical Time</div><div>Rewards</div><div style="text-align:right">Status</div>
-        </div>
-        <div class="row">
-          <div class="date">2026-08-17<br/>2026-08-23</div>
-          <div class="rcell"><strong>Beans</strong><span>180,000</span></div>
-          <div class="status">Claimed</div>
-        </div>
+        <div id="recordsArea"></div>
       </section>
 
     </div>
@@ -246,6 +239,65 @@ const rewardTemplates = {
     </div>`
 };
 
+
+const recordsTemplates = {
+  claimable: `
+    <div class="row header">
+      <div>Statistical Time</div><div>Rewards</div><div style="text-align:right">Status</div>
+    </div>
+    <div class="row">
+      <div class="date">2026-08-17<br/>2026-08-23</div>
+      <div class="rcell"><strong>Beans</strong><span>180,000</span></div>
+      <div class="status">Claimed</div>
+    </div>`,
+  claimed: `
+    <div class="row header">
+      <div>Statistical Time</div><div>Rewards</div><div style="text-align:right">Status</div>
+    </div>
+    <div class="row">
+      <div class="date">2026-08-24<br/>2026-08-30</div>
+      <div class="rcell"><strong>Beans</strong><span>180,000</span></div>
+      <div class="status">Claimed</div>
+    </div>
+    <div class="row">
+      <div class="date">2026-08-17<br/>2026-08-23</div>
+      <div class="rcell"><strong>Beans</strong><span>180,000</span></div>
+      <div class="status">Claimed</div>
+    </div>`,
+  expired: `
+    <div class="row header">
+      <div>Statistical Time</div><div>Rewards</div><div style="text-align:right">Status</div>
+    </div>
+    <div class="row">
+      <div class="date">2026-08-24<br/>2026-08-30</div>
+      <div class="rcell"><strong>Coins 120,000 / Beans 180,000</strong><span>(Not claimed)</span></div>
+      <div class="status">Expired</div>
+    </div>
+    <div class="row">
+      <div class="date">2026-08-17<br/>2026-08-23</div>
+      <div class="rcell"><strong>Beans</strong><span>180,000</span></div>
+      <div class="status">Claimed</div>
+    </div>`,
+  calculating: `
+    <div class="row header">
+      <div>Statistical Time</div><div>Rewards</div><div style="text-align:right">Status</div>
+    </div>
+    <div class="row">
+      <div class="date">2026-08-17<br/>2026-08-23</div>
+      <div class="rcell"><strong>Beans</strong><span>180,000</span></div>
+      <div class="status">Claimed</div>
+    </div>`,
+  none: `
+    <div class="row header">
+      <div>Statistical Time</div><div>Rewards</div><div style="text-align:right">Status</div>
+    </div>
+    <div class="row">
+      <div class="date">2026-08-17<br/>2026-08-23</div>
+      <div class="rcell"><strong>Beans</strong><span>180,000</span></div>
+      <div class="status">Claimed</div>
+    </div>`
+};
+
 function setProgress(key){
   document.querySelectorAll("[data-progress]").forEach(x=>x.classList.toggle("active",x.dataset.progress===key));
   const d=progressData[key];
@@ -258,6 +310,7 @@ function setProgress(key){
 function setReward(key){
   document.querySelectorAll("[data-reward]").forEach(x=>x.classList.toggle("active",x.dataset.reward===key));
   document.getElementById("rewardCard").innerHTML=rewardTemplates[key];
+  document.getElementById("recordsArea").innerHTML=recordsTemplates[key];
 }
 document.getElementById("progressTabs").onclick=e=>{
   const b=e.target.closest("[data-progress]"); if(b) setProgress(b.dataset.progress);
