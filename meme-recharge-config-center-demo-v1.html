@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MEME 充值配置中心 Demo v6.6</title>
+<style>
+:root{--bg:#f6f8fb;--panel:#fff;--line:#e5e9f0;--text:#172033;--muted:#6d778a;--primary:#2563eb;--soft:#eff6ff;--green:#16a34a;--gsoft:#ecfdf3;--amber:#d97706;--asoft:#fff7ed}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.topbar{height:60px;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 24px;position:sticky;top:0;z-index:20}
+.brand{display:flex;gap:10px;align-items:center}.logo{width:30px;height:30px;border-radius:9px;background:#111827;color:#fff;display:grid;place-items:center;font-weight:800}.brand b{font-size:15px}.brand small{display:block;color:var(--muted);font-size:11px}
+.btn{height:34px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:#354052;font-size:12px}.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.shell{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:calc(100vh - 60px)}.sidebar{background:#fff;border-right:1px solid var(--line);padding:16px 12px}.sideTitle{font-size:10px;color:#9aa3b2;padding:8px 10px}.nav{width:100%;height:42px;border:0;border-radius:9px;background:transparent;color:#5b6575;text-align:left;padding:0 12px;font-size:13px;margin-bottom:4px}.nav.active{background:var(--soft);color:var(--primary);font-weight:700}.nav span{display:inline-block;width:24px}
+.content{padding:22px;min-width:0}.page{display:none}.page.active{display:block}.pageHead{display:flex;justify-content:space-between;gap:16px;margin-bottom:18px}.pageHead h1{margin:0;font-size:20px}.pageHead p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px}.cardHead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.cardHead b{font-size:14px}.cardHead small{font-size:11px;color:var(--muted)}
+.notice{padding:11px 13px;border:1px solid #dbeafe;background:#f8fbff;border-radius:10px;font-size:11px;color:#4f5f74;line-height:1.55;margin-bottom:14px}
+.tabs{display:flex;gap:7px;overflow:auto;padding:12px 14px 0}.tabs button{height:32px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#667085;padding:0 11px;font-size:11px;white-space:nowrap}.tabs button.active{background:var(--soft);border-color:#bfdbfe;color:var(--primary);font-weight:700}
+.tableWrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px;min-width:950px}th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f8fafc;color:#647084;font-weight:600}tr:last-child td{border-bottom:0}
+.tag{display:inline-flex;height:22px;align-items:center;padding:0 8px;border-radius:999px;font-size:10px;font-weight:700}.tag.green{background:var(--gsoft);color:var(--green)}.tag.blue{background:var(--soft);color:var(--primary)}.tag.gray{background:#f2f4f7;color:#667085}.tag.amber{background:var(--asoft);color:var(--amber)}
+.link{border:0;background:transparent;color:var(--primary);padding:0;font-size:12px;margin-right:10px}.switch{width:38px;height:22px;border:0;border-radius:99px;background:#d7dce4;position:relative}.switch:after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.15s}.switch.on{background:var(--primary)}.switch.on:after{left:19px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}.stat span{font-size:11px;color:var(--muted)}.stat b{display:block;font-size:20px;margin-top:5px}.stat small{font-size:10px;color:var(--muted)}
+.seg{display:inline-flex;padding:3px;background:#f1f5f9;border-radius:9px;gap:3px}.seg button{height:30px;border:0;background:transparent;border-radius:7px;padding:0 11px;font-size:11px;color:#667085}.seg button.active{background:#fff;color:#111827;font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.inline{width:105px;height:32px;border:1px solid var(--line);border-radius:7px;padding:0 8px;background:#fff;font-size:12px}
+.modalMask{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:50;align-items:center;justify-content:center;padding:20px}.modalMask.show{display:flex}.modal{width:540px;max-width:100%;background:#fff;border-radius:14px;border:1px solid var(--line);box-shadow:0 24px 60px rgba(15,23,42,.2)}.modalHead{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.modalHead button{border:0;background:transparent;font-size:20px;color:#7a8495}.modalBody{padding:18px}.modalFoot{padding:14px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}.field{margin-bottom:12px}.field label{display:block;font-size:11px;color:#647084;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;height:38px;border:1px solid var(--line);border-radius:8px;padding:0 10px}.field textarea{height:72px;padding:9px 10px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.preview{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px}.prow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed #d9dee7;font-size:11px}.prow:last-child{border-bottom:0}.prow span{color:var(--muted)}
+.toast{position:fixed;right:24px;bottom:24px;background:#111827;color:#fff;padding:10px 13px;border-radius:9px;font-size:12px;opacity:0;transform:translateY(10px);transition:.2s}.toast.show{opacity:1;transform:none}
+@media(max-width:980px){.shell{grid-template-columns:1fr}.sidebar{display:none}.stats{grid-template-columns:repeat(2,1fr)}.content{padding:14px}}
+
+.fxFormula{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:14px 16px;border-top:1px solid var(--line)}
+.fxMetric{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px}
+.fxMetric span{display:block;font-size:10px;color:var(--muted);margin-bottom:6px}
+.fxMetric b{font-size:16px}
+.fxHint{font-size:10px;color:var(--muted);line-height:1.55;margin-top:5px}
+@media(max-width:980px){.fxFormula{grid-template-columns:1fr 1fr}}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="logo">M</div><div><b>充值配置中心</b><small>MEME · V1 Demo · v6.6</small></div></div>
+  <div><button class="btn" id="auditBtn">操作记录</button> <button class="btn primary" id="refreshBtn">刷新数据</button></div>
+</header>
+<div class="shell">
+<aside class="sidebar">
+  <div class="sideTitle">一期 · Coin Trader</div>
+  <button class="nav active" data-page="rules"><span>⇢</span>币商返币规则</button>
+  <button class="nav" data-page="countries"><span>◉</span>国家 / 地区</button>
+  <button class="nav" data-page="fx"><span>◎</span>汇率管理</button>
+  <div class="sideTitle" style="margin-top:14px">H5 充值（后续）</div>
+  <button class="nav" data-page="sku"><span>▤</span>H5 页面充值档位</button>
+  <button class="nav" data-page="promo"><span>✦</span>H5 SKU 促销标准</button>
+  <div class="sideTitle" style="margin-top:14px">二期</div>
+  <button class="nav" disabled style="opacity:.45"><span>◫</span>支付方式</button>
+  <button class="nav" disabled style="opacity:.45"><span>⇄</span>支付通道与路由</button>
+</aside>
+<main class="content">
+
+<section id="page-sku" class="page">
+  <div class="pageHead">
+    <div>
+      <h1>H5 页面充值档位</h1>
+      <p>SKU 是前端实际售卖商品。默认按「平台基础兑换率 + SKU 促销标准」生成金币；本地售价可按内部汇率生成，也可由国家单独覆盖。</p>
+    </div>
+    <div><button class="btn" id="skuHistory">历史版本</button> <button class="btn primary" id="addSku">+ 新增档位</button></div>
+  </div>
+  <div class="notice"><b>统一口径：</b>基础兑换率固定为 14,000 Coins/$；SKU 根据 USD Reference 自动命中「SKU 促销标准」。内部汇率仅用于生成/校准本地售价，不改变金币促销标准。</div>
+  <div class="card">
+    <div class="cardHead">
+      <div><b>充值页面 SKU</b><small id="scopeHint">全球默认模板</small></div>
+      <div><span class="tag blue">SKU 版本 V2</span></div>
+    </div>
+    <div class="tabs" id="countryTabs"></div>
+    <div class="tableWrap" style="margin-top:12px">
+      <table style="min-width:1200px">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>USD Reference</th>
+            <th id="localHead">页面售价</th>
+            <th>标准促销</th>
+            <th>实际促销</th>
+            <th>Effective Coins/$</th>
+            <th>最终金币</th>
+            <th>促销来源</th>
+            <th>配置来源</th>
+            <th>展示</th>
+            <th>排序</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="skuBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="page-promo" class="page">
+  <div class="pageHead">
+    <div>
+      <h1>H5 SKU 促销标准</h1>
+      <p>定义固定页面 SKU 在不同 USD Reference 下的标准 Bonus。用于创建/校准 SKU，不会自动改动已上线 SKU。</p>
+    </div>
+    <div><button class="btn" id="promoHistory">历史版本</button> <button class="btn primary" id="addPromo">+ 新增标准</button></div>
+  </div>
+  <div class="notice"><b>规则：</b>基础兑换率 14,000 Coins/$。保存促销标准后，新建 SKU 自动使用最新标准；已上线 SKU 保留创建/发布时的促销快照，只显示“符合标准 / 建议更新”，由运营决定是否更新。</div>
+  <div class="stats">
+    <div class="stat"><span>基础兑换率</span><b>14,000</b><small>Coins / USD</small></div>
+    <div class="stat"><span>当前标准</span><b id="promoCount">6</b><small>金额区间</small></div>
+    <div class="stat"><span>SKU 待检查</span><b id="skuMismatch">0</b><small>与最新标准不一致</small></div>
+    <div class="stat"><span>当前版本</span><b>V2</b><small>修改后生成新版本</small></div>
+  </div>
+  <div class="card">
+    <div class="cardHead"><div><b>标准促销阶梯</b><small>Demo 示例值，可调整</small></div><button class="btn primary" id="savePromo">保存新版本</button></div>
+    <div class="tableWrap">
+      <table>
+        <thead><tr><th>最低 USD</th><th>最高 USD</th><th>基础 Coins/$</th><th>标准 Bonus</th><th>标准 Coins/$</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody id="promoBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="page-countries" class="page">
+  <div class="pageHead"><div><h1>国家 / 地区</h1><p>一期维护国家、币种、充值开关与内部汇率。内部汇率用于 USD / 本地币换算，并作为本地 SKU 售价参考；支付方式与 PSP 放到二期。</p></div><button class="btn primary" id="addCountry">+ 新增国家</button></div>
+  <div class="card"><div class="cardHead"><div><b>国家价格维度</b><small>轻量配置</small></div></div>
+    <div class="tableWrap"><table><thead><tr><th>国家 / 地区</th><th>代码</th><th>币种</th><th>充值开关</th><th>内部汇率</th><th>H5 页面档位</th><th>操作</th></tr></thead><tbody id="countryBody"></tbody></table></div>
+  </div>
+</section>
+
+<section id="page-fx" class="page">
+  <div class="pageHead"><div><h1>汇率管理</h1><p>维护平台内部 USD / 本地币换算汇率。市场参考汇率每日更新，内部汇率保持稳定，仅在偏差达到阈值或周期复核时由运营调整。</p></div><button class="btn" id="fxHistory">汇率历史</button></div>
+  <div class="stats">
+    <div class="stat"><span>当前币种</span><b>5</b><small>一期价格维度</small></div>
+    <div class="stat"><span>今日市场汇率刷新</span><b>5</b><small>仅更新参考值</small></div>
+    <div class="stat"><span>本周内部汇率调整</span><b id="fxChanges">2</b><small>仅在需要时调整</small></div>
+    <div class="stat"><span>待处理汇率</span><b id="fxAlerts" style="color:var(--green)">0</b><small>偏差 ≥3% 或待复核</small></div>
+  </div>
+  <div class="notice"><b>计算规则：</b>建议内部汇率 = 市场参考汇率 ×（1 + 安全垫），再按币种取整规则处理。偏差 < 3% 为正常，≥ 3% 建议更新，≥ 5% 需尽快更新；每 7 天至少复核一次，但不强制修改。真正参与新订单换算的是“内部汇率”。</div>
+  <div class="card">
+      <div class="cardHead"><div><b>汇率用途</b><small>平台内部统一口径</small></div></div>
+      <div style="padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="preview"><div class="prow"><span>市场参考汇率</span><b>仅监控</b></div><div style="font-size:11px;color:var(--muted);line-height:1.55;margin-top:6px">定期更新，用于判断内部汇率是否偏离市场，不直接参与订单计算。</div></div>
+        <div class="preview"><div class="prow"><span>内部汇率</span><b>实际换算</b></div><div style="font-size:11px;color:var(--muted);line-height:1.55;margin-top:6px">用于 USD / 本地币订单换算，并作为本地 SKU 售价生成与校准参考。</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="cardHead"><div><b>内部汇率制定规则</b><small>偏差触发 + 7 天复核</small></div></div>
+      <div class="fxFormula">
+        <div class="fxMetric"><span>市场参考汇率</span><b>278.50</b><div class="fxHint">自动更新，仅用于参考</div></div>
+        <div class="fxMetric"><span>安全垫</span><b>1.50%</b><div class="fxHint">用于覆盖短期波动与换汇价差</div></div>
+        <div class="fxMetric"><span>建议内部汇率</span><b>282.68</b><div class="fxHint">系统自动计算</div></div>
+        <div class="fxMetric"><span>当前内部汇率</span><b>283.00</b><div class="fxHint">运营确认后用于新订单</div></div>
+      </div>
+    </div>
+    <div class="card"><div class="cardHead"><div><b>国家 / 币种汇率</b><small>1 USD = 本地货币</small></div></div>
+    <div class="tableWrap"><table><thead><tr><th>国家</th><th>币种</th><th>市场参考汇率</th><th>安全垫</th><th>建议内部汇率</th><th>内部汇率</th><th>取整规则</th><th>偏差</th><th>状态</th><th>上次复核</th><th>市场更新时间</th><th>操作</th></tr></thead><tbody id="fxBody"></tbody></table></div>
+  </div>
+</section>
+
+<section id="page-rules" class="page active">
+  <div class="pageHead"><div><h1>币商返币规则</h1><p>按实际美元金额维护币商进货与薪资结算的金币档位，两类规则独立生效。</p></div><div><button class="btn" id="ruleHistory">历史版本</button> <button class="btn primary" id="addRule">+ 新增规则</button></div></div>
+  <div class="notice"><b>统一口径：</b>基础兑换率 14,000 Coins/$。币商进货按进货美元金额命中档位；薪资结算按实际薪资美元金额命中档位。支付方式、支付通道、限额与路由一期继续由服务端维护。</div>
+  <div class="card">
+    <div class="cardHead"><div class="seg" id="ruleSeg"><button class="active" data-rule="MERCHANT">币商进货</button><button data-rule="SALARY">薪资结算</button></div><span class="tag blue">版本 V4</span></div>
+    <div class="tableWrap"><table><thead><tr><th>最低 USD</th><th>最高 USD</th><th>Coins / $</th><th>Bonus / Reward</th><th>状态</th><th>操作</th></tr></thead><tbody id="ruleBody"></tbody></table></div>
+  </div>
+</section>
+
+</main></div>
+
+<div class="modalMask" id="skuModal"><div class="modal">
+  <div class="modalHead"><b id="skuTitle">编辑页面充值档位</b><button data-close="skuModal">×</button></div>
+  <div class="modalBody">
+    <div class="field"><label>SKU ID</label><input id="skuId" readonly></div>
+    <div class="grid2">
+      <div class="field"><label>USD Reference</label><input id="skuUsd" type="number" step=".01"></div>
+      <div class="field"><label>排序</label><input id="skuSort" type="number"></div>
+    </div>
+    <div class="preview">
+      <div class="prow"><span>基础兑换率</span><b>14,000 Coins/$</b></div>
+      <div class="prow"><span>命中标准促销</span><b id="skuStdPromo">—</b></div>
+      <div class="prow"><span>标准 Effective Rate</span><b id="skuStdRate">—</b></div>
+    </div>
+    <div class="grid2" style="margin-top:12px">
+      <div class="field">
+        <label>促销方式</label>
+        <select id="skuPromoMode"><option value="STANDARD">使用当前标准</option><option value="CUSTOM">自定义促销</option></select>
+      </div>
+      <div class="field">
+        <label>实际 Bonus %</label>
+        <input id="skuPromoPct" type="number" step=".01" disabled>
+      </div>
+    </div>
+    <div class="preview">
+      <div class="prow"><span>Effective Coins/$</span><b id="skuEffectiveRate">—</b></div>
+      <div class="prow"><span>预计最终金币</span><b id="skuFinalCoins">—</b></div>
+    </div>
+    <div class="field" id="localField" style="margin-top:12px"><label id="localLabel">本地售价覆盖</label><input id="skuLocal" type="number" step=".01" placeholder="留空 = 按定价参考汇率生成"></div>
+    <div class="field"><label>展示状态</label><select id="skuVisible"><option value="1">展示</option><option value="0">隐藏</option></select></div>
+  </div>
+  <div class="modalFoot"><button class="btn" data-close="skuModal">取消</button><button class="btn primary" id="saveSku">保存</button></div>
+</div></div>
+
+<div class="modalMask" id="fxModal"><div class="modal">
+  <div class="modalHead"><b>调整内部汇率</b><button data-close="fxModal">×</button></div>
+  <div class="modalBody">
+    <div class="field"><label>国家 / 币种</label><input id="fxCountry" readonly></div>
+    <div class="grid2"><div class="field"><label>市场参考汇率</label><input id="fxMarket" readonly></div><div class="field"><label>当前内部汇率</label><input id="fxCurrent" readonly></div></div>
+    <div class="grid2">
+      <div class="field"><label>安全垫（%）</label><input id="fxMargin" type="number" step=".1"></div>
+      <div class="field"><label>取整步长</label><input id="fxRoundStep" type="number" step=".1"></div>
+    </div>
+    <div class="preview">
+      <div class="prow"><span>建议内部汇率</span><b id="fxSuggested"></b></div>
+      <div class="prow"><span>按取整规则建议</span><b id="fxSuggestedRounded"></b></div>
+    </div>
+    <div class="field" style="margin-top:12px"><label>新内部汇率</label><input id="fxNew" type="number" step=".01"></div><div class="notice" style="margin-top:0">偏差未达到 3% 时通常无需调整；超过 7 天可仅完成复核，不修改内部汇率。</div>
+    <div class="preview"><div class="prow"><span>相比市场汇率</span><b id="vsMarket"></b></div><div class="prow"><span>相比当前内部汇率</span><b id="vsCurrent"></b></div></div>
+    <div class="grid2" style="margin-top:12px"><div class="field"><label>调整方式</label><select id="fxMode"><option value="NOW">立即应用</option><option value="SCHEDULE">定时应用</option></select></div><div class="field"><label>生效时间</label><input id="fxTime" type="datetime-local" disabled></div></div>
+    <div class="field"><label>修改原因</label><textarea id="fxReason" placeholder="必填"></textarea></div>
+  </div>
+  <div class="modalFoot"><button class="btn" data-close="fxModal">取消</button><button class="btn primary" id="saveFx">确认修改</button></div>
+</div></div>
+
+<div class="modalMask" id="historyModal"><div class="modal">
+  <div class="modalHead"><b id="historyTitle">记录</b><button data-close="historyModal">×</button></div>
+  <div class="modalBody" id="historyBody"></div>
+  <div class="modalFoot"><button class="btn primary" data-close="historyModal">关闭</button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s)), money=n=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:2}), pct=n=>(n>=0?'+':'')+n.toFixed(2)+'%';
+const countries=[
+ {code:'PK',name:'巴基斯坦',currency:'PKR',market:278.5,fx:283,margin:1.5,roundStep:1,reviewDays:2,enabled:true},
+ {code:'IN',name:'印度',currency:'INR',market:83.5,fx:84.5,margin:1.0,roundStep:0.5,reviewDays:5,enabled:true},
+ {code:'BD',name:'孟加拉',currency:'BDT',market:117,fx:119,margin:1.5,roundStep:1,reviewDays:8,enabled:true},
+ {code:'NG',name:'尼日利亚',currency:'NGN',market:1550,fx:1590,margin:2.5,roundStep:10,reviewDays:3,enabled:true},
+ {code:'EG',name:'埃及',currency:'EGP',market:50,fx:50.8,margin:1.5,roundStep:0.1,reviewDays:9,enabled:true}
+];
+const BASE_RATE=14000;
+const promoStandards=[
+ {min:1,max:4.99,pct:0},
+ {min:5,max:9.99,pct:2},
+ {min:10,max:19.99,pct:4},
+ {min:20,max:49.99,pct:7},
+ {min:50,max:99.99,pct:10},
+ {min:100,max:null,pct:14}
+];
+const globalSkus=[
+ {id:'SKU-001',usd:1,sort:1,visible:true,promoMode:'STANDARD',promoPct:0},
+ {id:'SKU-005',usd:5,sort:2,visible:true,promoMode:'STANDARD',promoPct:2},
+ {id:'SKU-010',usd:10,sort:3,visible:true,promoMode:'STANDARD',promoPct:4},
+ {id:'SKU-020',usd:20,sort:4,visible:true,promoMode:'STANDARD',promoPct:7},
+ {id:'SKU-050',usd:50,sort:5,visible:true,promoMode:'STANDARD',promoPct:10},
+ {id:'SKU-100',usd:100,sort:6,visible:true,promoMode:'STANDARD',promoPct:14}
+];
+const overrides={PK:{'SKU-001':{visible:false},'SKU-010':{localPrice:2799}},IN:{'SKU-005':{localPrice:419}},BD:{},NG:{'SKU-001':{visible:false}},EG:{}};
+const extras={PK:[{id:'PK-500',usd:500/282,sort:1.5,visible:true,localPrice:500,promoMode:'STANDARD',promoPct:0}],IN:[],BD:[],NG:[],EG:[]};
+const rules={
+ H5:[{min:5,max:19.99,rate:14000,bonus:0},{min:20,max:49.99,rate:14500,bonus:3.57},{min:50,max:99.99,rate:15000,bonus:7.14},{min:100,max:499.99,rate:15500,bonus:10.71},{min:500,max:null,rate:16000,bonus:14.29}],
+ MERCHANT:[{min:100,max:499.99,rate:19600,bonus:40},{min:500,max:999.99,rate:19880,bonus:42},{min:1000,max:1999.99,rate:20160,bonus:44},{min:2000,max:null,rate:20300,bonus:45}],
+ SALARY:[{min:20,max:1999.99,rate:20160,bonus:44},{min:2000,max:null,rate:20300,bonus:45}]
+};
+const history=[{time:'刚刚',item:'Salary Receipt 规则',change:'新增 2 个结算档位 · V4',operator:'Current Admin'},{time:'08/28 02:30',item:'PKR 内部汇率',change:'280 → 282',operator:'Admin A'},{time:'08/27 18:10',item:'Coin Trader Stock 规则',change:'更新至 V3',operator:'Admin B'}];
+let scope='GLOBAL', ruleType='MERCHANT', editSku=null, editFx=null;
+
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),1600)}
+function open(id){$('#'+id).classList.add('show')} function close(id){$('#'+id).classList.remove('show')}
+$$('[data-close]').forEach(b=>b.onclick=()=>close(b.dataset.close));
+$$('.nav[data-page]').forEach(b=>b.onclick=()=>{$$('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+b.dataset.page));$$('.nav[data-page]').forEach(n=>n.classList.toggle('active',n===b))});
+function getCountry(code){return countries.find(c=>c.code===code)}
+function roundToStep(v,step){step=Number(step)||1;return Math.round(v/step)*step}
+function suggestedFx(c){return c.market*(1+(Number(c.margin)||0)/100)}
+function suggestedRoundedFx(c){return roundToStep(suggestedFx(c),c.roundStep)}
+function stdFor(usd){
+ return promoStandards.find(r=>usd>=r.min&&(r.max===null||usd<=r.max)) || {pct:0,min:0,max:null}
+}
+function skuComputed(r){
+ const std=stdFor(Number(r.usd)||0), actualPct=r.promoPct===undefined ? Number(std.pct||0) : Number(r.promoPct||0);
+ const rate=BASE_RATE*(1+actualPct/100), finalCoins=Math.round((Number(r.usd)||0)*rate);
+ return {...r,stdPct:std.pct,actualPct,rate,finalCoins,baseCoins:Math.round((Number(r.usd)||0)*BASE_RATE)}
+}
+function rowsFor(s){
+ if(s==='GLOBAL') return globalSkus.map(x=>({...skuComputed(x),source:'全球默认'}));
+ const ov=overrides[s]||{};
+ return [...globalSkus.map(x=>{
+   const merged={...x,...(ov[x.id]||{})};
+   return {...skuComputed(merged),source:Object.keys(ov[x.id]||{}).length?'国家自定义':'继承全球'}
+ }),...(extras[s]||[]).map(x=>({...skuComputed(x),source:'国家专属'}))].sort((a,b)=>a.sort-b.sort)
+}
+function renderTabs(){
+ $('#countryTabs').innerHTML=`<button data-scope="GLOBAL" class="${scope==='GLOBAL'?'active':''}">全球默认</button>`+countries.map(c=>`<button data-scope="${c.code}" class="${scope===c.code?'active':''}">${c.name}</button>`).join('');
+ $$('[data-scope]').forEach(b=>b.onclick=()=>{scope=b.dataset.scope;renderTabs();renderSku()})
+}
+function renderSku(){
+ const c=scope==='GLOBAL'?null:getCountry(scope);
+ $('#scopeHint').textContent=scope==='GLOBAL'?'全球默认模板':c.name+' · 继承全球 SKU，可按内部汇率生成或独立覆盖本地售价';
+ $('#localHead').textContent=scope==='GLOBAL'?'USD 页面价格':`本地售价 (${c.currency})`;
+ let mismatch=0;
+ $('#skuBody').innerHTML=rowsFor(scope).map(r=>{
+   const local=scope==='GLOBAL'?`$${money(r.usd)}`:`${money(r.localPrice??r.usd*c.fx)} ${c.currency}`;
+   const custom=r.promoMode==='CUSTOM', promoMismatch=Math.abs(r.actualPct-r.stdPct)>0.001;
+   if(promoMismatch) mismatch++;
+   return `<tr>
+     <td><b>${r.id}</b></td>
+     <td>$${money(r.usd)}</td>
+     <td><b>${local}</b></td>
+     <td>${r.stdPct.toFixed(2)}%</td>
+     <td><b>${r.actualPct.toFixed(2)}%</b></td>
+     <td>${money(Math.round(r.rate))}</td>
+     <td><b>${money(r.finalCoins)}</b></td>
+     <td><span class="tag ${promoMismatch?'amber':custom?'blue':'green'}">${promoMismatch?'建议更新':custom?'自定义':'标准生成'}</span></td>
+     <td><span class="tag ${r.source==='继承全球'?'gray':r.source==='国家专属'?'amber':'blue'}">${r.source}</span></td>
+     <td><span class="tag ${r.visible?'green':'gray'}">${r.visible?'展示':'隐藏'}</span></td>
+     <td>${r.sort}</td>
+     <td><button class="link" data-edit-sku="${r.id}">编辑</button>${scope!=='GLOBAL'&&r.source==='国家自定义'?`<button class="link" data-reset="${r.id}">恢复继承</button>`:''}</td>
+   </tr>`
+ }).join('');
+ $$('[data-edit-sku]').forEach(b=>b.onclick=()=>openSku(b.dataset.editSku));
+ $$('[data-reset]').forEach(b=>b.onclick=()=>{delete overrides[scope][b.dataset.reset];renderSku();toast('已恢复全球默认')});
+ if($('#skuMismatch')) $('#skuMismatch').textContent=countSkuMismatch()
+}
+function countSkuMismatch(){
+ let n=0;
+ [...globalSkus,...Object.values(extras).flat()].forEach(r=>{
+   const c=skuComputed(r);
+   if(Math.abs(c.actualPct-c.stdPct)>0.001)n++
+ });
+ Object.values(overrides).forEach(group=>Object.values(group).forEach(o=>{
+   if(o.usd!==undefined || o.promoPct!==undefined){
+     const usd=Number(o.usd||0),std=stdFor(usd);
+     if(o.promoPct!==undefined&&Math.abs(Number(o.promoPct||0)-std.pct)>0.001)n++
+   }
+ }));
+ return n
+}
+function updateSkuPromoPreview(){
+ const usd=Number($('#skuUsd').value)||0, std=stdFor(usd);
+ const mode=$('#skuPromoMode').value;
+ $('#skuPromoPct').disabled=mode!=='CUSTOM';
+ if(mode!=='CUSTOM') $('#skuPromoPct').value=std.pct;
+ const actual=mode==='CUSTOM'?Number($('#skuPromoPct').value||0):std.pct;
+ const rate=BASE_RATE*(1+actual/100), final=Math.round(usd*rate);
+ $('#skuStdPromo').textContent=std.pct.toFixed(2)+'%';
+ $('#skuStdRate').textContent=money(Math.round(BASE_RATE*(1+std.pct/100)))+' Coins/$';
+ $('#skuEffectiveRate').textContent=money(Math.round(rate))+' Coins/$';
+ $('#skuFinalCoins').textContent=money(final)+' Coins'
+}
+function openSku(id){
+ const r=rowsFor(scope).find(x=>x.id===id); editSku={scope,id,r};
+ $('#skuTitle').textContent=scope==='GLOBAL'?'编辑全球充值档位':'编辑国家充值档位';
+ $('#skuId').value=id;$('#skuUsd').value=r.usd;$('#skuSort').value=r.sort;$('#skuVisible').value=r.visible?'1':'0';
+ $('#skuPromoMode').value=r.promoMode||'STANDARD';$('#skuPromoPct').value=r.actualPct;
+ $('#localField').style.display=scope==='GLOBAL'?'none':'block';
+ if(scope!=='GLOBAL'){const c=getCountry(scope);$('#localLabel').textContent=`本地售价覆盖 (${c.currency})`;$('#skuLocal').value=r.localPrice??''}
+ updateSkuPromoPreview();open('skuModal')
+}
+$('#skuUsd').oninput=updateSkuPromoPreview;
+$('#skuPromoMode').onchange=updateSkuPromoPreview;
+$('#skuPromoPct').oninput=updateSkuPromoPreview;
+$('#saveSku').onclick=()=>{
+ const usd=Number($('#skuUsd').value),sort=Number($('#skuSort').value),visible=$('#skuVisible').value==='1',promoMode=$('#skuPromoMode').value,promoPct=Number($('#skuPromoPct').value||0);
+ if(!(usd>0))return toast('请填写有效的 USD Reference');
+ const appliedPct=promoMode==='CUSTOM'?promoPct:stdFor(usd).pct;
+ const patch={usd,sort,visible,promoMode,promoPct:appliedPct};
+ if(editSku.scope==='GLOBAL'){
+   const target=globalSkus.find(x=>x.id===editSku.id);Object.assign(target,patch);
+ }else{
+   const e=(extras[editSku.scope]||[]).find(x=>x.id===editSku.id),lp=$('#skuLocal').value.trim()===''?null:Number($('#skuLocal').value);
+   if(e){Object.assign(e,patch,{localPrice:lp})}
+   else{
+     const o={...patch};if(lp!==null)o.localPrice=lp;overrides[editSku.scope][editSku.id]=o
+   }
+ }
+ renderSku();renderPromo();close('skuModal');toast('页面充值档位已保存')
+};
+$('#addSku').onclick=()=>{
+ if(scope==='GLOBAL')globalSkus.push({id:'SKU-'+String(globalSkus.length+1).padStart(3,'0'),usd:200,sort:99,visible:true,promoMode:'STANDARD',promoPct:stdFor(200).pct});
+ else{const c=getCountry(scope);extras[scope].push({id:scope+'-LOCAL-'+(extras[scope].length+1),usd:10,sort:99,visible:true,localPrice:10*c.fx,promoMode:'STANDARD',promoPct:stdFor(10).pct})}
+ renderSku();renderPromo();toast(scope==='GLOBAL'?'已新增全球档位并自动命中促销标准':'已新增国家专属档位并自动命中促销标准')
+};
+
+
+function renderPromo(){
+ $('#promoBody').innerHTML=promoStandards.map((r,i)=>{
+   const stdRate=Math.round(BASE_RATE*(1+Number(r.pct||0)/100));
+   return `<tr>
+    <td><input class="inline" value="${r.min}" data-pi="${i}" data-pk="min"></td>
+    <td><input class="inline" value="${r.max===null?'':r.max}" placeholder="无上限" data-pi="${i}" data-pk="max"></td>
+    <td>${money(BASE_RATE)}</td>
+    <td><input class="inline" value="${r.pct}" data-pi="${i}" data-pk="pct"> %</td>
+    <td><b>${money(stdRate)}</b></td>
+    <td><span class="tag green">生效中</span></td>
+    <td><button class="link" data-pdel="${i}">删除</button></td>
+   </tr>`
+ }).join('');
+ $('#promoCount').textContent=promoStandards.length;
+ $('#skuMismatch').textContent=countSkuMismatch();
+ $$('#promoBody input').forEach(x=>x.onchange=()=>{
+   const r=promoStandards[Number(x.dataset.pi)],k=x.dataset.pk,v=x.value.trim();
+   r[k]=k==='max'&&v===''?null:Number(v);renderPromo();renderSku()
+ });
+ $$('[data-pdel]').forEach(b=>b.onclick=()=>{
+   if(promoStandards.length<=1)return toast('至少保留一个促销标准');
+   promoStandards.splice(Number(b.dataset.pdel),1);renderPromo();renderSku()
+ })
+}
+$('#addPromo').onclick=()=>{promoStandards.push({min:200,max:null,pct:14});renderPromo();toast('已新增促销标准')};
+$('#savePromo').onclick=()=>{history.unshift({time:'刚刚',item:'SKU 促销标准 V3',change:'保存 '+promoStandards.length+' 个标准区间',operator:'Current Admin'});renderPromo();renderSku();toast('促销标准已保存为新版本；已上线 SKU 不会自动改动')};
+
+function renderCountries(){
+ $('#countryBody').innerHTML=countries.map(c=>`<tr><td><b>${c.name}</b></td><td>${c.code}</td><td>${c.currency}</td><td><button class="switch ${c.enabled?'on':''}" data-switch="${c.code}"></button></td><td>${money(c.fx)} ${c.currency}/USD</td><td><button class="link" data-sku="${c.code}">查看档位</button></td><td><button class="link" data-cfx="${c.code}">调整汇率</button></td></tr>`).join('');
+ $$('[data-switch]').forEach(b=>b.onclick=()=>{const c=getCountry(b.dataset.switch);c.enabled=!c.enabled;renderCountries();toast(c.enabled?'已开启充值':'已关闭充值')});
+ $$('[data-sku]').forEach(b=>b.onclick=()=>{scope=b.dataset.sku;renderTabs();renderSku();document.querySelector('[data-page="sku"]').click()});
+ $$('[data-cfx]').forEach(b=>b.onclick=()=>openFx(b.dataset.cfx))
+}
+function renderFx(){
+ let alertCount=0;
+ $('#fxBody').innerHTML=countries.map(c=>{
+   const suggested=suggestedFx(c);
+   const dev=Math.abs((c.fx/suggested-1)*100);
+   const reviewDue=(c.reviewDays||0)>=7;
+   let status='正常',tagClass='green';
+   if(dev>=5){status='需尽快更新';tagClass='amber'}
+   else if(dev>=3){status='建议更新';tagClass='amber'}
+   else if(reviewDue){status='待复核';tagClass='blue'}
+   if(dev>=3||reviewDue) alertCount++;
+   return `<tr>
+     <td><b>${c.name}</b></td>
+     <td>${c.currency}</td>
+     <td>${money(c.market)}</td>
+     <td>${money(c.margin)}%</td>
+     <td><b>${money(suggested)}</b></td>
+     <td><b>${money(c.fx)}</b></td>
+     <td>${c.roundStep>=1?'按 '+money(c.roundStep)+' 取整':'保留至 '+money(c.roundStep)}</td>
+     <td style="color:${dev>=3?'var(--amber)':'inherit'}">${dev.toFixed(2)}%</td>
+     <td><span class="tag ${tagClass}">${status}</span></td>
+     <td>${c.reviewDays===0?'今天':c.reviewDays+' 天前'}</td>
+     <td>2026-09-01 08:00</td>
+     <td><button class="link" data-review-fx="${c.code}">复核</button><button class="link" data-efx="${c.code}">调整汇率</button></td>
+   </tr>`
+ }).join('');
+ $('#fxAlerts').textContent=alertCount;
+ $('#fxAlerts').style.color=alertCount?'var(--amber)':'var(--green)';
+ $$('[data-efx]').forEach(b=>b.onclick=()=>openFx(b.dataset.efx));
+ $$('[data-review-fx]').forEach(b=>b.onclick=()=>{
+   const c=getCountry(b.dataset.reviewFx);
+   c.reviewDays=0;
+   history.unshift({time:'刚刚',item:c.currency+' 内部汇率',change:'完成周期复核，无需调整',operator:'Current Admin'});
+   renderFx();
+   toast('已完成复核')
+ })
+}
+function openFx(code){
+ editFx=getCountry(code);
+ $('#fxCountry').value=editFx.name+' · '+editFx.currency;
+ $('#fxMarket').value=editFx.market;
+ $('#fxCurrent').value=editFx.fx;
+ $('#fxMargin').value=editFx.margin;
+ $('#fxRoundStep').value=editFx.roundStep;
+ $('#fxNew').value=editFx.fx;
+ $('#fxReason').value='';
+ $('#fxMode').value='NOW';
+ $('#fxTime').disabled=true;
+ fxPreview();
+ open('fxModal')
+}
+function fxPreview(){
+ const margin=Number($('#fxMargin').value)||0;
+ const step=Number($('#fxRoundStep').value)||1;
+ const suggested=editFx.market*(1+margin/100);
+ const rounded=roundToStep(suggested,step);
+ const n=Number($('#fxNew').value)||0;
+ $('#fxSuggested').textContent=money(suggested)+' '+editFx.currency+'/USD';
+ $('#fxSuggestedRounded').textContent=money(rounded)+' '+editFx.currency+'/USD';
+ $('#vsMarket').textContent=pct((n/editFx.market-1)*100);
+ $('#vsCurrent').textContent=pct((n/editFx.fx-1)*100)
+}
+$('#fxNew').oninput=fxPreview;
+$('#fxMargin').oninput=fxPreview;
+$('#fxRoundStep').oninput=fxPreview;
+$('#fxMode').onchange=()=>$('#fxTime').disabled=$('#fxMode').value!=='SCHEDULE';
+$('#saveFx').onclick=()=>{
+ const n=Number($('#fxNew').value),reason=$('#fxReason').value.trim();
+ const margin=Number($('#fxMargin').value),roundStep=Number($('#fxRoundStep').value);
+ if(!(n>0))return toast('请输入新内部汇率');
+ if(!(margin>=0))return toast('请输入有效安全垫');
+ if(!(roundStep>0))return toast('请输入有效取整步长');
+ if(!reason)return toast('请填写调整原因');
+ editFx.fx=n;editFx.margin=margin;editFx.roundStep=roundStep;editFx.reviewDays=0;
+ $('#fxChanges').textContent=Number($('#fxChanges').textContent)+1;
+ history.unshift({time:'刚刚',item:editFx.currency+' 内部汇率',change:'更新为 '+n+'；安全垫 '+margin+'%',operator:'Current Admin'});
+ renderFx();renderCountries();renderSku();
+ close('fxModal');
+ toast('内部汇率已保存并生成版本记录')
+};
+
+function renderRules(){
+ $('#ruleBody').innerHTML=rules[ruleType].map((r,i)=>`<tr><td><input class="inline" value="${r.min}" data-i="${i}" data-k="min"></td><td><input class="inline" value="${r.max===null?'':r.max}" placeholder="无上限" data-i="${i}" data-k="max"></td><td><input class="inline" value="${r.rate}" data-i="${i}" data-k="rate"></td><td><input class="inline" value="${r.bonus}" data-i="${i}" data-k="bonus"></td><td><span class="tag green">生效中</span></td><td><button class="link" data-del="${i}">删除</button></td></tr>`).join('');
+ $$('#ruleBody input').forEach(x=>x.onchange=()=>{rules[ruleType][Number(x.dataset.i)][x.dataset.k]=x.dataset.k==='max'&&x.value.trim()===''?null:Number(x.value);toast('规则已修改（Demo）')});
+ $$('[data-del]').forEach(b=>b.onclick=()=>{if(rules[ruleType].length<=1)return toast('至少保留一档');rules[ruleType].splice(Number(b.dataset.del),1);renderRules()})
+}
+$$('#ruleSeg button').forEach(b=>b.onclick=()=>{ruleType=b.dataset.rule;$$('#ruleSeg button').forEach(x=>x.classList.toggle('active',x===b));renderRules()});
+$('#addRule').onclick=()=>{
+ const defaults=ruleType==='MERCHANT'
+   ? {min:9999,max:null,rate:20300,bonus:45}
+   : ruleType==='SALARY'
+     ? {min:9999,max:null,rate:20300,bonus:45}
+     : {min:9999,max:null,rate:16000,bonus:14.29};
+ rules[ruleType].push(defaults);
+ renderRules();
+ toast('已新增规则')
+};
+
+function showHistory(title){$('#historyTitle').textContent=title;$('#historyBody').innerHTML=history.map(x=>`<div style="display:grid;grid-template-columns:110px 1fr 160px 90px;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:11px"><span style="color:var(--muted)">${x.time}</span><b>${x.item}</b><div>${x.change}</div><div>${x.operator}</div></div>`).join('');open('historyModal')}
+$('#skuHistory').onclick=()=>showHistory('H5 页面充值档位历史');$('#promoHistory').onclick=()=>showHistory('H5 SKU 促销标准历史');$('#fxHistory').onclick=()=>showHistory('汇率历史');$('#ruleHistory').onclick=()=>showHistory('自定义金额返币规则历史');$('#auditBtn').onclick=()=>showHistory('操作记录');$('#refreshBtn').onclick=()=>toast('数据已刷新');$('#addCountry').onclick=()=>toast('Demo：新增国家 / 地区');
+
+renderTabs();renderSku();renderPromo();renderCountries();renderFx();renderRules();
+})();
+</script>
+</body>
+</html>
