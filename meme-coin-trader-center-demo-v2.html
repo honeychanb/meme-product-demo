@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MEME Coin Trader Center Demo v21.1</title>
+<style>
+:root{
+  --bg:#0f1115;--panel:#171a21;--panel2:#1d212a;--line:#2b303b;
+  --text:#f5f7fb;--muted:#8f98a8;--gold:#f5c95c;--gold2:#d9a932;
+  --green:#53d68a;--red:#ff747b;--blue:#6aa8ff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#090b0f;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{width:100%;max-width:430px;min-height:100vh;margin:0 auto;background:
+radial-gradient(circle at 92% -4%,rgba(245,201,92,.13),transparent 28%),
+linear-gradient(180deg,#11141a 0,#0f1115 100%);position:relative;overflow:hidden}
+.topbar{height:56px;display:grid;grid-template-columns:40px 1fr 40px;align-items:center;padding:0 12px;position:sticky;top:0;z-index:20;background:rgba(15,17,21,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.05)}
+.iconBtn{height:36px;width:36px;border:0;border-radius:50%;background:#1a1e26;color:#fff;font-size:20px}
+.title{text-align:center;font-size:16px;font-weight:800}
+main{padding:14px 14px 88px}
+.page{display:none}.page.active{display:block}
+.backTitle{display:flex;align-items:center;gap:8px}.backTitle button{border:0;background:#1b1f27;color:#fff;width:34px;height:34px;border-radius:50%;font-size:18px}.backTitle b{font-size:15px}
+.rowBetween{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hero{border:1px solid rgba(245,201,92,.22);background:linear-gradient(145deg,#292419,#17191f);border-radius:20px;padding:16px}
+.user{display:flex;gap:10px;align-items:center;min-width:0}
+.avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(145deg,#695a2e,#b58c35);display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+.user b{display:block;font-size:14px}.user small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.badge{padding:5px 8px;border-radius:999px;background:rgba(245,201,92,.13);color:var(--gold);font-size:9px;border:1px solid rgba(245,201,92,.25);white-space:nowrap}
+.balanceLabel{font-size:10px;color:#c0b69c;margin-top:18px}
+.balance{font-size:31px;font-weight:900;letter-spacing:-1px;margin-top:4px}.balance small{font-size:12px;color:var(--muted);font-weight:600;margin-left:5px}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.metric{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:10px}
+.metric span{font-size:9px;color:var(--muted);display:block}.metric b{font-size:13px;display:block;margin-top:4px}
+.progressCard{margin-top:12px;border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:13px}
+.progressCard b{font-size:12px}.progressCard small{font-size:9px;color:var(--muted)}
+.bar{height:7px;background:#262a33;border-radius:999px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;width:72%;background:linear-gradient(90deg,var(--gold2),var(--gold))}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:15px}
+.quick button{border:0;background:transparent;color:#fff;padding:0}
+.quickIcon{width:50px;height:50px;border-radius:15px;margin:0 auto 7px;display:grid;place-items:center;background:#1c2028;border:1px solid #2a2f39;font-size:20px}
+.quick span{font-size:10px}
+.sectionTitle{margin:20px 2px 10px;display:flex;justify-content:space-between;align-items:center}.sectionTitle b{font-size:14px}.sectionTitle button{border:0;background:transparent;color:var(--muted);font-size:9px}
+.card{border:1px solid var(--line);background:var(--panel);border-radius:16px;overflow:hidden}
+.listRow{padding:13px 14px;display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid var(--line)}.listRow:first-child{border-top:0}
+.left b{font-size:11px;display:block}.left small{font-size:9px;color:var(--muted);display:block;margin-top:4px}
+.amountPlus{color:var(--green);font-weight:800;font-size:11px}.amountMinus{color:#fff;font-weight:800;font-size:11px}
+.formCard{padding:14px}.field{margin-bottom:14px}.field label{display:block;font-size:10px;color:#aeb6c5;margin-bottom:7px}
+.input{width:100%;height:46px;border:1px solid var(--line);border-radius:12px;background:#11141a;color:#fff;padding:0 12px;outline:none;font-size:16px}
+.input:focus{border-color:#6b5a32}
+.primary{width:100%;height:46px;border:0;border-radius:13px;background:linear-gradient(90deg,#f2cb63,#dcae3f);font-weight:900;color:#2b220e}
+.primary[disabled]{background:#2a2e36;color:#6f7682;cursor:not-allowed}
+.secondary{width:100%;height:44px;border:1px solid var(--line);border-radius:13px;background:#161a21;color:#e5e8ee}
+.notice{font-size:9px;line-height:1.55;color:#aeb6c5;padding:10px 11px;border-radius:11px;background:#12151b;border:1px solid var(--line);margin-bottom:12px}
+.countryChip{height:32px;border:1px solid var(--line);border-radius:999px;background:#151920;color:#e9edf4;padding:0 11px;font-size:9px;display:inline-flex;align-items:center;gap:6px}
+.countryChip .chev{color:#707887;font-size:12px}
+.compactSelect{width:100%;min-height:48px;border:1px solid var(--line);border-radius:12px;background:#11141a;color:#fff;padding:0 12px;display:flex;align-items:center;justify-content:space-between;text-align:left}
+.compactSelect .meta{display:flex;align-items:center;gap:10px;min-width:0}.compactSelect .meta b{font-size:11px}.compactSelect .meta small{display:block;color:var(--muted);font-size:8px;margin-top:3px}.compactSelect .arrow{color:#707887;font-size:18px}
+.tierGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.tierBtn{height:46px;border:1px solid var(--line);border-radius:12px;background:#14181f;color:#e7eaf0;font-size:10px;font-weight:700}
+.tierBtn small{display:block;color:var(--muted);font-size:7px;font-weight:500;margin-top:2px}
+.tierBtn.active{border-color:#9c7b31;background:#211d13;color:var(--gold)}.tierBtn.active small{color:#bba86d}
+.payAmountBox{margin-top:12px;border:1px solid rgba(245,201,92,.2);border-radius:15px;background:linear-gradient(145deg,#211d15,#171a20);padding:13px}
+.payAmountLabel{font-size:9px;color:#b7ad93}
+.payAmount{font-size:25px;font-weight:900;margin-top:4px;letter-spacing:-.4px}
+.payAmount small{font-size:11px;color:#aeb6c5;font-weight:600}
+.payMeta{display:flex;justify-content:space-between;gap:10px;margin-top:7px;font-size:8px;color:var(--muted)}
+.limitLine{margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06);font-size:8px;color:#9ba4b3;display:flex;justify-content:space-between;gap:8px}
+.limitWarn{margin-top:10px;padding:9px 10px;border:1px solid rgba(255,116,123,.22);background:rgba(255,116,123,.07);border-radius:10px;color:#ff9aa0;font-size:8px;line-height:1.5}
+.hidden{display:none!important}
+.resultBox{margin-top:14px}.resultMain{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}.resultMain span{font-size:9px;color:var(--muted)}.resultMain b{font-size:18px;color:var(--gold)}
+.tabs{display:flex;gap:7px;overflow:auto;scrollbar-width:none;margin:12px 0}.tabs button{height:34px;border:1px solid var(--line);border-radius:999px;background:#151920;color:#9ba4b3;padding:0 12px;white-space:nowrap;font-size:9px}.tabs button.active{background:var(--gold);border-color:var(--gold);color:#211b0b;font-weight:800}
+.status{font-size:8px;border-radius:999px;padding:4px 7px}.success{background:rgba(83,214,138,.1);color:var(--green)}.pending{background:rgba(245,201,92,.1);color:var(--gold)}.failed{background:rgba(255,116,123,.1);color:var(--red)}
+.record{padding:13px;border-top:1px solid var(--line)}.record:first-child{border-top:0}.recordHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.recordHead b{font-size:11px}.recordHead small{display:block;margin-top:4px;color:var(--muted);font-size:8px}
+.recordMeta{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}.recordMeta span{display:block;color:#747d8b;font-size:7px}.recordMeta b{display:block;color:#e9edf4;font-size:9px;margin-top:3px;word-break:break-word}
+.inlineActions{display:flex;justify-content:flex-end;gap:7px;margin-top:10px}.inlineActions button{height:30px;border:1px solid var(--line);border-radius:9px;background:#151920;color:#ddd;padding:0 10px;font-size:8px}
+.subtle{font-size:8px;color:var(--muted);line-height:1.5}
+.sheetMask{display:none;position:fixed;inset:0;background:rgba(0,0,0,.66);z-index:60;align-items:flex-end;justify-content:center}.sheetMask.show{display:flex}
+.sheet{width:100%;max-width:430px;background:#171a21;border:1px solid var(--line);border-radius:22px 22px 0 0;padding:10px 14px 22px;max-height:78vh;overflow:auto}
+.grab{width:38px;height:4px;border-radius:99px;background:#3a404c;margin:0 auto 14px}
+.sheetHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.sheetHead b{font-size:14px}.sheetHead button{border:0;background:transparent;color:#8f98a8;font-size:20px}
+.choice{width:100%;min-height:50px;border:0;border-top:1px solid var(--line);background:transparent;color:#fff;display:flex;justify-content:space-between;align-items:center;text-align:left;padding:0 2px}.choice:first-child{border-top:0}.choice b{font-size:11px}.choice small{display:block;color:var(--muted);font-size:8px;margin-top:3px}.choice em{font-style:normal;color:var(--gold);font-size:9px}
+.paymentHero{text-align:center;padding:18px 12px 10px}.spinner{width:48px;height:48px;border-radius:50%;border:4px solid rgba(245,201,92,.15);border-top-color:var(--gold);margin:0 auto 11px;animation:spin 1s linear infinite}.paymentHero.success .spinner{animation:none;border-color:var(--green);position:relative}.paymentHero.success .spinner:after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:var(--green);font-size:22px}.paymentHero h2{font-size:16px;margin:0}.paymentHero p{font-size:9px;color:var(--muted);margin:6px 0 0}.countdown{margin-top:8px;color:var(--gold);font-weight:800;font-size:10px}@keyframes spin{to{transform:rotate(360deg)}}
+.summary{margin-top:12px;border-top:1px solid var(--line)}.srow{min-height:42px;display:flex;justify-content:space-between;align-items:center;gap:14px;border-bottom:1px solid var(--line);font-size:9px}.srow span{color:var(--muted)}.srow b{font-size:10px;text-align:right;word-break:break-word}.gold{color:var(--gold)!important}
+.qr{width:148px;height:148px;background:
+linear-gradient(90deg,#fff 10px,transparent 10px) 0 0/20px 20px,
+linear-gradient(#fff 10px,transparent 10px) 0 0/20px 20px,#111;
+border:8px solid #fff;border-radius:10px;margin:14px auto}
+.successTop{text-align:center;padding:24px 10px}.successIcon{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;margin:0 auto 12px;background:rgba(83,214,138,.1);border:2px solid rgba(83,214,138,.45);color:var(--green);font-size:28px}.successTop h2{font-size:17px;margin:0}.successTop p{font-size:9px;color:var(--muted);margin:6px 0 0}
+.bottomNav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:66px;background:rgba(14,16,21,.96);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.07);display:grid;grid-template-columns:repeat(4,1fr);z-index:30}
+.bottomNav button{border:0;background:transparent;color:#777f8c;font-size:9px}.bottomNav button b{display:block;font-size:18px;margin-bottom:3px}.bottomNav button.active{color:var(--gold)}
+.toast{position:fixed;left:50%;bottom:82px;transform:translate(-50%,15px);opacity:0;transition:.2s;background:#08090d;border:1px solid #292e37;border-radius:10px;padding:9px 12px;font-size:10px;z-index:90;pointer-events:none;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(min-width:700px){body{padding:24px}.app{border-radius:24px;min-height:calc(100vh - 48px)}.bottomNav{bottom:24px;border-radius:0 0 24px 24px}}
+
+.customToggle{width:100%;height:38px;margin-top:8px;border:1px dashed var(--line);border-radius:11px;background:transparent;color:#aeb6c5;font-size:9px}
+.customToggle.active{border-style:solid;border-color:#9c7b31;background:#211d13;color:var(--gold);font-weight:800}
+.customAmount{margin-top:10px;padding:11px;border:1px solid var(--line);border-radius:12px;background:#12151b}
+.customAmount label{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;font-size:9px;color:#aeb6c5}
+.customAmount label span{font-size:8px;color:var(--muted)}
+.customInputWrap{display:grid;grid-template-columns:42px minmax(0,1fr) auto 42px;align-items:center;border:1px solid var(--line);border-radius:11px;background:#0f1217;overflow:hidden}
+.customInputWrap input{width:100%;height:44px;border:0;background:transparent;color:#fff;padding:0 8px;font-size:16px;outline:none;text-align:center;min-width:0}
+.customInputWrap b{padding:0 9px;font-size:10px;color:#c7ced9;border-left:1px solid var(--line);white-space:nowrap}
+.customStepBtn{height:44px;border:0;background:#171b22;color:#dfe4ec;font-size:20px;font-weight:500;line-height:1}
+.customStepBtn:first-child{border-right:1px solid var(--line)}
+.customStepBtn:last-child{border-left:1px solid var(--line)}
+.customStepBtn:active{background:#222833}
+.customHint{margin-top:7px;font-size:8px;color:var(--muted);line-height:1.45}
+
+
+body.onboarding .bottomNav{display:none}
+body.onboarding main{padding-bottom:24px}
+.applyHero{border:1px solid rgba(245,201,92,.22);background:linear-gradient(145deg,#292419,#17191f);border-radius:20px;padding:17px}
+.applyHero h1{font-size:20px;margin:10px 0 7px}.applyHero p{font-size:9px;line-height:1.6;color:#b9c0cb;margin:0}
+.applySteps{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:14px}
+.applyStep{border:1px solid var(--line);background:#151920;border-radius:12px;padding:10px 7px;text-align:center}.applyStep b{display:block;font-size:9px}.applyStep small{display:block;color:var(--muted);font-size:7px;margin-top:4px;line-height:1.35}
+.typeGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.typeCard{border:1px solid var(--line);border-radius:14px;background:#13171d;padding:12px;text-align:left;color:#fff}.typeCard.active{border-color:#9c7b31;background:#211d13}.typeCard b{font-size:11px}.typeCard small{display:block;color:var(--muted);font-size:8px;line-height:1.5;margin-top:5px}.typeCard em{font-style:normal;color:var(--gold);font-size:9px;display:block;margin-top:8px}
+.checkLine{display:flex;gap:8px;align-items:flex-start;font-size:9px;line-height:1.5;color:#aeb6c5;margin-top:10px}.checkLine input{margin-top:2px}
+.statusCard{border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:18px;text-align:center}.statusIcon{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;margin:0 auto 10px;background:rgba(245,201,92,.1);border:1px solid rgba(245,201,92,.25);color:var(--gold);font-size:23px}.statusCard h2{font-size:16px;margin:0}.statusCard p{font-size:9px;color:var(--muted);line-height:1.55;margin:6px 0 0}
+.depositBox{border:1px solid rgba(245,201,92,.2);border-radius:15px;background:linear-gradient(145deg,#211d15,#171a20);padding:14px;margin-top:12px}.depositBox span{font-size:9px;color:#b7ad93}.depositBox b{display:block;font-size:26px;margin-top:4px;color:var(--gold)}
+
+
+.activationCard{margin-top:12px;border:1px solid rgba(245,201,92,.25);background:linear-gradient(145deg,#262014,#17191f);border-radius:16px;padding:14px}
+.activationCard .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.activationCard h3{font-size:14px;margin:0}.activationCard p{font-size:9px;line-height:1.55;color:#aeb6c5;margin:5px 0 0}
+.activationAmount{font-size:18px;font-weight:900;color:var(--gold);white-space:nowrap}
+.activationMeta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.activationMeta div{padding:9px;border-radius:11px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)}
+.activationMeta span{display:block;color:var(--muted);font-size:8px}.activationMeta b{display:block;font-size:10px;margin-top:3px}
+.lockedAction{opacity:.45}.lockedAction .quickIcon{position:relative}.lockedAction .quickIcon:after{content:"🔒";position:absolute;right:-3px;top:-5px;font-size:11px}
+.inactiveBalance{color:#717987!important}
+.statusInactive{background:rgba(255,255,255,.06);color:#aab2bf;border-color:#343a45}
+
+
+.applyInfoCard{margin-top:12px;padding:16px;border-radius:17px;border:1px solid rgba(245,201,92,.16);background:rgba(255,255,255,.025)}
+.formSectionTitle{font-size:11px;font-weight:900;letter-spacing:.2px;color:var(--gold);margin:0 0 14px}
+.fieldLabel{display:flex;align-items:center;gap:4px;font-size:10px;font-weight:800;margin-bottom:7px}
+.req{color:#ff6a6a}
+.readonlyInput{background:#282b33!important;color:#d8dde7!important}
+.fieldHelp{font-size:8px;color:#8f98aa;line-height:1.45;margin:6px 3px 0}
+.inviteValue{min-height:49px;padding:0 14px;border-radius:12px;background:#282b33;border:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;font-weight:800}
+.verifiedTag{flex:0 0 auto;padding:5px 8px;border-radius:999px;background:rgba(245,201,92,.16);color:var(--gold);font-size:8px;font-weight:900}
+.applicationFooter{font-size:8px;line-height:1.5;color:#8992a4;text-align:center;margin:10px 10px 0}
+
+
+.compactHero{padding:16px 16px 15px}
+.compactHero .balanceLabel{margin-top:18px}
+.activateMini{margin-top:12px;padding:14px 15px;border-radius:16px;border:1px solid rgba(245,201,92,.22);background:linear-gradient(145deg,#241f15,#181a20)}
+.activateMini .line{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.activateMini .label{font-size:10px;color:#aab2bf}
+.activateMini .amount{font-size:22px;font-weight:900;color:var(--gold)}
+.activateMini button{margin-top:12px}
+.progressMini{margin-top:12px;padding:14px 15px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.progressMini .head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.progressMini .head b{font-size:12px}
+.progressMini .head span{font-size:9px;color:#9ca5b5}
+.progressMini .value{font-size:19px;font-weight:900;margin-top:5px}
+.homeLinks{margin-top:12px}
+.homeLinks .listRow{min-height:48px}
+
+
+.bottomNav{grid-template-columns:repeat(4,1fr)}
+.bottomNav button span{font-size:8px}
+.bottomNav button .navIcon{font-size:17px}
+.dashboardBlock{margin-top:12px}
+.dashboardBlock .sectionTitle{margin-bottom:8px}
+.metricStrip{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.metricTile{padding:12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.metricTile span{display:block;font-size:8px;color:#8f98aa}
+.metricTile b{display:block;font-size:15px;margin-top:5px}
+.salarySummary{margin-top:12px;padding:13px 14px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between}
+.salarySummary span{font-size:9px;color:#929bac}
+.salarySummary b{font-size:15px}
+.rulesRow{margin-top:12px}
+
+
+.businessSummary{margin-top:12px}
+.businessSummaryGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.businessSummaryItem{padding:12px 10px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.businessSummaryItem span{display:block;font-size:8px;color:#8f98aa;line-height:1.35}
+.businessSummaryItem b{display:block;font-size:13px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.afterActivation{margin-top:12px}
+.afterActivation .listRow{min-height:44px}
+
+
+.primaryActionCard{margin-top:12px;padding:14px;border-radius:16px;background:linear-gradient(145deg,#221f17,#181a20);border:1px solid rgba(245,201,92,.18)}
+.primaryActionCard .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.primaryActionCard .copy b{display:block;font-size:13px}
+.primaryActionCard .copy span{display:block;margin-top:4px;font-size:8px;color:#929bac}
+.primaryActionCard .actionIcon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:18px;background:rgba(245,201,92,.12);color:var(--gold)}
+.primaryActionCard .primary{margin-top:12px}
+.bottomNav{grid-template-columns:repeat(3,1fr)!important}
+
+
+.centerSectionTitle{margin:14px 2px 8px;font-size:11px;font-weight:900}
+.inlineTopup{margin-top:8px}
+.inlineTopup .card{margin:0}
+.stockProgress{margin:0 0 12px}
+.forceActivationMask{position:fixed;inset:0;z-index:120;background:rgba(5,7,10,.82);backdrop-filter:blur(9px);display:none;align-items:flex-end;justify-content:center}
+.forceActivationMask.show{display:flex}
+.forceActivationModal{width:100%;max-width:430px;background:#15181e;border:1px solid rgba(255,255,255,.08);border-radius:22px 22px 0 0;padding:18px 16px 24px;box-shadow:0 -20px 60px rgba(0,0,0,.45)}
+.forceActivationModal .modalMark{width:42px;height:4px;border-radius:99px;background:#3a404a;margin:0 auto 16px}
+.forceActivationModal h2{font-size:18px;margin:0}
+.forceActivationModal .modalSub{font-size:9px;color:#939cab;margin-top:5px}
+.forceActivationModal .depositHero{margin:14px 0;padding:14px;border-radius:15px;background:linear-gradient(145deg,#242015,#191b21);border:1px solid rgba(245,201,92,.2)}
+.forceActivationModal .depositHero span{font-size:8px;color:#a7afbc}
+.forceActivationModal .depositHero b{display:block;margin-top:4px;font-size:25px;color:var(--gold)}
+.forceActivationModal .modalOrder{display:none}
+.forceActivationModal.orderMode .modalSetup{display:none}
+.forceActivationModal.orderMode .modalOrder{display:block}
+.modalBlockingNote{text-align:center;font-size:8px;color:#7f8999;margin-top:10px}
+.modalPaymentStatus{text-align:center;padding:8px 0 14px}
+.modalPaymentStatus b{display:block;font-size:15px}
+.modalPaymentStatus span{display:block;margin-top:4px;font-size:9px;color:#8f98aa}
+.modalPaymentStatus .countdown{margin-top:8px}
+body.depositLocked{overflow:hidden}
+
+
+.coinBreakdown{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.coinBreakdown .coinRow{min-height:34px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:9px}
+.coinBreakdown .coinRow span{color:var(--muted)}
+.coinBreakdown .coinRow b{font-size:11px}
+.coinBreakdown .coinTotal{margin-top:4px;padding-top:10px;border-top:1px solid var(--line)}
+.coinBreakdown .coinTotal span{color:#d5dae3;font-weight:800}
+.coinBreakdown .coinTotal b{font-size:18px;color:var(--gold)}
+
+
+.payReceiveWrap{margin-top:14px;display:grid;gap:10px}
+.payCard,.receiveCard{padding:14px;border-radius:15px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03)}
+.payCard .kicker,.receiveCard .kicker{font-size:8px;font-weight:900;color:#8f98aa;text-transform:uppercase;letter-spacing:.4px}
+.payCard .mainAmount{font-size:20px;font-weight:900;margin-top:5px}
+.payCard .mainAmount small{font-size:11px;color:#d7dce5}
+.payCard .usdEq{font-size:9px;color:#9ca5b5;margin-top:4px}
+.payCard .fxMini{font-size:8px;color:#6f7888;margin-top:4px}
+.receiveRows{margin-top:8px}
+.receiveRows .r{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:30px;font-size:9px}
+.receiveRows .r span{color:#929bac}
+.receiveRows .r b{font-size:10px}
+.receiveRows .total{margin-top:4px;padding-top:10px;border-top:1px solid var(--line)}
+.receiveRows .total span{color:#d8dde7;font-weight:800}
+.receiveRows .total b{font-size:18px;color:var(--gold)}
+
+
+.receiveRows .total{
+  margin-top:6px;
+  padding-top:12px;
+}
+.receiveRows .total span{
+  font-size:9px;
+  color:#d8dde7;
+  font-weight:900;
+}
+.receiveRows .total b{
+  display:block;
+  font-size:24px;
+  line-height:1.05;
+  font-weight:900;
+  color:var(--gold);
+  letter-spacing:-.4px;
+}
+.payCard .limitInfo{
+  font-size:8px;
+  color:#7f8999;
+  margin-top:5px;
+}
+
+
+.recordMeta.compactMeta{grid-template-columns:repeat(2,minmax(0,1fr))}
+.recordMeta.compactMeta>div:only-child{grid-column:1/-1}
+.recordMeta .gold{color:var(--gold)}
+
+
+.approvalNotice{margin-top:12px;padding:13px 14px;border-radius:14px;background:rgba(245,201,92,.08);border:1px solid rgba(245,201,92,.2);font-size:9px;line-height:1.55;color:#d8d0ba}
+.approvalNotice b{display:block;color:var(--gold);font-size:11px;margin-bottom:4px}
+.activationCard .progressLine{margin-top:11px}
+.activationCard .progressLine .bar{margin-top:6px}
+.activationCard .progressMeta{display:flex;justify-content:space-between;gap:10px;margin-top:6px;font-size:8px;color:#939cab}
+.businessSummaryGrid.two{grid-template-columns:repeat(2,1fr)}
+.activationHint{margin-top:8px;font-size:8px;color:#939cab;line-height:1.45}
+
+.activationTicker{height:38px;margin:0 0 10px;border-radius:12px;background:rgba(245,201,92,.09);border:1px solid rgba(245,201,92,.20);display:flex;align-items:center;gap:8px;padding:0 10px;overflow:hidden;cursor:pointer;width:100%;color:inherit}
+.activationTicker .ico{flex:0 0 auto;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:rgba(245,201,92,.14);color:var(--gold);font-size:10px;font-weight:900}
+.activationTicker .track{min-width:0;overflow:hidden;white-space:nowrap;flex:1}
+.activationTicker .marquee{display:inline-block;padding-left:100%;font-size:9px;font-weight:800;color:#e4dcc7;animation:ctTicker 12s linear infinite}
+.activationTicker .chev{flex:0 0 auto;color:var(--gold);font-size:15px;line-height:1}
+@keyframes ctTicker{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+.globalActivationTicker{margin:10px 14px 0;width:calc(100% - 28px)}
+body.onboarding .globalActivationTicker{display:none!important}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <button class="iconBtn" id="topBack">‹</button>
+  <div class="title" id="topTitle">Apply to be a Coin Trader</div>
+  <button class="iconBtn" id="topMore">⋯</button>
+</header>
+
+<button type="button" class="activationTicker globalActivationTicker hidden" id="activationTicker">
+  <span class="ico">!</span>
+  <span class="track"><span class="marquee" id="activationTickerText">Top up to activate Coin Trader.</span></span>
+  <span class="chev">›</span>
+</button>
+
+<main>
+
+  <section id="applyForm" class="page active">
+    <div class="applyInfoCard">
+      <div class="formSectionTitle">YOUR INFORMATION</div>
+
+      <div class="field">
+        <div class="fieldLabel">User ID</div>
+        <input id="applyUserId" class="input readonlyInput" value="10032846" readonly>
+      </div>
+
+      <div class="field">
+        <div class="fieldLabel">Username</div>
+        <input id="applyUsername" class="input readonlyInput" value="Jaden" readonly>
+      </div>
+
+      <div class="field">
+        <div class="fieldLabel"><span class="req">*</span> Country / Region</div>
+        <select id="applyCountry" class="input">
+          <option value="Pakistan" selected>Pakistan</option>
+          <option value="India">India</option>
+          <option value="Bangladesh">Bangladesh</option>
+          <option value="Nigeria">Nigeria</option>
+          <option value="Egypt">Egypt</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <div class="fieldLabel"><span class="req">*</span> Real Name</div>
+        <input id="applyRealName" class="input" value="Jaden Khan">
+        <div class="fieldHelp">This information won't be shown to other users.</div>
+      </div>
+
+      <div class="field">
+        <div class="fieldLabel"><span class="req">*</span> WhatsApp</div>
+        <input id="applyWhatsapp" class="input" value="+92 300 1234567">
+        <div class="fieldHelp">This information won't be shown to other users.</div>
+      </div>
+
+      <div class="field" style="margin-bottom:0">
+        <div class="fieldLabel">Coin Trader Type</div>
+        <input id="applyTypeReadonly" class="input readonlyInput" value="Private Coin Trader" readonly>
+      </div>
+    </div>
+
+    <div class="applyInfoCard">
+      <div class="formSectionTitle">INVITER INFORMATION</div>
+
+      <div class="field">
+        <div class="fieldLabel">Invitation Code</div>
+        <div class="inviteValue">
+          <span id="applyInvitationCode">MGR-CT-31VN</span>
+          <span class="verifiedTag">Verified</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="fieldLabel">Inviter</div>
+        <input id="applyInviter" class="input readonlyInput" value="Alex · ID 10008621" readonly>
+      </div>
+
+    </div>
+
+    <label class="checkLine" style="margin-top:14px"><input id="applyAgree" type="checkbox" checked><span>I confirm that the information provided is accurate and agree to the Coin Trader rules.</span></label>
+    <button type="button" class="primary" id="submitApply" style="margin-top:14px">Submit</button>
+    <div class="applicationFooter">By submitting, you confirm that the information provided is accurate.</div>
+  </section>
+
+  <section id="applyPending" class="page">
+    <div class="statusCard">
+      <div class="statusIcon" id="applicationStatusIcon">…</div>
+      <h2 id="applicationStatusTitle">Application Under Review</h2>
+      <p id="applicationStatusText">Your application has been submitted. Once approved, a system notification will unlock access to the Coin Trader Center.</p>
+    </div>
+    <div class="approvalNotice hidden" id="approvalNotice"><b>System Notification</b>Your Coin Trader application has been approved. Coin Trader Center is now available. Complete the required Stock Top-up to activate trading features.</div>
+    <div class="card formCard accountSummary">
+      <div class="srow"><span>User</span><b id="pendingUser">Jaden · 10032846</b></div>
+      <div class="srow"><span>Coin Trader Type</span><b id="pendingType">Private Coin Trader</b></div>
+      <div class="srow"><span>Inviter</span><b id="pendingInviter">Alex · ID 10008621</b></div>
+      <div class="srow"><span>Application Status</span><b class="gold" id="pendingStatus">Pending Review</b></div>
+      <div class="srow"><span>Activation Requirement</span><b id="pendingActivation">$100 Stock Top-up</b></div>
+    </div>
+    <button type="button" class="primary" id="simulateApprove" style="margin-top:14px">Demo: Approve Application</button>
+    <button type="button" class="primary hidden" id="enterTraderCenter" style="margin-top:14px">Enter Coin Trader Center</button>
+  </section>
+
+  <section id="home" class="page">
+    <div class="hero compactHero">
+      <div class="rowBetween">
+        <div class="user">
+          <div class="avatar">M</div>
+          <div><b>Mina Trader</b><small>UID 20829415 · Pakistan</small></div>
+        </div>
+        <span class="badge statusInactive" id="traderStatusBadge">Private Coin Trader · Not Activated</span>
+      </div>
+      <div class="balanceLabel">Coin Balance</div>
+      <div class="balance inactiveBalance" id="balanceWrap">
+        <span id="homeBalance">0</span><small>Coins</small>
+      </div>
+    </div>
+
+    <div class="businessSummary" id="businessSummary">
+      <div class="sectionTitle"><b>Business Summary</b></div>
+      <div class="businessSummaryGrid two">
+        <div class="businessSummaryItem"><span>Stock Top-up</span><b id="summaryStock">$0</b></div>
+        <div class="businessSummaryItem"><span>User Top-up</span><b id="summaryUser">0 Coins</b></div>
+      </div>
+    </div>
+
+    <div class="inlineTopup" id="inlineUserTopup">
+      <div class="centerSectionTitle">User Top-up</div>
+      <div class="card formCard">
+        <div class="field">
+          <label>User UID</label>
+          <div style="display:grid;grid-template-columns:1fr 84px;gap:8px">
+            <input id="uidInput" class="input" value="10032846" inputmode="numeric">
+            <button type="button" class="primary" id="verifyUid">Verify</button>
+          </div>
+        </div>
+        <div id="verifiedUser" class="card hidden" style="margin-bottom:14px">
+          <div class="listRow"><div class="user"><div class="avatar" style="width:38px;height:38px">J</div><div><b>Jaden</b><small>UID 10032846</small></div></div><span class="status success">Active</span></div>
+        </div>
+        <div class="field">
+          <label>Coin Amount</label>
+          <input id="userCoinInput" class="input" value="70000" inputmode="numeric">
+        </div>
+        <div class="tierGrid" id="coinQuick">
+          <button type="button" class="tierBtn" data-coins="35000">35K</button>
+          <button type="button" class="tierBtn active" data-coins="70000">70K</button>
+          <button type="button" class="tierBtn" data-coins="350000">350K</button>
+          <button type="button" class="tierBtn" data-coins="700000">700K</button>
+        </div>
+        <div class="summary">
+          <div class="srow"><span>Current Balance</span><b id="topupBalance"></b></div>
+          <div class="srow"><span>Balance After Top-up</span><b id="topupAfter"></b></div>
+        </div>
+        <button type="button" class="primary" id="confirmUserTopup" style="margin-top:12px">Confirm Top-up</button>
+      </div>
+    </div>
+
+  </section>
+
+  <section id="stock" class="page">
+    <div class="rowBetween" style="margin-bottom:12px">
+      <div class="backTitle"><button type="button" data-back>‹</button><b>Stock Top-up</b></div>
+      <button type="button" class="countryChip" id="countryBtn"><span id="countryLabel">🇵🇰 Pakistan</span><span class="chev">⌄</span></button>
+    </div>
+
+    <div class="progressMini stockProgress" id="qualificationCard">
+      <div class="head">
+        <b id="qualificationTitle">First 30-Day Recharge Target</b>
+        <span id="qualificationDays">30 days left</span>
+      </div>
+      <div class="value" id="qualificationValue">$0 / $500</div>
+      <div class="bar"><i id="qualificationBar" style="width:0%"></i></div>
+    </div>
+
+    <div class="card formCard">
+      <div class="field">
+        <label>Payment Method</label>
+        <button type="button" class="compactSelect" id="methodBtn">
+          <span class="meta"><span id="methodIcon" style="font-size:18px">◉</span><span><b id="methodName">Easypaisa</b><small id="methodHint">PKR · Local wallet</small></span></span>
+          <span class="arrow">›</span>
+        </button>
+      </div>
+
+      <div class="field">
+        <label>Stock Amount</label>
+        <div class="tierGrid" id="tierGrid">
+          <button type="button" class="tierBtn" data-tier="100">$100<small>40%</small></button>
+          <button type="button" class="tierBtn" data-tier="500">$500<small>42%</small></button>
+          <button type="button" class="tierBtn active" data-tier="1000">$1,000<small>44%</small></button>
+          <button type="button" class="tierBtn" data-tier="2000">$2,000<small>45%</small></button>
+        </div>
+        <button type="button" class="customToggle" id="customToggle">Custom Payment Amount</button>
+
+        <div class="customAmount hidden" id="customAmountBox">
+          <label>Payment Amount <span>Enter in the selected payment currency</span></label>
+          <div class="customInputWrap">
+            <button type="button" class="customStepBtn" id="customMinus" aria-label="Decrease amount">−</button>
+            <input id="customAmountInput" inputmode="numeric" pattern="[0-9]*" value="280000" aria-label="Custom Payment Amount">
+            <b id="customCurrency">PKR</b>
+            <button type="button" class="customStepBtn" id="customPlus" aria-label="Increase amount">+</button>
+          </div>
+          <div class="customHint" id="customHint">≈ $1,000 USD · Auto-matched to 44% tier</div>
+        </div>
+      </div>
+
+      <div class="payReceiveWrap">
+        <div class="payCard">
+          <div class="kicker">Pay</div>
+          <div class="mainAmount"><span id="payLocalAmount">280,000</span> <small id="payCurrency">PKR</small></div>
+          <div class="usdEq" id="usdEquivalent">≈ $1,000 USD</div>
+          <div class="limitInfo" id="channelLimitInfo">Limit 5,000–300,000 PKR</div>
+          <div class="limitWarn hidden" id="limitWarn">This payment method cannot process this amount.</div>
+        </div>
+
+        <div class="receiveCard">
+          <div class="kicker">You’ll Receive</div>
+          <div class="receiveRows">
+            <div class="r"><span>Base</span><b id="stockBaseCoins">14,000,000</b></div>
+            <div class="r"><span id="stockBonusLabel">Bonus +44%</span><b id="stockBonusCoins">6,160,000</b></div>
+            <div class="r total"><span>Total</span><b id="stockCoins">20,160,000 Coins</b></div>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="primary" id="stockConfirm" style="margin-top:14px">Confirm Stock Top-up</button>
+    </div>
+
+  </section>
+
+  <section id="payment" class="page">
+    <div class="backTitle" style="margin-bottom:12px"><button type="button" data-back>‹</button><b>Payment Order</b></div>
+    <div class="paymentHero" id="paymentHero">
+      <div class="spinner"></div>
+      <h2 id="paymentTitle">Waiting for Payment</h2>
+      <p>Complete the payment before the order expires.</p>
+      <div class="countdown" id="countdown">20:00</div>
+    </div>
+    <div class="card formCard">
+      <div class="srow"><span>Order No.</span><b id="orderNo">UP202608280001</b></div>
+      <div class="srow"><span>Payment Method</span><b id="orderMethod">Easypaisa</b></div>
+      <div class="srow"><span>Amount Due</span><b id="orderPay">280,000 PKR</b></div>
+      <div class="srow"><span>USD Equivalent</span><b id="orderUsd">$1,000</b></div>
+      <div class="srow"><span>Base</span><b id="orderBaseCoins">14,000,000 Coins</b></div>
+      <div class="srow"><span id="orderBonusLabel">Bonus +44%</span><b id="orderBonusCoins">6,160,000 Coins</b></div>
+      <div class="srow"><span>Total</span><b class="gold" id="orderCoins">20,160,000 Coins</b></div>
+    </div>
+
+    <div id="usdtPanel" class="hidden">
+      <div class="qr" aria-label="USDT QR code demo"></div>
+      <div class="card formCard">
+        <div class="srow"><span>Network</span><b id="usdtNetwork">TRC20</b></div>
+        <div class="srow"><span>Receiving Address</span><b style="max-width:230px">TQ8Lw9p2xD7k3mN6cR4vB1zA5sF0hJ2uXq</b></div>
+      </div>
+    </div>
+
+    <div id="localPanel" class="notice" style="margin-top:12px">Pay the exact local amount shown in the order. Payment status is checked and updated automatically; no manual confirmation is required.</div>
+
+    <button type="button" class="secondary" id="simulatePay" style="margin-top:12px">Demo: Mark as Paid</button>
+  </section>
+
+  <section id="paySuccess" class="page">
+    <div class="successTop">
+      <div class="successIcon">✓</div>
+      <h2>Stock Top-up Successful</h2>
+      <p>Coins have been credited to your Coin Trader account.</p>
+    </div>
+    <div class="card formCard">
+      <div class="srow"><span>Order No.</span><b id="successOrder"></b></div>
+      <div class="srow"><span>Amount Paid</span><b id="successPay"></b></div>
+      <div class="srow"><span>Base</span><b id="successBaseCoins"></b></div>
+      <div class="srow"><span id="successBonusLabel">Bonus Coins</span><b id="successBonusCoins"></b></div>
+      <div class="srow"><span>Total</span><b class="gold" id="successCoins"></b></div>
+    </div>
+    <button type="button" class="primary" id="backHomeAfterPay" style="margin-top:12px">Back to Coin Trader Center</button>
+    <button type="button" class="secondary" data-go="history" style="margin-top:8px">View Transactions</button>
+  </section>
+
+  <section id="history" class="page">
+    <div class="backTitle"><button type="button" data-back>‹</button><b>Transactions</b></div>
+    <div class="tabs" id="historyTabs">
+      <button type="button" data-filter="stock" class="active">Stock Top-up</button>
+      <button type="button" data-filter="user">User Top-up</button>
+    </div>
+    <div class="card" id="historyList"></div>
+  </section>
+
+  <section id="appeal" class="page">
+    <div class="backTitle" style="margin-bottom:12px"><button type="button" data-back>‹</button><b>Top-up Appeal</b></div>
+    <div class="notice">Appeals must be opened from a specific transaction. Order, Coin Trader, and amount details are filled automatically.</div>
+    <div class="card formCard">
+      <div class="srow"><span>Record</span><b id="appealRecord"></b></div>
+      <div class="srow"><span>Related User</span><b id="appealUser"></b></div>
+      <div class="srow"><span>Coins</span><b id="appealAmount"></b></div>
+      <div class="field" style="margin-top:12px">
+        <label>Appeal Reason</label>
+        <input id="appealText" class="input" placeholder="Enter the appeal reason">
+      </div>
+      <button type="button" class="primary" id="submitAppeal">Submit Appeal</button>
+    </div>
+  </section>
+</main>
+
+<nav class="bottomNav">
+    <button type="button" data-nav="home" class="active"><div class="navIcon">⌂</div><span>Home</span></button>
+    <button type="button" data-nav="stock"><div class="navIcon">＋</div><span>Stock</span></button>
+    <button type="button" data-nav="history"><div class="navIcon">≡</div><span>Transactions</span></button>
+  </nav>
+</div>
+
+
+<div class="sheetMask" id="countrySheet">
+  <div class="sheet">
+    <div class="grab"></div>
+    <div class="sheetHead"><b>Switch Country / Region</b><button type="button" data-close-sheet="countrySheet">×</button></div>
+    <div id="countryChoices"></div>
+  </div>
+</div>
+
+<div class="sheetMask" id="methodSheet">
+  <div class="sheet">
+    <div class="grab"></div>
+    <div class="sheetHead"><b id="methodSheetTitle">Select Payment Method</b><button type="button" data-close-sheet="methodSheet">×</button></div>
+    <div class="notice">Only payment methods available for the selected country/region are shown. Demo limits are illustrative; production limits follow payment-channel configuration.</div>
+    <div id="methodChoices"></div>
+  </div>
+</div>
+
+<div class="sheetMask" id="rulesSheet">
+  <div class="sheet">
+    <div class="grab"></div>
+    <div class="sheetHead"><b>Coin Trader Rules</b><button type="button" data-close-sheet="rulesSheet">×</button></div>
+    <div class="card formCard">
+      <div class="srow"><span>$100–499.99</span><b>40% · 19,600/$</b></div>
+      <div class="srow"><span>$500–999.99</span><b>42% · 19,880/$</b></div>
+      <div class="srow"><span>$1,000–1,999.99</span><b>44% · 20,160/$</b></div>
+      <div class="srow"><span>≥ $2,000</span><b>45% · 20,300/$</b></div>
+      <div class="srow"><span>Recommended Selling Ratio</span><b>18,500 Coins/$</b></div>
+      <div class="srow"><span>Maximum Selling Ratio</span><b>20,000 Coins/$</b></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const money = n => Number(n||0).toLocaleString('en-US');
+
+  const countries = {
+    GLOBAL:{name:'Global',flag:'🌐',currency:'USD',fx:1,methods:[
+      {name:'USDT · TRC20',hint:'USD · USDT TRC20',icon:'₮',currency:'USD',fx:1,min:100,max:10000,network:'TRC20'},
+      {name:'EPAY',hint:'USD · EPAY',icon:'E',currency:'USD',fx:1,min:100,max:10000}
+    ]},
+    PK:{name:'Pakistan',flag:'🇵🇰',currency:'PKR',fx:280,methods:[
+      {name:'Easypaisa',hint:'PKR · Local wallet',icon:'◉',min:5000,max:300000},
+      {name:'JazzCash',hint:'PKR · Local wallet',icon:'◉',min:5000,max:300000},
+      {name:'Local Bank Transfer',hint:'PKR · Bank Transfer',icon:'▣',min:10000,max:2000000}
+    ]},
+    IN:{name:'India',flag:'🇮🇳',currency:'INR',fx:84,methods:[
+      {name:'UPI',hint:'INR · Local Instant Payment',icon:'◎',min:1000,max:100000},
+      {name:'Local Bank Transfer',hint:'INR · Bank Transfer',icon:'▣',min:5000,max:500000}
+    ]},
+    BD:{name:'Bangladesh',flag:'🇧🇩',currency:'BDT',fx:122,methods:[
+      {name:'bKash',hint:'BDT · Local wallet',icon:'◉',min:1000,max:250000},
+      {name:'Nagad',hint:'BDT · Local wallet',icon:'◉',min:1000,max:250000},
+      {name:'Local Bank Transfer',hint:'BDT · Bank Transfer',icon:'▣',min:5000,max:1000000}
+    ]},
+    NG:{name:'Nigeria',flag:'🇳🇬',currency:'NGN',fx:1550,methods:[
+      {name:'Local Bank Transfer',hint:'NGN · Bank Transfer',icon:'▣',min:10000,max:5000000},
+      {name:'OPay',hint:'NGN · Local wallet',icon:'◉',min:5000,max:1000000}
+    ]},
+    EG:{name:'Egypt',flag:'🇪🇬',currency:'EGP',fx:50,methods:[
+      {name:'InstaPay',hint:'EGP · Local Instant Payment',icon:'◎',min:500,max:500000},
+      {name:'Vodafone Cash',hint:'EGP · Local wallet',icon:'◉',min:100,max:60000},
+      {name:'Local Bank Transfer',hint:'EGP · Bank Transfer',icon:'▣',min:1000,max:1000000}
+    ]}
+  };
+
+  const state = {
+    page:'applyForm',
+    applicantType:(new URLSearchParams(location.search).get('type')==='public'?'public':'private'),
+    applicantStatus:'not_applied',
+    currentUser:{uid:'10032846',username:'Jaden'},
+    invites:{
+      public:{code:'PUB-CT-82KA',inviter:'MEME Official · ID 10000001',managerUid:''},
+      private:{code:'MGR-CT-31VN',inviter:'Alex · ID 10008621',managerUid:'10008621'}
+    },
+    stack:[],
+    balance:0,
+    country:'PK',
+    methodIndexByCountry:{GLOBAL:0,PK:0,IN:0,BD:0,NG:0,EG:0},
+    tier:1000,
+    custom:false,
+    customUsd:1000,
+    order:null,
+    timer:null,
+    seconds:1200,
+    verified:false,
+    historyFilter:'stock',
+    histories:[]
+  };
+
+  function tierInfo(v){
+    if(v>=2000) return {reward:45,rate:20300};
+    if(v>=1000) return {reward:44,rate:20160};
+    if(v>=500) return {reward:42,rate:19880};
+    return {reward:40,rate:19600};
+  }
+  function currentCountry(){ return countries[state.country]; }
+  function currentMethod(){ return currentCountry().methods[state.methodIndexByCountry[state.country]||0]; }
+  function customAmountStep(currency){ return ['USD','USDT'].includes(currency)?1:100; }
+  function adjustCustomAmount(direction){
+    const c=currentCountry(),m=currentMethod(),curr=m.currency||c.currency,fx=m.fx||c.fx;
+    const step=customAmountStep(curr);
+    const input=$('#customAmountInput');
+    const raw=input.value.replace(/,/g,'').trim();
+    let local=/^\d+$/.test(raw)?Number(raw):0;
+
+    if(direction>0){
+      local = local>0 ? local+step : step;
+    }else{
+      local = Math.max(0, local-step);
+    }
+
+    input.value=local.toLocaleString('en-US');
+    state.customUsd=fx?local/fx:0;
+    renderStock();
+  }
+  function showToast(msg){
+    const t=$('#toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(showToast._t); showToast._t=setTimeout(()=>t.classList.remove('show'),1600);
+  }
+  function pageTitle(page){
+    return {applyForm:'Apply to be a Coin Trader',applyPending:'Application Review',home:'Coin Trader Center',stock:'Stock Top-up',payment:'Payment Order',paySuccess:'Stock Result',history:'Transactions',appeal:'Top-up Appeal'}[page]||'Coin Trader Center';
+  }
+  function go(page,push=true){
+    if(state.page===page) return;
+    if(push && state.page) state.stack.push(state.page);
+    state.page=page;
+    $$('.page').forEach(p=>p.classList.toggle('active',p.id===page));
+    $('#topTitle').textContent=pageTitle(page);
+    $$('.bottomNav button[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===page || (page==='paySuccess'&&b.dataset.nav==='stock') || (page==='payment'&&b.dataset.nav==='stock')));
+    document.body.classList.toggle('onboarding',['applyForm','applyPending'].includes(page));
+    updateActivationTicker();
+    window.scrollTo(0,0);
+    if(page==='history') renderHistory();
+    if(page==='home') renderUserTopup();
+  }
+  function back(){
+    if(state.stack.length){ go(state.stack.pop(),false); } else { go('home',false); }
+  }
+  function exitApplication(){
+    if(window.history.length>1){
+      window.history.back();
+    }else{
+      showToast('Return to the app.');
+    }
+  }
+  function openSheet(id){ $('#'+id).classList.add('show'); }
+  function closeSheet(id){ $('#'+id).classList.remove('show'); }
+
+
+  function applicantInfo(){
+    return state.applicantType==='public'?{name:'Public Coin Trader',activation:500,target:3000,desc:'Serve eligible users platform-wide'}:{name:'Private Coin Trader',activation:100,target:500,desc:'Same Manager Team only'};
+  }
+  function renderApplyType(){
+    const info=applicantInfo(), invite=state.invites[state.applicantType];
+    $('#applyUserId').value=state.currentUser.uid;
+    $('#applyUsername').value=state.currentUser.username;
+    $('#applyTypeReadonly').value=info.name;
+    $('#applyInvitationCode').textContent=invite.code;
+    $('#applyInviter').value=invite.inviter;
+    $('#pendingUser').textContent=`${state.currentUser.username} · ${state.currentUser.uid}`;
+    $('#pendingType').textContent=info.name;
+    $('#pendingInviter').textContent=invite.inviter;
+    $('#pendingActivation').textContent=`$${money(info.activation)} Stock Top-up`;
+  }
+  function validateApplication(){
+    if(!$('#applyRealName').value.trim()||!$('#applyCountry').value.trim()||!$('#applyWhatsapp').value.trim()){
+      showToast('Please complete all required information.');return false;
+    }
+    if(!state.invites[state.applicantType] || !state.invites[state.applicantType].code){
+      showToast('Invalid invitation link.');return false;
+    }
+    if(state.applicantType==='private' && !state.invites.private.managerUid){
+      showToast('Manager information is missing from this invitation.');return false;
+    }
+    if(!$('#applyAgree').checked){showToast('Please agree to the Coin Trader rules first.');return false;}
+    return true;
+  }
+  function submitApplication(){
+    if(!validateApplication()) return;
+    state.applicantStatus='pending';
+    $('#pendingStatus').textContent='Pending Review';
+    renderApplyType();
+    go('applyPending');
+  }
+  function approveApplication(){
+    state.applicantStatus='approved';
+    state.stack=[];
+    $('#applicationStatusIcon').textContent='✓';
+    $('#applicationStatusTitle').textContent='Application Approved';
+    $('#applicationStatusText').textContent='Your application has been approved. A system notification has unlocked Coin Trader Center access.';
+    $('#pendingStatus').textContent='Approved';
+    $('#approvalNotice').classList.remove('hidden');
+    $('#simulateApprove').classList.add('hidden');
+    $('#enterTraderCenter').classList.remove('hidden');
+    renderHome();
+    renderStock();
+    renderUserTopup();
+    updateActivationTicker();
+    showToast('System notification sent.');
+  }
+
+  function activationStockUsd(){
+    return state.histories
+      .filter(r=>r.kind==='stock' && r.status==='success')
+      .reduce((sum,r)=>sum+(Number(String(r.usd||'').replace(/[^0-9.]/g,''))||0),0);
+  }
+
+  function activationRemaining(){
+    return Math.max(0, applicantInfo().activation-activationStockUsd());
+  }
+
+  function updateActivationTicker(){
+    const show=state.applicantStatus==='approved';
+    $('#activationTicker').classList.toggle('hidden',!show);
+    $('#activationTickerText').textContent=state.applicantType==='public'
+      ? 'Top up $500 to activate Public Coin Trader and unlock trading features.'
+      : 'Top up $100 to activate Private Coin Trader and unlock trading features.';
+  }
+
+  function startActivationTopup(){
+    if(state.applicantStatus!=='approved') return;
+    const remaining=Math.max(100, activationRemaining());
+    if([100,500,1000,2000].includes(remaining)){
+      state.custom=false;
+      state.tier=remaining;
+      state.customUsd=remaining;
+    }else{
+      state.custom=true;
+      state.customUsd=remaining;
+    }
+    renderStock();
+    go('stock');
+  }
+
+  function renderHome(){
+    const info=applicantInfo(), active=state.applicantStatus==='active';
+    const stockUsd=activationStockUsd();
+    const activationPct=Math.max(0,Math.min(100,info.activation?stockUsd/info.activation*100:0));
+
+    $('#traderStatusBadge').textContent=active
+      ? `${info.name} · Active`
+      : `${info.name} · Not Activated`;
+    $('#traderStatusBadge').classList.toggle('statusInactive',!active);
+
+    $('#homeBalance').textContent=money(state.balance);
+    $('#balanceWrap').classList.toggle('inactiveBalance',!active);
+
+    const userCoins=state.histories
+      .filter(r=>r.kind==='user' && r.status!=='failed')
+      .reduce((sum,r)=>sum+(Number(String(r.amount||'').replace(/[^0-9.]/g,''))||0),0);
+
+    $('#summaryStock').textContent=`$${money(stockUsd)}`;
+    $('#summaryUser').textContent=`${money(userCoins)} Coins`;
+
+    $('#inlineUserTopup').classList.remove('hidden');
+  }
+
+  function renderCountrySheet(){
+    $('#countryChoices').innerHTML=Object.entries(countries).map(([code,c])=>`
+      <button type="button" class="choice" data-country="${code}">
+        <span><b>${c.flag} ${c.name}</b><small>${c.currency}</small></span>
+        <em>${code===state.country?'Current':''}</em>
+      </button>`).join('');
+    $$('#countryChoices [data-country]').forEach(btn=>btn.addEventListener('click',()=>{
+      state.country=btn.dataset.country;
+      closeSheet('countrySheet');
+      renderStock();
+    }));
+  }
+
+  function renderMethodSheet(){
+    const c=currentCountry();
+    $('#methodSheetTitle').textContent='Select Payment Method · '+c.name;
+    $('#methodChoices').innerHTML=c.methods.map((m,i)=>{
+      const curr=m.currency||c.currency;
+      const current=i===(state.methodIndexByCountry[state.country]||0);
+      return `<button type="button" class="choice" data-method="${i}">
+        <span><b>${m.name}</b><small>${m.hint} · ${money(m.min)}–${money(m.max)} ${curr}</small></span>
+        <em>${current?'Current':'›'}</em>
+      </button>`;
+    }).join('');
+    $$('#methodChoices [data-method]').forEach(btn=>btn.addEventListener('click',()=>{
+      state.methodIndexByCountry[state.country]=Number(btn.dataset.method);
+      closeSheet('methodSheet');
+      renderStock();
+    }));
+  }
+
+  function renderStock(){
+    const c=currentCountry(), m=currentMethod();
+    const curr=m.currency||c.currency, fx=m.fx||c.fx;
+
+    const usd = state.custom ? state.customUsd : state.tier;
+    const info=tierInfo(usd);
+    const local=usd*fx;
+    const traderInfo=applicantInfo();
+    const stockUsd=activationStockUsd();
+    const active=state.applicantStatus==='active';
+
+    $('#qualificationCard').classList.toggle('hidden',!active);
+    if(active){
+      const pct=Math.max(0,Math.min(100,traderInfo.target?stockUsd/traderInfo.target*100:0));
+      $('#qualificationTitle').textContent='First 30-Day Recharge Target';
+      $('#qualificationValue').textContent=`$${money(stockUsd)} / $${money(traderInfo.target)}`;
+      $('#qualificationBar').style.width=`${pct}%`;
+      $('#qualificationDays').textContent='30 days left';
+    }
+
+    $('#countryLabel').textContent=`${c.flag} ${c.name}`;
+    $('#methodIcon').textContent=m.icon;
+    $('#methodName').textContent=m.name;
+    $('#methodHint').textContent=m.hint;
+
+    $('#customToggle').classList.toggle('active',state.custom);
+    $('#customToggle').textContent='Custom Payment Amount';
+    $('#customAmountBox').classList.toggle('hidden',!state.custom);
+
+    if(state.custom){
+      $('#customCurrency').textContent=curr;
+      // Keep the custom USD value stable when changing country/payment method.
+      const input=document.getElementById('customAmountInput');
+      if(document.activeElement!==input) input.value=(Math.round(local*100)/100).toLocaleString('en-US',{maximumFractionDigits:2});
+      const step=customAmountStep(curr);
+      $('#customHint').textContent=`≈ $${usd.toLocaleString('en-US',{maximumFractionDigits:2})} USD · Step ${step.toLocaleString('en-US')} ${curr} · ${info.reward}% tier`;
+    }
+
+    $('#payLocalAmount').textContent=money(local);
+    $('#payCurrency').textContent=curr;
+    $('#channelLimitInfo').textContent=`Limit ${money(m.min)}–${money(m.max)} ${curr}`;
+    $('#usdEquivalent').textContent=`≈ $${usd.toLocaleString('en-US',{maximumFractionDigits:2})} USD`;
+    const baseCoins=Math.round(usd*14000);
+    const bonusCoins=Math.round(baseCoins*info.reward/100);
+    const totalCoins=baseCoins+bonusCoins;
+    $('#stockBaseCoins').textContent=money(baseCoins);
+    $('#stockBonusLabel').textContent=`Bonus +${info.reward}%`;
+    $('#stockBonusCoins').textContent=money(bonusCoins);
+    $('#stockCoins').textContent=`${money(totalCoins)} Coins`;
+
+    $$('#tierGrid [data-tier]').forEach(b=>b.classList.toggle('active',!state.custom && Number(b.dataset.tier)===state.tier));
+
+    const belowPolicy=usd<100;
+    const enteredLocal=state.custom?Number($('#customAmountInput').value.replace(/,/g,'').trim()||0):local;
+    const step=customAmountStep(curr);
+    const integerInvalid=state.custom && (!Number.isInteger(enteredLocal) || enteredLocal<=0);
+    const stepInvalid=state.custom && !integerInvalid && (enteredLocal%step!==0);
+    const invalid=belowPolicy || integerInvalid || stepInvalid || local<m.min || local>m.max;
+    $('#limitWarn').classList.toggle('hidden',!invalid);
+    if(integerInvalid){
+      $('#limitWarn').textContent='Enter a positive whole number.';
+    }else if(stepInvalid){
+      $('#limitWarn').textContent=step===1
+        ? 'Enter a whole-number amount.'
+        : `Enter an amount in multiples of ${step} ${curr}.`;
+    }else if(belowPolicy){
+      $('#limitWarn').textContent='Minimum Stock Top-up is the equivalent of $100 USD.';
+    }else if(local<m.min || local>m.max){
+      $('#limitWarn').textContent='The current amount exceeds the channel transaction limit. Adjust the amount or choose another payment method.';
+    }
+
+    $('#stockConfirm').disabled=invalid;
+    if(invalid){
+      $('#stockConfirm').textContent='Amount Not Available';
+    }else if(state.applicantStatus==='approved'){
+      const reaches=activationStockUsd()+usd>=applicantInfo().activation;
+      $('#stockConfirm').textContent=reaches?'Top Up & Activate':'Confirm Activation Top-up';
+    }else{
+      $('#stockConfirm').textContent='Confirm Stock Top-up';
+    }
+  }
+
+  function createOrder(){
+    if(!['approved','active'].includes(state.applicantStatus)) return showToast('Your Coin Trader application has not been approved yet.');
+    const c=currentCountry(), m=currentMethod();
+    const curr=m.currency||c.currency, fx=m.fx||c.fx;
+    const usd=state.custom?state.customUsd:state.tier;
+    const info=tierInfo(usd), local=usd*fx;
+
+    const enteredLocal=state.custom?Number($('#customAmountInput').value.replace(/,/g,'').trim()||0):local;
+    const step=customAmountStep(curr);
+    if(state.custom && (!Number.isInteger(enteredLocal) || enteredLocal<=0)) return showToast('Enter a positive whole number.');
+    if(state.custom && enteredLocal%step!==0) return showToast(step===1?'Enter a whole-number amount.':`Enter an amount in multiples of ${step} ${curr}.`);
+    if(usd<100) return showToast('Minimum Stock Top-up is $100.');
+    if(local<m.min || local>m.max){
+      showToast('Adjust the amount or choose another payment method.');
+      renderMethodSheet();
+      openSheet('methodSheet');
+      return;
+    }
+
+    state.order={
+      no:'UP'+Date.now().toString().slice(-12),
+      method:m.name,
+      currency:curr,
+      localAmount:local,
+      usd:usd,
+      reward:info.reward,
+      baseCoins:Math.round(usd*14000),
+      bonusCoins:Math.round(usd*14000*info.reward/100),
+      coins:Math.round(usd*14000)+Math.round(usd*14000*info.reward/100),
+      network:m.network||null
+    };
+    state.seconds=1200;
+    renderPayment();
+    go('payment');
+    startTimer();
+  }
+
+  function renderPayment(){
+    const o=state.order; if(!o) return;
+    $('#paymentHero').classList.remove('success');
+    $('#paymentTitle').textContent='Waiting for Payment';
+    $('#countdown').textContent='20:00';
+    $('#orderNo').textContent=o.no;
+    $('#orderMethod').textContent=o.method;
+    $('#orderPay').textContent=`${money(o.localAmount)} ${o.currency}`;
+    $('#orderUsd').textContent=`$${money(o.usd)}`;
+    $('#orderBaseCoins').textContent=`${money(o.baseCoins)} Coins`;
+    $('#orderBonusLabel').textContent=`Bonus +${o.reward}%`;
+    $('#orderBonusCoins').textContent=`${money(o.bonusCoins)} Coins`;
+    $('#orderCoins').textContent=`${money(o.coins)} Coins`;
+    const isUsdt=o.currency==='USDT';
+    $('#usdtPanel').classList.toggle('hidden',!isUsdt);
+    $('#localPanel').classList.toggle('hidden',isUsdt);
+    if(isUsdt) $('#usdtNetwork').textContent=o.network||'TRC20';
+    $('#simulatePay').textContent='Demo: Mark as Paid';
+    $('#simulatePay').disabled=false;
+  }
+
+  function startTimer(){
+    clearInterval(state.timer);
+    state.timer=setInterval(()=>{
+      if(state.page!=='payment') return;
+      state.seconds=Math.max(0,state.seconds-1);
+      const m=String(Math.floor(state.seconds/60)).padStart(2,'0');
+      const s=String(state.seconds%60).padStart(2,'0');
+      $('#countdown').textContent=`${m}:${s}`;
+      if(state.seconds===0){
+        clearInterval(state.timer);
+        $('#simulatePay').disabled=true;
+        showToast('The order has expired.');
+      }
+    },1000);
+  }
+
+  function completePayment(){
+    if(!state.order || state.seconds===0) return;
+    clearInterval(state.timer);
+    const o=state.order;
+    state.balance += o.coins;
+    state.histories.unshift({
+      id:o.no,
+      kind:'stock',
+      title:'Stock Top-up',
+      status:'success',
+      time:'Just now',
+      paymentAmount:`${money(o.localAmount)} ${o.currency}`,
+      baseCoins:o.baseCoins,
+      bonusCoins:o.bonusCoins,
+      reward:o.reward,
+      totalCoins:o.coins,
+      amount:`+${money(o.coins)} Coins`,
+      user:o.method,
+      usd:`$${money(o.usd)}`
+    });
+
+    const activatedNow=state.applicantStatus==='approved' && activationStockUsd()>=applicantInfo().activation;
+    if(activatedNow){state.applicantStatus='active';updateActivationTicker();}
+
+    $('#paymentHero').classList.add('success');
+    $('#paymentTitle').textContent=activatedNow?'Payment Successful · Activated':'Payment Successful';
+    $('#countdown').textContent='Completed';
+    $('#simulatePay').disabled=true;
+    setTimeout(()=>{
+      $('#successOrder').textContent=o.no;
+      $('#successPay').textContent=`${money(o.localAmount)} ${o.currency}`;
+      $('#successBaseCoins').textContent=`${money(o.baseCoins)} Coins`;
+      $('#successBonusLabel').textContent=`Bonus +${o.reward}%`;
+      $('#successBonusCoins').textContent=`${money(o.bonusCoins)} Coins`;
+      $('#successCoins').textContent=`${money(o.coins)} Coins`;
+      const title=$('#paySuccess .successTop h2');
+      const desc=$('#paySuccess .successTop p');
+      if(activatedNow){
+        title.textContent='Coin Trader Activated';
+        desc.textContent=state.applicantType==='public'
+          ? 'Your Public Coin Trader is active. Public badge and trader-list visibility now follow your Coin Balance.'
+          : 'Your Private Coin Trader is active. You can now serve users within your Manager Team.';
+        showToast('Coin Trader activated.');
+      }else{
+        title.textContent='Stock Top-up Successful';
+        desc.textContent=state.applicantStatus==='approved'
+          ? `$${money(activationRemaining())} more Stock Top-up is needed to activate.`
+          : 'Coins have been credited to your Coin Trader account.';
+      }
+      renderApplyType();
+      renderHome();
+      renderStock();
+      renderUserTopup();
+      renderHistory();
+      go('paySuccess');
+    },450);
+  }
+
+  function renderUserTopup(){
+    $('#topupBalance').textContent=money(state.balance);
+    updateTopupAfter();
+  }
+  function updateTopupAfter(){
+    const n=Math.max(0,Number(($('#userCoinInput').value||'').replace(/,/g,''))||0);
+    $('#topupAfter').textContent=money(Math.max(0,state.balance-n));
+    $$('#coinQuick [data-coins]').forEach(b=>b.classList.toggle('active',Number(b.dataset.coins)===n));
+  }
+  function verifyUid(){
+    const uid=$('#uidInput').value.trim();
+    const validUsers=['10032846','10077421','10090317'];
+    const sameManagerTeam=['10032846','10077421'];
+    const exists=validUsers.includes(uid);
+
+    if(!exists){
+      state.verified=false;
+      $('#verifiedUser').classList.add('hidden');
+      return showToast('User not found.');
+    }
+
+    if(state.applicantType==='private' && !sameManagerTeam.includes(uid)){
+      state.verified=false;
+      $('#verifiedUser').classList.add('hidden');
+      return showToast('This user is not available for your team.');
+    }
+
+    state.verified=true;
+    $('#verifiedUser').classList.remove('hidden');
+    showToast('User verified.');
+  }
+  function confirmUserTopup(){
+    if(state.applicantStatus!=='active') return showToast('Complete the activation top-up first.');
+    const n=Math.max(0,Number(($('#userCoinInput').value||'').replace(/,/g,''))||0);
+    if(!state.verified) return showToast('Verify the user first.');
+    if(!n) return showToast('Enter the Coin amount.');
+    if(n>state.balance) return showToast('Insufficient Coin Trader balance.');
+    state.balance-=n;
+    const uid=$('#uidInput').value.trim();
+    const userNames={'10032846':'Jaden','10077421':'Aisha','10090317':'Noah'};
+    state.histories.unshift({
+      id:'TU'+Date.now().toString().slice(-12),
+      kind:'user',
+      title:'User Top-up',
+      status:'success',
+      time:'Just now',
+      user:`${userNames[uid]||'User'} · ID ${uid}`,
+      coins:n,
+      amount:`-${money(n)} Coins`
+    });
+    renderHome(); renderUserTopup();
+    showToast('User Top-up Successful');
+  }
+
+  function renderHistory(){
+    const list=state.histories.filter(r=>r.kind===state.historyFilter);
+
+    const statusTag=r=>`<span class="status ${r.status==='success'?'success':'failed'}">${r.status==='success'?'Successful':'Failed'}</span>`;
+
+    const stockRecord=r=>`
+      <div class="record">
+        <div class="recordHead">
+          <div><b>Stock Top-up</b><small>${r.time}</small></div>
+          ${statusTag(r)}
+        </div>
+        <div class="recordMeta">
+          <div><span>Payment</span><b>${r.paymentAmount||'—'}</b></div>
+          <div><span>Base</span><b>${money(r.baseCoins||0)}</b></div>
+          <div><span>Bonus +${r.reward||0}%</span><b>${money(r.bonusCoins||0)}</b></div>
+          <div><span>Total</span><b class="gold">${money(r.totalCoins||0)} Coins</b></div>
+        </div>
+        ${r.status==='failed'?`<div class="inlineActions"><button type="button" data-appeal="${r.id}">Appeal</button></div>`:''}
+      </div>`;
+
+    const userRecord=r=>`
+      <div class="record">
+        <div class="recordHead">
+          <div><b>${r.user}</b><small>${r.time}</small></div>
+          ${statusTag(r)}
+        </div>
+        <div class="recordMeta compactMeta">
+          <div><span>Coins</span><b>${money(r.coins||0)} Coins</b></div>
+        </div>
+        ${r.status==='failed'?`<div class="inlineActions"><button type="button" data-appeal="${r.id}">Appeal</button></div>`:''}
+      </div>`;
+
+    const renderers={stock:stockRecord,user:userRecord};
+
+    $('#historyList').innerHTML=list.length
+      ? list.map(r=>(renderers[r.kind]||stockRecord)(r)).join('')
+      : `<div class="listRow"><div class="left"><b>No records</b><small>No transactions in this category.</small></div></div>`;
+
+    $$('[data-appeal]').forEach(btn=>btn.addEventListener('click',()=>openAppeal(btn.dataset.appeal)));
+  }
+
+  function openStock(){
+    if(['approved','active'].includes(state.applicantStatus)){go('stock');return;}
+    showToast('Your Coin Trader application has not been approved yet.');
+  }
+
+  function openAppeal(id){
+    const r=state.histories.find(x=>x.id===id); if(!r) return;
+    $('#appealRecord').textContent=r.title;
+    $('#appealUser').textContent=r.user;
+    $('#appealAmount').textContent=r.amount;
+    $('#appealText').value='';
+    go('appeal');
+  }
+
+  // Navigation
+  $$('[data-go]').forEach(btn=>btn.addEventListener('click',()=>go(btn.dataset.go)));
+  $$('[data-back]').forEach(btn=>btn.addEventListener('click',back));
+  $$('[data-nav]').forEach(btn=>btn.addEventListener('click',()=>btn.dataset.nav==='stock'?openStock():go(btn.dataset.nav)));
+    $('#topBack').addEventListener('click',()=>{
+    if(state.page==='applyForm' || state.page==='applyPending') return exitApplication();
+    if(state.page==='home') return showToast('Back');
+    back();
+  });
+  $('#topMore').addEventListener('click',()=>openSheet('rulesSheet'));
+  $('#countryBtn').addEventListener('click',()=>{renderCountrySheet();openSheet('countrySheet')});
+  $('#methodBtn').addEventListener('click',()=>{renderMethodSheet();openSheet('methodSheet')});
+  $$('[data-close-sheet]').forEach(btn=>btn.addEventListener('click',()=>closeSheet(btn.dataset.closeSheet)));
+  $$('.sheetMask').forEach(mask=>mask.addEventListener('click',e=>{if(e.target===mask)mask.classList.remove('show')}));
+  $$('#tierGrid [data-tier]').forEach(btn=>btn.addEventListener('click',()=>{
+    state.custom=false;
+    state.tier=Number(btn.dataset.tier);
+    state.customUsd=state.tier;
+    renderStock();
+  }));
+  $('#customToggle').addEventListener('click',()=>{
+    state.custom=!state.custom;
+    if(state.custom){
+      state.customUsd=state.tier;
+      const c=currentCountry(),m=currentMethod(),fx=m.fx||c.fx;
+      $('#customAmountInput').value=(state.customUsd*fx).toLocaleString('en-US',{maximumFractionDigits:2});
+      setTimeout(()=>$('#customAmountInput').focus(),0);
+    }
+    renderStock();
+  });
+  $('#customMinus').addEventListener('click',()=>adjustCustomAmount(-1));
+  $('#customPlus').addEventListener('click',()=>adjustCustomAmount(1));
+  $('#customAmountInput').addEventListener('beforeinput',e=>{
+    if(e.data && !/^\d+$/.test(e.data)) e.preventDefault();
+  });
+  $('#customAmountInput').addEventListener('paste',e=>{
+    const text=(e.clipboardData||window.clipboardData).getData('text').replace(/,/g,'').trim();
+    if(!/^\d+$/.test(text)){
+      e.preventDefault();
+      showToast('Enter a positive whole number.');
+    }
+  });
+  $('#customAmountInput').addEventListener('input',()=>{
+    const c=currentCountry(),m=currentMethod(),fx=m.fx||c.fx;
+    const raw=$('#customAmountInput').value.replace(/,/g,'').trim();
+    const local=/^\d+$/.test(raw)?Number(raw):0;
+    state.customUsd=fx?local/fx:0;
+    renderStock();
+  });
+  $('#stockConfirm').addEventListener('click',createOrder);
+  $('#simulatePay').addEventListener('click',completePayment);
+  $('#backHomeAfterPay').addEventListener('click',()=>{state.stack=[];go('home',false)});
+  $('#verifyUid').addEventListener('click',verifyUid);
+  $('#userCoinInput').addEventListener('input',updateTopupAfter);
+  $$('#coinQuick [data-coins]').forEach(btn=>btn.addEventListener('click',()=>{$('#userCoinInput').value=btn.dataset.coins;updateTopupAfter()}));
+  $('#confirmUserTopup').addEventListener('click',confirmUserTopup);
+  $$('#historyTabs [data-filter]').forEach(btn=>btn.addEventListener('click',()=>{
+    state.historyFilter=btn.dataset.filter;
+    $$('#historyTabs [data-filter]').forEach(b=>b.classList.toggle('active',b===btn));
+    renderHistory();
+  }));
+  $('#submitAppeal').addEventListener('click',()=>{
+    if(!$('#appealText').value.trim()) return showToast('Enter an appeal reason.');
+    showToast('Appeal submitted.');
+    setTimeout(()=>back(),500);
+  });
+
+
+  // Coin Trader application & activation
+  $('#submitApply').addEventListener('click',submitApplication);
+  $('#simulateApprove').addEventListener('click',approveApplication);
+  $('#enterTraderCenter').addEventListener('click',()=>{state.stack=[];renderHome();renderStock();go('home',false)});
+  $('#activationTicker').addEventListener('click',startActivationTopup);
+
+  // Init
+  try{ renderApplyType(); }catch(e){ console.error('Coin Trader init failed',e); }
+  renderHome();
+  renderStock();
+  renderUserTopup();
+  renderHistory();
+  document.body.classList.add('onboarding');
+  $('#topTitle').textContent='Apply to be a Coin Trader';
+})();
+</script>
+</body>
+</html>
