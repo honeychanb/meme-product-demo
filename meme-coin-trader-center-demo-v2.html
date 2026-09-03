@@ -290,6 +290,14 @@ body.onboarding .globalActivationTicker{display:none!important}
 
 .summaryTitle{align-items:center}
 .summaryTitle span{font-size:8px;color:var(--muted);font-weight:700;white-space:nowrap}
+
+.paymentMeta{margin-top:12px;padding-top:11px;border-top:1px solid var(--line)}
+.paymentAmountLine{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:28px}
+.paymentAmountLine span{font-size:9px;color:var(--muted)}
+.paymentAmountLine b{font-size:15px}.paymentAmountLine b small{font-size:10px;color:#c7ced9}
+.paymentMetaLine{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px;font-size:8px;color:#8993a4}
+.receiveInline{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.receiveInlineTitle{font-size:9px;font-weight:900;color:#cfd5df;margin-bottom:2px}
 </style>
 </head>
 <body>
@@ -491,22 +499,24 @@ body.onboarding .globalActivationTicker{display:none!important}
         </div>
       </div>
 
-      <div class="payReceiveWrap">
-        <div class="payCard">
-          <div class="kicker">Pay</div>
-          <div class="mainAmount"><span id="payLocalAmount">280,000</span> <small id="payCurrency">PKR</small></div>
-          <div class="usdEq" id="usdEquivalent">≈ $1,000 USD</div>
-          <div class="limitInfo" id="channelLimitInfo">Limit 5,000–300,000 PKR</div>
-          <div class="limitWarn hidden" id="limitWarn">This payment method cannot process this amount.</div>
+      <div class="paymentMeta inlineMeta">
+        <div class="paymentAmountLine" id="paymentAmountLine">
+          <span>Payment Amount</span>
+          <b><span id="payLocalAmount">280,000</span> <small id="payCurrency">PKR</small></b>
         </div>
+        <div class="paymentMetaLine">
+          <span id="usdEquivalent">≈ $1,000 USD</span>
+          <span id="channelLimitInfo">Limit 5,000–300,000 PKR</span>
+        </div>
+        <div class="limitWarn hidden" id="limitWarn">This payment method cannot process this amount.</div>
+      </div>
 
-        <div class="receiveCard">
-          <div class="kicker">You’ll Receive</div>
-          <div class="receiveRows">
-            <div class="r"><span>Base</span><b id="stockBaseCoins">14,000,000</b></div>
-            <div class="r"><span id="stockBonusLabel">Bonus +44%</span><b id="stockBonusCoins">6,160,000</b></div>
-            <div class="r total"><span>Total</span><b id="stockCoins">20,160,000 Coins</b></div>
-          </div>
+      <div class="receiveInline">
+        <div class="receiveInlineTitle">You’ll Receive</div>
+        <div class="receiveRows">
+          <div class="r"><span>Base</span><b id="stockBaseCoins">14,000,000</b></div>
+          <div class="r"><span id="stockBonusLabel">Bonus +44%</span><b id="stockBonusCoins">6,160,000</b></div>
+          <div class="r total"><span>Total</span><b id="stockCoins">20,160,000 Coins</b></div>
         </div>
       </div>
 
@@ -922,6 +932,7 @@ body.onboarding .globalActivationTicker{display:none!important}
     $('#customToggle').classList.toggle('active',state.custom);
     $('#customToggle').textContent='Custom Payment Amount';
     $('#customAmountBox').classList.toggle('hidden',!state.custom);
+    $('#paymentAmountLine').classList.toggle('hidden',state.custom);
 
     if(state.custom){
       $('#customCurrency').textContent=curr;
@@ -929,7 +940,7 @@ body.onboarding .globalActivationTicker{display:none!important}
       const input=document.getElementById('customAmountInput');
       if(document.activeElement!==input) input.value=(Math.round(local*100)/100).toLocaleString('en-US',{maximumFractionDigits:2});
       const step=customAmountStep(curr);
-      $('#customHint').textContent=`≈ $${usd.toLocaleString('en-US',{maximumFractionDigits:2})} USD · Step ${step.toLocaleString('en-US')} ${curr} · ${info.reward}% tier`;
+      $('#customHint').textContent=`Step ${step.toLocaleString('en-US')} ${curr}`;
     }
 
     $('#payLocalAmount').textContent=money(local);
