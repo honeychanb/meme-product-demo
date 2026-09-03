@@ -287,6 +287,9 @@ body.depositLocked{overflow:hidden}
 .globalActivationTicker{margin:10px 14px 0;width:calc(100% - 28px)}
 body.onboarding .globalActivationTicker{display:none!important}
 
+
+.summaryTitle{align-items:center}
+.summaryTitle span{font-size:8px;color:var(--muted);font-weight:700;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -405,7 +408,10 @@ body.onboarding .globalActivationTicker{display:none!important}
     </div>
 
     <div class="businessSummary" id="businessSummary">
-      <div class="sectionTitle"><b>Business Summary</b></div>
+      <div class="sectionTitle summaryTitle">
+        <b>Business Summary · This Month</b>
+        <span id="summaryPeriod">UTC+0</span>
+      </div>
       <div class="businessSummaryGrid two">
         <div class="businessSummaryItem"><span>Stock Top-up</span><b id="summaryStock">$0</b></div>
         <div class="businessSummaryItem"><span>User Top-up</span><b id="summaryUser">0 Coins</b></div>
@@ -428,12 +434,6 @@ body.onboarding .globalActivationTicker{display:none!important}
         <div class="field">
           <label>Coin Amount</label>
           <input id="userCoinInput" class="input" value="70000" inputmode="numeric">
-        </div>
-        <div class="tierGrid" id="coinQuick">
-          <button type="button" class="tierBtn" data-coins="35000">35K</button>
-          <button type="button" class="tierBtn active" data-coins="70000">70K</button>
-          <button type="button" class="tierBtn" data-coins="350000">350K</button>
-          <button type="button" class="tierBtn" data-coins="700000">700K</button>
         </div>
         <div class="summary">
           <div class="srow"><span>Current Balance</span><b id="topupBalance"></b></div>
@@ -838,6 +838,10 @@ body.onboarding .globalActivationTicker{display:none!important}
 
   function renderHome(){
     const info=applicantInfo(), active=state.applicantStatus==='active';
+    const now=new Date();
+    const month=now.toLocaleString('en-US',{month:'short',timeZone:'UTC'});
+    const day=now.getUTCDate();
+    $('#summaryPeriod').textContent=`${month} 1–${day} · UTC+0`;
     const stockUsd=activationStockUsd();
     const activationPct=Math.max(0,Math.min(100,info.activation?stockUsd/info.activation*100:0));
 
@@ -1111,7 +1115,6 @@ body.onboarding .globalActivationTicker{display:none!important}
   function updateTopupAfter(){
     const n=Math.max(0,Number(($('#userCoinInput').value||'').replace(/,/g,''))||0);
     $('#topupAfter').textContent=money(Math.max(0,state.balance-n));
-    $$('#coinQuick [data-coins]').forEach(b=>b.classList.toggle('active',Number(b.dataset.coins)===n));
   }
   function verifyUid(){
     const uid=$('#uidInput').value.trim();
@@ -1267,7 +1270,6 @@ body.onboarding .globalActivationTicker{display:none!important}
   $('#backHomeAfterPay').addEventListener('click',()=>{state.stack=[];go('home',false)});
   $('#verifyUid').addEventListener('click',verifyUid);
   $('#userCoinInput').addEventListener('input',updateTopupAfter);
-  $$('#coinQuick [data-coins]').forEach(btn=>btn.addEventListener('click',()=>{$('#userCoinInput').value=btn.dataset.coins;updateTopupAfter()}));
   $('#confirmUserTopup').addEventListener('click',confirmUserTopup);
   $$('#historyTabs [data-filter]').forEach(btn=>btn.addEventListener('click',()=>{
     state.historyFilter=btn.dataset.filter;
