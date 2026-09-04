@@ -625,7 +625,7 @@ html,body{font-size:14px}
         <div class="pageHead"><div><h2>业务概览</h2><p class="dashboardPeriodLine"><span class="readonlyPeriod"><span class="pickerCalendar" aria-hidden="true">▦</span><b>当前结算周期</b><span class="periodDivider"></span><span>2026-08-24 ~ 2026-08-30</span><span class="timezoneChip">UTC+0</span></span><span class="muted">按当前账号数据权限范围统计</span></p></div><div class="actions"><button class="btn ghost" onclick="toast('数据已刷新')">刷新</button></div></div>
         <div class="grid kpiGrid dashboardKpiGrid">
           <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">本周 Coins</span><span class="metricHelp" tabindex="0" data-tip="当前结算周期内，当前账号数据权限范围下全部 Host 的收礼 Coins 流水合计。">?</span></span><span class="kpiIcon">C</span></div><div class="kpiValue" id="dashboardWeeklyCoinsValue">186.4M</div><div class="kpiMeta"><span>当前结算周期</span></div></div>
-          <div class="kpi dashboardClickableKpi" role="button" tabindex="0" onclick="openWeeklyCoinFlowValue()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openWeeklyCoinFlowValue()}"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">本周金币流水价值</span><span class="metricHelp" tabindex="0" data-tip="按 16,000 Coins = 1 USD 将本周 Coins 流水换算为美元等值，仅用于业务查看，不改变结算口径。点击进入数据中心 · 主播数据 · 按周。">?</span></span><span class="kpiIcon">$</span></div><div class="kpiValue" id="dashboardWeeklyCoinsUsdValue">$11,650</div><div class="kpiMeta"><span>16,000 Coins = $1</span></div></div>
+          <div class="kpi dashboardClickableKpi" role="button" tabindex="0" onclick="openWeeklyCoinFlowValue()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openWeeklyCoinFlowValue()}"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">本周 Coins 流水价值</span><span class="metricHelp" tabindex="0" data-tip="按 16,000 Coins = 1 USD 将本周 Coins 流水换算为美元等值，仅用于业务查看，不改变结算口径。点击进入数据中心 · 主播数据 · 按周。">?</span></span><span class="kpiIcon">$</span></div><div class="kpiValue" id="dashboardWeeklyCoinsUsdValue">$11,650</div><div class="kpiMeta"><span>16,000 Coins = $1</span></div></div>
           <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">本周 Diamonds</span><span class="metricHelp" tabindex="0" data-tip="当前结算周期内，当前账号数据权限范围下实时发放给 Host 的 Diamonds 合计。">?</span></span><span class="kpiIcon">◆</span></div><div class="kpiValue">46.6M</div><div class="kpiMeta"><span>当前结算周期</span></div></div>
           <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">Host 总数</span><span class="metricHelp" tabindex="0" data-tip="当前数据权限范围内，仍处于当前合作周期的 Host 总人数。业务资格封禁仍计入；解约后移除。">?</span></span><span class="kpiIcon">H</span></div><div class="kpiValue">2,846</div><div class="kpiMeta"><span>当前实时存量</span></div></div>
           <div class="kpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">Agency 数</span><span class="metricHelp" tabindex="0" data-tip="当前数据权限范围内，仍处于当前合作周期的 Agent / Agency 数量。业务资格封禁仍计入；解约后移除。">?</span></span><span class="kpiIcon">A</span></div><div class="kpiValue">316</div><div class="kpiMeta"><span>当前实时存量</span></div></div>
@@ -2801,7 +2801,7 @@ body[data-business-view="HQ"] #ctOperatorInvitePanel{display:none!important}
     </section>
     <section class="view" id="view-coinFunds">
       <div class="pageHead"><div><h2>币商资金记录</h2><p>当前仅展示 Stock Top-up 进货记录。</p></div><div class="actions ctRoleView"><span>数据权限视角</span><select class="select ctModeSelect"><option value="hq">总部 / 高权限</option><option value="Nora">运营 Nora</option></select></div></div>
-      <div class="ctStats"><div class="ctStat"><span>本月进货金额 ($)</span><b id="ctFundStock">0</b></div><div class="ctStat"><span>本月发放 Coins</span><b id="ctFundCoins">0</b></div><div class="ctStat"><span>成功订单</span><b id="ctFundSuccess">0</b></div><div class="ctStat"><span>失败订单</span><b id="ctFundFailed">0</b></div></div>
+      <div class="ctStats"><div class="ctStat"><span>本月进货金额 ($)</span><b id="ctFundStock">0</b></div></div>
       <div class="ctPanel"><div class="ctPanelHead"><div><b>记录筛选</b><small>普通运营仅查看归属币商的 Stock Top-up；总部 / 高权限可按所属运营筛选</small></div></div><div class="ctFilters"><div class="ctField">币商 <input class="input" id="ctFKw" placeholder="UID / 昵称"></div><div class="ctField">状态 <select class="select" id="ctFStatus"><option value="">全部</option><option value="Successful">成功</option><option value="Failed">失败</option></select></div><div class="ctField ctOperatorFilter">所属运营 <select class="select" id="ctFOperator"><option value="">全部</option><option>Nora</option><option>Daniel</option><option>Amina</option></select></div><div class="ctField">时间 <input class="input" style="min-width:260px" value="2026-08-01 00:00:00 — 2026-08-31 23:59:59" readonly></div><button class="btn primary" id="ctFSearch">搜索</button><button class="btn" id="ctFReset">重置</button><button class="btn" id="ctFExport">导出</button></div></div>
       <div class="ctPanel"><div class="ctPanelHead"><div><b>币商进货</b><small>成功 Stock Top-up 正常发放 Base Coins + Bonus；未激活币商的成功进货同时累计激活进度</small></div></div><div class="ctTableWrap"><table class="ctTable"><thead id="ctFHead"></thead><tbody id="ctFBody"></tbody></table></div></div>
     </section>`);
@@ -2867,7 +2867,7 @@ body[data-business-view="HQ"] #ctOperatorInvitePanel{display:none!important}
   }
   function ctUpdateTraderStats(){const s=ctTraders.filter(x=>ctMode==='hq'||x.operator===ctMode);$('#ctStatBalance').textContent=ctFmt(s.reduce((a,x)=>a+x.balance,0));$('#ctStatActive').textContent=`${s.filter(x=>x.status==='Active').length} / ${s.length}`;$('#ctStatPublic').textContent=s.filter(x=>x.type==='Public').length;$('#ctStatPrivate').textContent=s.filter(x=>x.type==='Private').length;$('#ctStatFirst').textContent=s.filter(x=>x.firstState==='running').length}
   function ctRenderFunds(){const s=ctSchemas[ctFundKind],kw=$('#ctFKw').value.toLowerCase(),status=$('#ctFStatus').value,operator=$('#ctFOperator').value;const rows=ctFunds[ctFundKind].filter(x=>(!kw||x.user.toLowerCase().includes(kw))&&(!status||x.status===status)&&(ctMode==='hq'||x.operator===ctMode)&&(!operator||x.operator===operator));$('#ctFHead').innerHTML='<tr>'+s.head.map(x=>`<th>${x}</th>`).join('')+'</tr>';$('#ctFBody').innerHTML=rows.map(r=>'<tr>'+s.keys.map((k,i)=>{const v=r[k]??'—';if(k==='status')return `<td><span class="ctTag ${v==='Successful'?'green':'red'}">${v==='Successful'?'成功':'失败'}</span></td>`;if(i===0){const p=String(v).split(' · ');return `<td>${ctUser(p[0],p[1]||'—')}</td>`}return `<td>${v}</td>`}).join('')+'</tr>').join('')||`<tr><td colspan="${s.head.length}"><div class="ctEmpty">暂无符合条件的资金记录。</div></td></tr>`}
-  function ctUpdateFundStats(){const stock=ctFunds.stock.filter(x=>ctMode==='hq'||x.operator===ctMode),num=v=>Number(String(v).replace(/[$,]/g,''));$('#ctFundStock').textContent=ctFmt(stock.reduce((a,x)=>a+num(x.usd),0));$('#ctFundCoins').textContent=ctFmt(stock.reduce((a,x)=>a+num(x.total),0));$('#ctFundSuccess').textContent=ctFmt(stock.filter(x=>x.status==='Successful').length);const failed=$('#ctFundFailed');if(failed)failed.textContent=ctFmt(stock.filter(x=>x.status==='Failed').length)}
+  function ctUpdateFundStats(){const stock=ctFunds.stock.filter(x=>ctMode==='hq'||x.operator===ctMode),num=v=>Number(String(v).replace(/[$,]/g,''));const total=$('#ctFundStock');if(total)total.textContent=ctFmt(stock.reduce((a,x)=>a+num(x.usd),0))}
   function ctUpdateMode(value){ctMode=value;$$('.ctModeSelect').forEach(x=>x.value=value);$$('.ctOperatorFilter').forEach(x=>x.classList.toggle('ctHiddenByRole',value!=='hq'));if(value!=='hq'){$('#ctAOperator').value='';$('#ctTOperator').value='';$('#ctFOperator').value=''}ctRenderApps();ctRenderTraders();ctUpdateTraderStats();ctRenderFunds();ctUpdateFundStats()}
   function openCtPage(view){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===`view-${view}`));document.querySelectorAll('.navBtn').forEach(x=>x.classList.toggle('active',x.dataset.ctView===view));const map={coinApply:['币商申请管理','审核币商申请与入驻资格'],coinTraders:['币商管理','币商存量、经营状态与标识管理'],coinFunds:['币商资金记录','Stock Top-up 进货记录']};$('#topTitle').textContent=map[view][0];$('#topSubtitle').textContent=map[view][1];state.view=view;if(view==='coinApply')ctRenderApps();if(view==='coinTraders'){ctRenderTraders();ctUpdateTraderStats()}if(view==='coinFunds'){ctRenderFunds();ctUpdateFundStats()}window.scrollTo(0,0)}
   window.openCtPage=openCtPage;
@@ -3037,7 +3037,7 @@ renderData();
   window.hostDailyTable=function(){
     const all=hostDailyEnrichedRows(),sorted=hostDailySorted(all),meta=dcPaginate(sorted),rows=meta.rows,date=document.getElementById('dataDailyDate')?.value||'2026-08-28';
     const note=`<div class="forecastHint compactHint"><b>按日口径</b><span>送礼人数按 UID 去重</span><span>有效上麦次数：单次 ≥60 秒</span><span>有效天：有效上麦时长 ≥2h</span></div>`;
-    return `${note}${hostDailySummary(all)}<div class="table-responsive tableWrap"><table class="table hostDailyTable forecastTable"><thead><tr><th>主播头像、昵称、ID</th><th>国家/地区</th><th>代理昵称、ID</th><th>${dcSortHeader('送礼人数','givers')}</th><th>${dcSortHeader('总金币','coins')}</th><th>${dcSortHeader('总钻石','diamonds')}</th><th>${dcSortHeader('有效上麦次数','micSessions')}</th><th>${dcSortHeader('有效上麦时长(h)','micHours')}</th><th>${dcSortHeader('是否有效天','validDay')}</th><th>${dcSortHeader('兑换钻石数','exchanged')}</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${memberCell(x.name,x.uid)}</td><td>${displayCountry(x.country)}</td><td>${identityPlain(x.agency,x.agencyUid)}</td><td>${x.givers}</td><td>${fmt(x.coins)}</td><td>${fmt(x.diamonds)}</td><td>${x.micSessions}</td><td>${x.micHours.toFixed(2)}</td><td>${yesNo(x.validDay)}</td><td>${fmt(x.exchangedDiamonds)}</td></tr>`).join('')||'<tr><td colspan="10"><div class="empty">暂无符合条件的日统计数据。</div></td></tr>'}</tbody></table></div>${dcPager(meta)}`;
+    return `${note}${hostDailySummary(all)}<div class="table-responsive tableWrap"><table class="table hostDailyTable forecastTable"><thead><tr><th>主播头像、昵称、ID</th><th>国家/地区</th><th>代理昵称、ID</th><th>${dcSortHeader('送礼人数','givers')}</th><th>${dcSortHeader('总金币','coins')}</th><th>${dcSortHeader('总钻石','diamonds')}</th><th>${dcSortHeader('有效上麦次数','micSessions')}</th><th>${dcSortHeader('有效上麦时长(h)','micHours')}</th><th>${dcSortHeader('是否有效天','validDay')}</th><th>兑换钻石数</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${memberCell(x.name,x.uid)}</td><td>${displayCountry(x.country)}</td><td>${identityPlain(x.agency,x.agencyUid)}</td><td>${x.givers}</td><td>${fmt(x.coins)}</td><td>${fmt(x.diamonds)}</td><td>${x.micSessions}</td><td>${x.micHours.toFixed(2)}</td><td>${yesNo(x.validDay)}</td><td>${fmt(x.exchangedDiamonds)}</td></tr>`).join('')||'<tr><td colspan="10"><div class="empty">暂无符合条件的日统计数据。</div></td></tr>'}</tbody></table></div>${dcPager(meta)}`;
   };
 
   /* Host weekly filters and sorting. */
@@ -3527,6 +3527,196 @@ openMember=function(id){const m=members.find(x=>x.id===id);if(!m)return;if(m.rol
 #rcCountryStatusConfirm:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:760px){#view-rechargeCountries .ctStats{grid-template-columns:1fr 1fr}}
 </style>
+
+
+<style id="v66-host-ban-modal-style">
+.hostBanTypeGroup{display:flex;flex-wrap:wrap;gap:10px 14px;padding:11px 12px;border:1px solid #dfe7f2;border-radius:9px;background:#fbfcfe}
+.hostBanCheck{display:inline-flex;align-items:center;gap:7px;margin:0;font-size:13px;color:#2b405f;cursor:pointer}
+.hostBanCheck input{width:16px;height:16px;margin:0;accent-color:#2f6fe4}
+.hostBanTimeBox{display:grid;grid-template-columns:1fr 24px 1fr;gap:8px;align-items:center;padding:11px 12px;border:1px solid #e3eaf4;border-radius:9px;background:#f8fbff}
+.hostBanTimeBox>div{min-width:0}
+.hostBanTimeBox span{display:block;margin-bottom:4px;font-size:11px;color:#7b8da8}
+.hostBanTimeBox b{display:block;font-size:12px;color:#243a59;line-height:1.45;word-break:break-word}
+.hostBanTimeArrow{text-align:center;color:#8da0bb;font-weight:700}
+.hostBanRequired{color:#d95c5c;margin-left:3px}
+.hostBanHint{margin-top:6px;font-size:11px;color:#8696ad}
+@media(max-width:700px){.hostBanTimeBox{grid-template-columns:1fr}.hostBanTimeArrow{transform:rotate(90deg)}}
+</style>
+<script id="v66-host-ban-modal-script">
+(function(){
+  const HOST_BAN_REASONS=[
+    '低质/无人/黑屏/假播/睡播/直播做其他事',
+    '录屏/盗播',
+    '违规直播封面',
+    '裸露/色情/涉黄/低俗诱惑',
+    '自残/暴力/血腥内容',
+    '恐怖主义/极端主义',
+    '发布违规敏感内容',
+    '直播间闹事（骚扰/辱骂他人等）',
+    '其他'
+  ];
+  const HOST_BAN_DURATIONS=[
+    ['10','10分钟'],['30','30分钟'],['60','1小时'],['360','6小时'],['1440','1天'],['4320','3天'],['10080','7天']
+  ];
+  let hostBanOpenedAt=null;
+
+  function two(n){return String(n).padStart(2,'0')}
+  function utcText(d){return `${d.getUTCFullYear()}-${two(d.getUTCMonth()+1)}-${two(d.getUTCDate())} ${two(d.getUTCHours())}:${two(d.getUTCMinutes())}:${two(d.getUTCSeconds())} UTC+0`}
+  function banDurationMinutes(){return Number(document.getElementById('hostBanDuration')?.value||10)}
+  function syncHostBanTime(){
+    if(!hostBanOpenedAt)hostBanOpenedAt=new Date();
+    const start=hostBanOpenedAt,end=new Date(start.getTime()+banDurationMinutes()*60000);
+    const a=document.getElementById('hostBanStart'),b=document.getElementById('hostBanEnd');
+    if(a)a.textContent=utcText(start);if(b)b.textContent=utcText(end);
+  }
+  function syncHostBanRemark(){
+    const reason=document.getElementById('hostBanReason')?.value||'';
+    const label=document.getElementById('hostBanRemarkLabel'),hint=document.getElementById('hostBanRemarkHint');
+    if(label)label.innerHTML=`备注${reason==='其他'?'<span class="hostBanRequired">*</span>':''}`;
+    if(hint)hint.textContent=reason==='其他'?'选择“其他”时必须填写备注。':'选填，可补充违规场景或证据信息。';
+  }
+  window.syncHostBanTime=syncHostBanTime;
+  window.syncHostBanRemark=syncHostBanRemark;
+
+  window.openHostBan=function(id){
+    const m=members.find(x=>String(x.id)===String(id));if(!m||m.role!=='Host')return;
+    if(m.status==='Suspended'){toast('该主播当前已处于封禁状态');return}
+    hostBanOpenedAt=new Date();
+    const reasonOptions=HOST_BAN_REASONS.map(x=>`<option value="${x}">${x}</option>`).join('');
+    const durationOptions=HOST_BAN_DURATIONS.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+    openModal('封禁主播',`
+      <div class="formGrid">
+        <div class="field"><label>主播昵称</label><input value="${m.name}" disabled></div>
+        <div class="field"><label>主播 ID</label><input value="${m.id}" disabled></div>
+        <div class="field full"><label>封禁类型<span class="hostBanRequired">*</span></label>
+          <div class="hostBanTypeGroup">
+            <label class="hostBanCheck"><input type="checkbox" name="hostBanType" value="上麦">上麦</label>
+            <label class="hostBanCheck"><input type="checkbox" name="hostBanType" value="开播">开播</label>
+          </div>
+          <div class="hostBanHint">支持多选；至少选择 1 项。</div>
+        </div>
+        <div class="field full"><label>封禁原因<span class="hostBanRequired">*</span></label><select id="hostBanReason" onchange="syncHostBanRemark()"><option value="" selected disabled>请选择封禁原因</option>${reasonOptions}</select></div>
+        <div class="field full"><label id="hostBanRemarkLabel">备注</label><textarea id="hostBanRemark" placeholder="填写补充说明"></textarea><div class="hostBanHint" id="hostBanRemarkHint">选填，可补充违规场景或证据信息。</div></div>
+        <div class="field"><label>封禁时长<span class="hostBanRequired">*</span></label><select id="hostBanDuration" onchange="syncHostBanTime()">${durationOptions}</select></div>
+        <div class="field full"><label>封禁时间</label>
+          <div class="hostBanTimeBox"><div><span>生效开始</span><b id="hostBanStart">—</b></div><div class="hostBanTimeArrow">→</div><div><span>生效结束</span><b id="hostBanEnd">—</b></div></div>
+        </div>
+      </div>`, '确认封禁', ()=>{
+        const types=[...document.querySelectorAll('input[name="hostBanType"]:checked')].map(x=>x.value);
+        const reason=document.getElementById('hostBanReason')?.value||'';
+        const remark=(document.getElementById('hostBanRemark')?.value||'').trim();
+        const minutes=banDurationMinutes();
+        if(!types.length){toast('请选择至少 1 项封禁类型');return}
+        if(!reason){toast('请选择封禁原因');return}
+        if(reason==='其他'&&!remark){toast('选择“其他”时必须填写备注');return}
+        const start=new Date(),end=new Date(start.getTime()+minutes*60000);
+        m.status='Suspended';
+        m.hostBan={types,reason,remark,durationMinutes:minutes,startAt:utcText(start),endAt:utcText(end),operator:'Current Admin'};
+        closeModal();
+        if(typeof renderMembers==='function')renderMembers();
+        if(typeof renderHostMemberList==='function'&&state.memberScope==='host')renderHostMemberList();
+        toast(`已封禁主播：${types.join('、')} · ${HOST_BAN_DURATIONS.find(x=>Number(x[0])===minutes)?.[1]||minutes+'分钟'}`);
+    });
+    setTimeout(()=>{syncHostBanTime();syncHostBanRemark()},0);
+  };
+
+  const baseToggleMember=window.toggleMember;
+  window.toggleMember=function(id){
+    const m=members.find(x=>String(x.id)===String(id));
+    if(m?.role==='Host'&&m.status==='Active')return window.openHostBan(id);
+    return baseToggleMember?.apply(this,arguments);
+  };
+
+  window.unbanHost=function(id){
+    const m=members.find(x=>String(x.id)===String(id));if(!m||m.role!=='Host')return;
+    m.status='Active';m.hostBan=null;
+    if(typeof renderMembers==='function')renderMembers();
+    if(typeof renderHostMemberList==='function'&&state.memberScope==='host')renderHostMemberList();
+    toast('主播封禁已解除');
+  };
+
+  memberOpsHtml=function(m){
+    const banAction=m.status==='Suspended'
+      ? `<button class="op good" type="button" onclick="unbanHost('${m.id}')">解封</button>`
+      : `<button class="op warn" type="button" onclick="openHostBan('${m.id}')">封禁</button>`;
+    return `<div class="hostActionCell">
+      <button class="op view" onclick="openMember('${m.id}')">查看详情</button>
+      <button class="op good" type="button">通过</button>
+      <button class="op bad" type="button">不通过</button>
+      <button class="op gold" type="button">重新试播</button>
+      ${banAction}
+      <button class="op bad" type="button">解约</button>
+    </div>`;
+  };
+
+  if(window.state&&state.memberScope==='host'&&typeof renderHostMemberList==='function')renderHostMemberList();
+})();
+</script>
+
+
+
+
+
+
+
+<!-- v81: management member summary card fix -->
+<style id="v81-management-member-summary-style">
+#boMemberStats.memberManagementOnly{
+  display:grid!important;
+  grid-template-columns:minmax(250px,300px)!important;
+  gap:14px!important;
+  align-items:stretch!important;
+  justify-content:start!important;
+}
+#boMemberStats.memberManagementOnly .memberManagementKpi{
+  width:100%!important;
+  min-width:0!important;
+  max-width:300px!important;
+  min-height:118px!important;
+}
+#boMemberStats.memberManagementOnly .memberManagementKpi .kpiLabel,
+#boMemberStats.memberManagementOnly .memberManagementKpi .managementBreakdown span{
+  white-space:nowrap!important;
+}
+@media(max-width:760px){
+  #boMemberStats.memberManagementOnly{grid-template-columns:minmax(0,1fr)!important}
+  #boMemberStats.memberManagementOnly .memberManagementKpi{max-width:100%!important}
+}
+</style>
+<script id="v81-management-member-summary-script">
+(()=>{
+  function scopedManagementRows(){
+    let rows=members.filter(x=>['BD','Admin','Super Admin','Manager'].includes(x.role));
+    const mode=document.getElementById('boMemberView')?.value||'HQ';
+    const op=mode!=='HQ'?mode:(document.getElementById('boManagementOperatorFilter')?.value||'All');
+    if(op&&op!=='All')rows=rows.filter(x=>x.operator===op);
+    return rows;
+  }
+  function managementCard(rows){
+    const counts={BD:0,Admin:0,'Super Admin':0,Manager:0};
+    rows.forEach(x=>{if(Object.prototype.hasOwnProperty.call(counts,x.role))counts[x.role]++});
+    const total=Object.values(counts).reduce((s,n)=>s+n,0);
+    return `<div class="kpi memberManagementKpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">管理线成员</span></span><span class="kpiIcon">M</span></div><div class="kpiValue">${total}</div><div class="managementBreakdown"><span>BD <b>${counts.BD}</b></span><span>Admin <b>${counts.Admin}</b></span><span>Super Admin <b>${counts['Super Admin']}</b></span><span>Manager <b>${counts.Manager}</b></span></div></div>`;
+  }
+  function refreshManagementSummary(){
+    const stats=document.getElementById('boMemberStats');
+    if(!stats||state.memberTab!=='list'||(state.memberScope||'all')!=='management')return;
+    stats.className='ctStats boUnifiedStats memberManagementOnly';
+    stats.style.display='';
+    stats.innerHTML=managementCard(scopedManagementRows());
+  }
+  const base=window.renderManagementMemberList;
+  if(typeof base==='function'){
+    window.renderManagementMemberList=function(){
+      const out=base.apply(this,arguments);
+      refreshManagementSummary();
+      return out;
+    };
+  }
+  /* Covers the case where management scope is already active when this patch loads. */
+  setTimeout(refreshManagementSummary,0);
+})();
+</script>
 </body>
 </html>
 <style>
@@ -4581,7 +4771,7 @@ openMember=function(id){const m=members.find(x=>x.id===id);if(!m)return;if(m.rol
 
   const actions={
     '本周 Coins':window.openDashboardWeeklyCoins,
-    '本周金币流水价值':window.openDashboardWeeklyCoinsUsd,
+    '本周 Coins 流水价值':window.openDashboardWeeklyCoinsUsd,
     '本周 Diamonds':window.openDashboardWeeklyDiamonds,
     'Host 总数':window.openDashboardHosts,
     'Agency 数':window.openDashboardAgents,
@@ -4940,7 +5130,7 @@ document.querySelectorAll('[data-ct-view]').forEach(function(button){
   window.approveApplication=function(id){const a=applications.find(x=>x.id===id);boApproveBase?.apply(this,arguments);const m=a&&members.find(x=>x.id===a.uid);if(m){const inviter=members.find(x=>x.id===String(a.inviteUid||''));m.operator=inviter?.operator||a.operator||m.operator||'Nora';renderApplications()}};
 
   function boDashboardData(){return boMode==='Nora'?{coins:'112.8M',usd:'$7,050',diamonds:'28.2M',hosts:'1,724',agencies:'196',management:'38',roles:[23,8,4,3],newHosts:'79',effective:'1,176',pending:4,bills:3,rejected:1,trader:2}:boMode==='Daniel'?{coins:'73.6M',usd:'$4,600',diamonds:'18.4M',hosts:'1,122',agencies:'120',management:'24',roles:[15,6,2,1],newHosts:'49',effective:'758',pending:1,bills:2,rejected:2,trader:0}:{coins:'186.4M',usd:'$11,650',diamonds:'46.6M',hosts:'2,846',agencies:'316',management:'62',roles:[38,14,6,4],newHosts:'128',effective:'1,934',pending:5,bills:5,rejected:3,trader:2}}
-  function boUpdateDashboard(){const d=boDashboardData(),cards=$$('#view-dashboard .kpi');const byLabel=label=>cards.find(c=>$('.kpiLabel',c)?.textContent.trim()===label);const set=(label,v)=>{const e=$('.kpiValue',byLabel(label));if(e)e.textContent=v};set('本周 Coins',d.coins);set('本周金币流水价值',d.usd);set('本周 Diamonds',d.diamonds);set('Host 总数',d.hosts);set('Agency 数',d.agencies);set('管理线成员',d.management);set('新增 Host',d.newHosts);set('有效 Host',d.effective);const breakdown=$$('.managementBreakdown span');breakdown.forEach((x,i)=>{const b=$('b',x);if(b)b.textContent=d.roles[i]});if($('#pendingApplicationsCount'))$('#pendingApplicationsCount').textContent=d.pending;if($('#pendingBillsCount'))$('#pendingBillsCount').textContent=d.bills;if($('#rejectedBillsCount'))$('#rejectedBillsCount').textContent=d.rejected;if($('#ctDashboardPendingCount'))$('#ctDashboardPendingCount').textContent=d.trader;const scopeText=$('#view-dashboard .dashboardPeriodLine .muted');if(scopeText)scopeText.innerHTML=`${boMode==='HQ'?'全部运营数据':`仅统计运营 ${boMode} 的业务数据`} <span class="boScopeChip">${boMode==='HQ'?'总部视角':boMode}</span>`}
+  function boUpdateDashboard(){const d=boDashboardData(),cards=$$('#view-dashboard .kpi');const byLabel=label=>cards.find(c=>$('.kpiLabel',c)?.textContent.trim()===label);const set=(label,v)=>{const e=$('.kpiValue',byLabel(label));if(e)e.textContent=v};set('本周 Coins',d.coins);set('本周 Coins 流水价值',d.usd);set('本周 Diamonds',d.diamonds);set('Host 总数',d.hosts);set('Agency 数',d.agencies);set('管理线成员',d.management);set('新增 Host',d.newHosts);set('有效 Host',d.effective);const breakdown=$$('.managementBreakdown span');breakdown.forEach((x,i)=>{const b=$('b',x);if(b)b.textContent=d.roles[i]});if($('#pendingApplicationsCount'))$('#pendingApplicationsCount').textContent=d.pending;if($('#pendingBillsCount'))$('#pendingBillsCount').textContent=d.bills;if($('#rejectedBillsCount'))$('#rejectedBillsCount').textContent=d.rejected;if($('#ctDashboardPendingCount'))$('#ctDashboardPendingCount').textContent=d.trader;const scopeText=$('#view-dashboard .dashboardPeriodLine .muted');if(scopeText)scopeText.innerHTML=`${boMode==='HQ'?'全部运营数据':`仅统计运营 ${boMode} 的业务数据`} <span class="boScopeChip">${boMode==='HQ'?'总部视角':boMode}</span>`}
 
   function boSyncFilters(){const ids=['boMemberOperatorFilter','boHostOperatorFilter','boAgentOperatorFilter','boManagementOperatorFilter','boApplicationOperatorFilter'];ids.forEach(id=>{const sel=document.getElementById(id),wrap=sel?.closest('.boOperatorFilter');if(!sel||!wrap)return;if(boMode==='HQ'){wrap.classList.remove('boScopeLocked')}else{sel.value=boMode;wrap.classList.add('boScopeLocked')}})}
   function boSetMode(mode){boMode=mode;$$('.boViewSelect').forEach(x=>x.value=mode);boSyncFilters();boUpdateDashboard();if(state.view==='members')renderMembers();if(state.view==='applications')renderApplications()}
@@ -5944,6 +6134,564 @@ body:not([data-business-view="HQ"]) #ctBackendAddBtn,body:not([data-business-vie
     schedule();
   });
   observer.observe(document.body,{childList:true,subtree:true});
+  schedule();
+})();
+</script>
+
+<style id="v77-upgrade-payment-coin-payout-style">
+/* v77 — upgrade review + payment method normalization + coin payout */
+#memberTabs .tabBtn[data-membertab="upgrade"]{white-space:nowrap}
+.upgradeRuleNote{display:flex;gap:10px 22px;flex-wrap:wrap;align-items:center}
+.upgradeRuleNote span{display:inline-flex;align-items:center;gap:6px}
+.upgradeWeeks{display:flex;gap:7px;flex-wrap:wrap;min-width:390px}
+.upgradeWeek{display:inline-flex;flex-direction:column;gap:2px;padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:#f8fafc;min-width:82px}
+.upgradeWeek small{font-size:10px;color:var(--muted)}
+.upgradeWeek b{font-size:12px;color:#243b60}
+.upgradeFlow{font-weight:700;color:#243b60;white-space:nowrap}
+.upgradeThreshold{font-weight:700;color:#8a5a00}
+.upgradeReviewTable{min-width:1900px!important;width:1900px!important}
+.settlementAgencyWeeklyTable{min-width:4450px!important;width:4450px!important}
+.settlementManagementWeeklyTable{min-width:3900px!important;width:3900px!important}
+.settlementManagementMonthlyTable{min-width:3550px!important;width:3550px!important}
+.coinSelectCell{width:52px!important;text-align:center!important}
+.coinSelectCell input{width:16px;height:16px;vertical-align:middle}
+.coinMethod{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.coinMethod small{display:block;color:#9a6b10;font-size:10px;margin-top:3px}
+.coinMethodMain{font-weight:700;color:#805a00}
+.coinPayoutButton{background:#fff8e6!important;border-color:#e0b85a!important;color:#8a5a00!important}
+.coinPayoutRecord{color:#2d7c5a!important}
+#coinBatchIssueBtn{white-space:nowrap}
+.coinBatchMeta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.coinBatchMeta>div{padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#f8fafc}
+.coinBatchMeta span{display:block;color:var(--muted);font-size:11px;margin-bottom:4px}.coinBatchMeta b{color:#243b60}
+.coinRecordGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.coinRecordGrid>div{padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#f8fafc}
+.coinRecordGrid span{display:block;color:var(--muted);font-size:11px;margin-bottom:4px}
+@media(max-width:760px){.upgradeWeeks{min-width:0}.coinBatchMeta,.coinRecordGrid{grid-template-columns:1fr}}
+</style>
+<script id="v77-upgrade-payment-coin-payout-script">
+(()=>{
+  const PERSONAL_ACCOUNT='个人账号（消费金币）';
+  const BILLABLE_TYPES=['agencyWeekly','managementWeekly','managementMonthly'];
+  const coinSelection=new Set();
+
+  /* -------------------- 3. Upgrade review -------------------- */
+  window.__upgradeReviewRows=window.__upgradeReviewRows||[
+    {uid:'510026',from:'BD',to:'Super Admin',threshold:1000,weeks:[{p:'2026-W31',v:1120},{p:'2026-W32',v:1280},{p:'2026-W33',v:1450},{p:'2026-W34',v:1650}],qualifiedAt:'2026-W34',status:'Pending'},
+    {uid:'530088',from:'Super Admin',to:'Manager',threshold:3500,weeks:[{p:'2026-W31',v:3820},{p:'2026-W32',v:4010},{p:'2026-W33',v:3650},{p:'2026-W34',v:4680}],qualifiedAt:'2026-W34',status:'Pending'}
+  ];
+
+  const memberTabs=document.getElementById('memberTabs');
+  if(memberTabs&&!memberTabs.querySelector('[data-membertab="upgrade"]')){
+    const btn=document.createElement('button');btn.className='tabBtn';btn.dataset.membertab='upgrade';btn.textContent='升级待审核';
+    btn.onclick=()=>{state.memberTab='upgrade';renderMembers()};
+    memberTabs.querySelector('[data-membertab="pending"]')?.insertAdjacentElement('beforebegin',btn);
+  }
+
+  const oldRoleChangeOptionsV77=window.roleChangeOptions;
+  window.roleChangeOptions=function(current){
+    if(current!=='BD'&&current!=='Super Admin')return oldRoleChangeOptionsV77(current);
+    const idx=businessRoleOrder.indexOf(current),downs=businessRoleOrder.slice(0,idx).reverse();
+    return `<option value="" selected disabled>请选择目标 Role</option><optgroup label="升级"><option disabled>请在「升级待审核」处理</option></optgroup>${downs.length?`<optgroup label="降级">${downs.map(x=>`<option value="${x}">${x}（降级）</option>`).join('')}</optgroup>`:''}`;
+  };
+
+  function upgradeRows(){
+    return window.__upgradeReviewRows.filter(r=>r.status==='Pending'&&members.some(m=>String(m.id)===String(r.uid)&&m.role===r.from));
+  }
+  function weeklySalaryHtml(row){return `<div class="upgradeWeeks">${row.weeks.map(w=>`<span class="upgradeWeek"><small>${w.p}</small><b>${money(w.v)}</b></span>`).join('')}</div>`}
+  function renderUpgradeReview(){
+    const list=document.getElementById('memberListContent'),rel=document.getElementById('memberRelationContent'),tabs=document.getElementById('memberTabs');
+    if(!rel)return;
+    list?.classList.add('hidden');rel.classList.remove('hidden');tabs?.classList.remove('hidden');
+    document.getElementById('memberScopeTabs')?.classList.add('hidden');
+    const stats=document.getElementById('boMemberStats');if(stats)stats.style.display='none';
+    const title=document.getElementById('memberPageTitle'),sub=document.getElementById('memberPageSubtitle');if(title)title.textContent='升级待审核';if(sub)sub.textContent='连续 4 个已完成周结算周期达标后进入审核，由后台选择下一周期或立即升级。';
+    syncTabs('memberTabs','membertab','upgrade');
+    const rows=upgradeRows();
+    rel.dataset.boStyled='upgrade';
+    rel.innerHTML=`<div class="ctPanel boFilterPanel"><div class="ctPanelHead"><div><b>升级规则</b><small>进行中的当前周不参与判断；达标后仅进入审核，不自动升级。</small></div></div><div class="memberRelationNote upgradeRuleNote"><span><b>BD → Super Admin</b> 连续 4 周 Weekly Salary ≥ <span class="upgradeThreshold">$1,000 / 周</span></span><span><b>Super Admin → Manager</b> 连续 4 周 Weekly Salary ≥ <span class="upgradeThreshold">$3,500 / 周</span></span></div></div>
+    <div class="ctPanel boListPanel"><div class="ctPanelHead"><div><b>待审核列表</b><small>仅展示已满足升级门槛、尚未处理的成员</small></div></div><div class="table-responsive tableWrap"><table class="table upgradeReviewTable"><thead><tr><th>成员</th><th>当前角色 → 目标角色</th><th>所属运营</th><th>最近 4 个已完成周结算 · Weekly Salary</th><th>升级门槛</th><th>达标周期</th><th>状态</th><th>操作</th></tr></thead><tbody>${rows.map(r=>{const m=members.find(x=>String(x.id)===String(r.uid));return `<tr><td>${m?memberCell(m.name,m.id):r.uid}</td><td><span class="upgradeFlow">${r.from} → ${r.to}</span></td><td>${m?.operator?`运营 ${m.operator}`:'—'}</td><td>${weeklySalaryHtml(r)}</td><td>连续 4 周 ≥ ${money(r.threshold)}</td><td>${r.qualifiedAt}</td><td>${statusBadge('Pending')}</td><td><div class="opCell"><button class="op good" onclick="openUpgradeDecision('${r.uid}','next')">下一结算周期升级</button><button class="op gold" onclick="openUpgradeDecision('${r.uid}','immediate')">立即升级</button></div></td></tr>`}).join('')||'<tr><td colspan="8"><div class="empty">暂无达到升级条件的待审核成员。</div></td></tr>'}</tbody></table></div></div>`;
+  }
+
+  window.openUpgradeDecision=function(uid,mode){
+    const row=window.__upgradeReviewRows.find(r=>String(r.uid)===String(uid)&&r.status==='Pending'),m=members.find(x=>String(x.id)===String(uid));if(!row||!m)return;
+    if(hasPendingAdjustment?.(m.id)){showPendingAdjustmentBlocked?.(m.id,'处理升级');return}
+    const opts=superiorOptions(row.to,m.id),method=mode==='immediate'?'立即升级':'下一结算周期升级';
+    const weekText=row.weeks.map(w=>`${w.p} ${money(w.v)}`).join(' · ');
+    openModal(method,`<div class="note"><b>${m.name} 已满足 ${row.from} → ${row.to} 升级条件。</b><br>${weekText}<br>${mode==='immediate'?'角色与组织关系将在确认后立即生效；已完成历史周期不回溯重算。':'升级将在下一 Billing Period 生效；生效前仍按当前角色参与业务与结算。'}</div><div class="formGrid" style="margin-top:12px"><div class="field"><label>成员</label><input value="${m.name} · ${m.id}" disabled></div><div class="field"><label>角色变更</label><input value="${row.from} → ${row.to}" disabled></div><div class="field full"><label>升级后直属上级</label><select id="upgradeSuperior">${opts}</select></div><div class="field full"><div class="note">系统仅展示与目标角色兼容的有效上级；可选「无上级（直属平台）」时也可直接选择。</div></div></div>`,method,()=>applyUpgradeDecision(uid,mode));
+  };
+
+  window.applyUpgradeDecision=function(uid,mode){
+    const row=window.__upgradeReviewRows.find(r=>String(r.uid)===String(uid)&&r.status==='Pending'),m=members.find(x=>String(x.id)===String(uid));if(!row||!m)return;
+    const val=document.getElementById('upgradeSuperior')?.value||'Platform-direct',newSup=superiorLabelFromValue(val),oldRole=m.role,oldSup=m.superior;
+    if(mode==='immediate'){
+      if(!confirm(`确认立即将 ${m.name} 从 ${row.from} 升级为 ${row.to}？\n\n本周期按当前生效规则处理，已完成历史周期不会重新计算。`))return;
+      m.role=row.to;m.level='—';m.superior=newSup;row.status='Effective';
+      const md=managementData.find(x=>String(x.uid)===String(uid));if(md)md.role=row.to;
+      [managementSettlement,managementWeeklySettlement,managementMonthlySettlement].forEach(arr=>arr?.forEach?.(x=>{if(String(x.uid)===String(uid))x.role=row.to}));
+      orgRecords.unshift({member:`${m.name} · ${m.id}`,type:'Role Change',from:oldRole,to:row.to,effective:'2026-08-29 01:23:00 UTC+0',operator:'Current Admin',status:'Effective',relationFrom:oldSup,relationTo:newSup});
+      closeModal();state.memberTab='upgrade';renderMembers();toast(`${m.name} 已立即升级为 ${row.to}`);return;
+    }
+    const groupId=`UP-${Date.now()}`;row.status='Scheduled';
+    orgPending.unshift({id:`PA-${Date.now()}`,groupId,memberId:m.id,member:`${m.name} · ${m.id}`,type:'Role Change',current:oldRole,after:row.to,relationFrom:oldSup,relationTo:newSup,period:'2026-W36',status:'Scheduled'});
+    closeModal();state.memberTab='pending';renderMembers();toast(`${m.name} 已加入下一结算周期升级`);
+  };
+
+  const renderMembersV77Base=window.renderMembers;
+  window.renderMembers=function(){
+    if(state.memberTab==='upgrade'){renderUpgradeReview();return}
+    const rel=document.getElementById('memberRelationContent');if(rel?.dataset.boStyled==='upgrade')delete rel.dataset.boStyled;
+    return renderMembersV77Base.apply(this,arguments);
+  };
+
+  /* -------------------- 4. Payment methods -------------------- */
+  function normalizeConfiguredMethod(v){return v==='薪资转金币'||v==='币商充值'?PERSONAL_ACCOUNT:(['USDT','银行','电子钱包',PERSONAL_ACCOUNT].includes(v)?v:'USDT')}
+  function personalAddress(x){return `个人 UID ${x.uid||x.agencyUid||'—'}`}
+  function normalizeBillRow(x){
+    if(!x)return;x.payType=normalizeConfiguredMethod(x.payType);x.configuredPayType=x.payType;
+    if(x.payType===PERSONAL_ACCOUNT){x.payAddress=personalAddress(x);x.paymentDetails={'收款方式':PERSONAL_ACCOUNT,'个人 UID':String(x.uid||x.agencyUid||'—'),'说明':'发放至本人消费金币余额'}}
+  }
+  function normalizeAllPayments(){
+    [agencyHostSettlement,hostWeeklySettlement,agencyWeeklySettlement,managementSettlement,managementWeeklySettlement,managementMonthlySettlement].forEach(arr=>arr?.forEach?.(normalizeBillRow));
+    if(typeof memberContactPayment==='object')Object.entries(memberContactPayment).forEach(([uid,p])=>{p.payType=normalizeConfiguredMethod(p.payType);if(p.payType===PERSONAL_ACCOUNT)p.payAddress=`个人 UID ${uid}`});
+    /* Demo keeps one user-selected personal-account case so the coin payout flow is visible. */
+    [managementSettlement,managementWeeklySettlement,managementMonthlySettlement].forEach(arr=>arr?.forEach?.(x=>{if(String(x.uid)==='510026'){x.payType=PERSONAL_ACCOUNT;x.configuredPayType=PERSONAL_ACCOUNT;x.payAddress=personalAddress(x);x.paymentDetails={'收款方式':PERSONAL_ACCOUNT,'个人 UID':String(x.uid),'说明':'用户主动选择个人账号（消费金币）'}}}));
+  }
+  normalizeAllPayments();
+
+  window.actualSettlementMethod=function(x){const configured=normalizeConfiguredMethod(x?.configuredPayType||x?.payType),amount=Number(x?.final);return Number.isFinite(amount)&&amount<20?PERSONAL_ACCOUNT:configured};
+  window.actualSettlementReason=function(x){const configured=normalizeConfiguredMethod(x?.configuredPayType||x?.payType),actual=actualSettlementMethod(x),amount=Number(x?.final);if(Number.isFinite(amount)&&amount<20&&configured!==PERSONAL_ACCOUNT)return '低于 $20，系统自动转金币';if(actual===PERSONAL_ACCOUNT)return '个人账号结算';return '按用户配置'};
+  window.actualSettlementAddress=function(x){return actualSettlementMethod(x)===PERSONAL_ACCOUNT?personalAddress(x):(x?.payAddress||'—')};
+  window.syncSettlementMethodState=function(x){if(!x)return;normalizeBillRow(x);x.settlementType=actualSettlementMethod(x)===PERSONAL_ACCOUNT?'金币':'现金'};
+
+  const payFilter=document.getElementById('settlementPaymentMethod');
+  if(payFilter){payFilter.innerHTML=`<option value="All Payment Types">全部实际结算方式</option><option value="${PERSONAL_ACCOUNT}">${PERSONAL_ACCOUNT}</option><option value="USDT">USDT</option><option value="银行">银行</option><option value="电子钱包">电子钱包</option>`}
+  const settlementTypeFilter=document.getElementById('settlementType');if(settlementTypeFilter)settlementTypeFilter.style.display='none';
+
+  const syncSettlementFilterVisibilityV77Base=window.syncSettlementFilterVisibility;
+  window.syncSettlementFilterVisibility=function(){syncSettlementFilterVisibilityV77Base?.apply(this,arguments);const st=document.getElementById('settlementType');if(st)st.style.display='none';const pay=document.getElementById('settlementPaymentMethod');if(pay){pay.style.display=(state.settlementQueueStatus||BILLABLE_TYPES.includes(state.settlementTab))?'':'none';if(pay.options[0])pay.options[0].textContent='全部实际结算方式'}};
+
+  window.settlementFilter=function(rows){
+    const finance=document.getElementById('financeStatus')?.value||'All Finance Status',bill=document.getElementById('billStatus')?.value||'All Bill Status',payout=document.getElementById('payoutStatus')?.value||'All Payout Status',pay=document.getElementById('settlementPaymentMethod')?.value||'All Payment Types',role=document.getElementById('settlementManagementRole')?.value||'All Management Roles',country=document.getElementById('settlementCountry')?.value||'All Countries',newHost=document.getElementById('settlementNewHost')?.value||'All New Host',q=(document.getElementById('settlementSearch')?.value||'').toLowerCase(),tab=state.settlementTab,mgmt=tab==='managementWeekly'||tab==='managementMonthly',billable=BILLABLE_TYPES.includes(tab);
+    rows.forEach(syncSettlementMethodState);
+    return rows.filter(x=>{const rowCountry=tab==='hostWeekly'?(x.hostCountry||x.country):(x.country||'—'),countryOk=country==='All Countries'||rowCountry===country,newHostOk=tab!=='hostWeekly'||newHost==='All New Host'||(newHost==='Yes'&&!!x.newHost)||(newHost==='No'&&!x.newHost);return countryOk&&newHostOk&&(finance==='All Finance Status'||x.finance===finance)&&(!billable||bill==='All Bill Status'||x.bill===bill)&&(!billable||payout==='All Payout Status'||x.payout===payout)&&(!billable||pay==='All Payment Types'||actualSettlementMethod(x)===pay)&&(!mgmt||role==='All Management Roles'||x.role===role)&&(!q||String(x.uid||'').includes(q)||String(x.name||'').toLowerCase().includes(q)||String(x.agency||'').toLowerCase().includes(q)||String(x.agencyUid||'').includes(q)||String(x.payAddress||'').toLowerCase().includes(q)||String(actualSettlementAddress(x)).toLowerCase().includes(q))});
+  };
+
+  function configuredMethodCell(x){return `<span>${normalizeConfiguredMethod(x.configuredPayType||x.payType)}</span>`}
+  function actualMethodCell(x){const actual=actualSettlementMethod(x),reason=actualSettlementReason(x);return `<div class="coinMethod"><div><span class="${actual===PERSONAL_ACCOUNT?'coinMethodMain':''}">${actual}</span>${actual===PERSONAL_ACCOUNT?`<small>${reason}</small>`:''}</div></div>`}
+
+  /* -------------------- 5. Coin payout -------------------- */
+  function coinKey(type,uid){return `${type}:${uid}`}
+  function coinBill(type,uid){return getBill(type,uid)}
+  window.canIssueCoinBill=function(type,x){const amount=Number(x?.final);return BILLABLE_TYPES.includes(type)&&Number.isFinite(amount)&&amount>0&&actualSettlementMethod(x)===PERSONAL_ACCOUNT&&x?.bill==='Confirmed'&&(x?.payout==='Unpaid'||x?.payout==='Failed')};
+  function coinCheckbox(type,x){const key=coinKey(type,x.uid),can=canIssueCoinBill(type,x);return `<input type="checkbox" data-coin-key="${key}" ${can?'':'disabled'} ${coinSelection.has(key)&&can?'checked':''} onchange="toggleCoinBill('${type}','${x.uid}',this.checked)" aria-label="选择 ${x.name} 金币结算单">`}
+  function coinHeader(type){return `<input type="checkbox" onchange="toggleAllCoinBills('${type}',this.checked)" aria-label="全选可发放金币账单">`}
+  window.toggleCoinBill=function(type,uid,checked){const x=coinBill(type,uid),key=coinKey(type,uid);if(!canIssueCoinBill(type,x)){coinSelection.delete(key);return updateCoinBatchButton()}checked?coinSelection.add(key):coinSelection.delete(key);updateCoinBatchButton()};
+  window.toggleAllCoinBills=function(type,checked){const rows=settlementFilter(settlementTypeRows(type));rows.forEach(x=>{const key=coinKey(type,x.uid);if(canIssueCoinBill(type,x)){checked?coinSelection.add(key):coinSelection.delete(key)}});renderSettlement();updateCoinBatchButton()};
+  function selectedCoinBills(){const out=[];coinSelection.forEach(key=>{const [type,...rest]=key.split(':'),uid=rest.join(':'),x=coinBill(type,uid);if(canIssueCoinBill(type,x))out.push({type,x});else coinSelection.delete(key)});return out}
+  function payoutRecordButton(type,x){return x.coinTxnId?`<button class="op coinPayoutRecord" onclick="openCoinPayoutRecord('${type}','${x.uid}')">发放记录</button>`:''}
+  function coinAction(type,x){if(canIssueCoinBill(type,x))return `<button class="op coinPayoutButton" onclick="issueCoinBill('${type}','${x.uid}')">发放金币</button>`;if(actualSettlementMethod(x)===PERSONAL_ACCOUNT&&x.payout==='Paid')return payoutRecordButton(type,x);return ''}
+
+  const agencyActionsV77Base=window.agencyWeeklyActions,managementActionsV77Base=window.managementWeeklyActions,monthlyActionsV77Base=window.monthlyManagementActions;
+  window.agencyWeeklyActions=function(x){const c=coinAction('agencyWeekly',x);if(c){const view=`<button class="op view" onclick="openAgencyComposition('${x.uid}')">查看主播薪资</button>`;return `<div class="opCell">${view}${c}</div>`}return agencyActionsV77Base(x)};
+  window.managementWeeklyActions=function(x){const c=coinAction('managementWeekly',x);if(c)return `<div class="opCell"><button class="op view" onclick="openBill('managementWeekly','${x.uid}')">详情</button>${c}</div>`;return managementActionsV77Base(x)};
+  window.monthlyManagementActions=function(x){const c=coinAction('managementMonthly',x);if(c)return `<div class="opCell"><button class="op view" onclick="openBill('managementMonthly','${x.uid}')">详情</button>${c}</div>`;return monthlyActionsV77Base(x)};
+
+  function completeCoinPayout(type,x){
+    x.payout='Paid';x.coinIssuedAt='2026-08-29 01:23:00 UTC+0';x.coinIssuedBy='Current Admin';x.coinTxnId=`COIN-${Date.now()}-${x.uid}`;x.coinAmount=x.coinAmount||null;coinSelection.delete(coinKey(type,x.uid));
+  }
+  window.issueCoinBill=function(type,uid){const x=coinBill(type,uid);if(!canIssueCoinBill(type,x))return toast('当前账单不满足发放金币条件');openModal('发放金币',`<div class="note"><b>仅对已确认的个人账号（消费金币）结算单执行发放。</b><br>金币数量使用账单生成时已锁定的 Coins Amount；本 Demo 不额外假设 USD → Coins 汇率。</div><div class="coinBatchMeta"><div><span>成员</span><b>${x.name} · ${x.uid}</b></div><div><span>Settlement Salary</span><b>${money(x.final)}</b></div><div><span>实际结算方式</span><b>${actualSettlementMethod(x)}</b></div><div><span>收款账号</span><b>${actualSettlementAddress(x)}</b></div></div>`,`确认发放`,()=>{completeCoinPayout(type,x);closeModal();renderSettlement();updatePendingCounters();toast('金币已发放')})};
+  window.batchIssueCoins=function(){const rows=selectedCoinBills();if(!rows.length)return toast('请先勾选可发放的金币结算单');const total=rows.reduce((s,r)=>s+Number(r.x.final||0),0);openModal('批量发放金币',`<div class="note"><b>将一次性发放 ${rows.length} 笔金币结算单。</b><br>仅包含：实际结算方式为个人账号（消费金币）+ 用户已确认 + 未付款/发放失败。Coins Amount 以各账单已锁定值为准。</div><div class="coinBatchMeta"><div><span>账单数</span><b>${rows.length} 笔</b></div><div><span>Settlement Salary 合计</span><b>${money(total)}</b></div><div><span>实际结算方式</span><b>${PERSONAL_ACCOUNT}</b></div><div><span>Coins Amount</span><b>按各账单锁定值发放</b></div></div>`,`确认批量发放`,()=>{rows.forEach(r=>completeCoinPayout(r.type,r.x));closeModal();renderSettlement();updatePendingCounters();toast(`已发放 ${rows.length} 笔金币结算单`)})};
+  window.openCoinPayoutRecord=function(type,uid){const x=coinBill(type,uid);if(!x?.coinTxnId)return toast('暂无发放记录');openDrawer('金币发放记录',`<div class="detailHero"><div class="avatar">C</div><div><h3>${x.name}</h3><p>UID ${x.uid} · ${actualSettlementMethod(x)}</p></div></div><div class="detailSec"><div class="coinRecordGrid"><div><span>Settlement Salary</span><b>${money(x.final)}</b></div><div><span>发放 Coins</span><b>${x.coinAmount?fmt(x.coinAmount):'账单锁定 Coins Amount'}</b></div><div><span>发放时间</span><b>${x.coinIssuedAt}</b></div><div><span>操作人</span><b>${x.coinIssuedBy}</b></div><div><span>发放流水号</span><b>${x.coinTxnId}</b></div><div><span>收款账号</span><b>${actualSettlementAddress(x)}</b></div></div></div>`)};
+
+  function ensureCoinBatchButton(){const actions=document.querySelector('#view-settlement .pageHead .actions');if(!actions)return null;let btn=document.getElementById('coinBatchIssueBtn');if(!btn){btn=document.createElement('button');btn.id='coinBatchIssueBtn';btn.className='btn gold';btn.onclick=batchIssueCoins;actions.insertBefore(btn,actions.firstChild)}return btn}
+  window.updateCoinBatchButton=function(){const btn=ensureCoinBatchButton();if(!btn)return;const visible=!state.settlementQueueStatus&&BILLABLE_TYPES.includes(state.settlementTab);btn.style.display=visible?'':'none';const n=selectedCoinBills().length;btn.textContent=`发放金币（${n}）`;btn.disabled=n===0};
+
+  window.agencyWeeklyTable=function(){
+    refreshAgencyWeeklyTotals();const type='agencyWeekly',rows=settlementFilter(agencyWeeklySettlement),body=rows.map(x=>`<tr><td class="coinSelectCell">${coinCheckbox(type,x)}</td><td>${identityMerged(x.name,x.uid)}</td><td>${displayCountry(x.country)}</td><td>${x.hosts}</td><td>${x.effectiveHosts}</td><td class="money">${fmt(x.totalCoins)}</td><td class="money">${fmt(x.totalDiamonds)}</td><td>${money(x.hostSalary)}</td><td>${money(x.hostSettlement)}</td><td>${money(x.agentOwnSalary)}</td><td>${money(x.agentTotalSalary)}</td><td class="${x.agentAdj<0?'redTxt':x.agentAdj>0?'greenTxt':''}">${x.agentAdj?((x.agentAdj>0?'+':'')+money(x.agentAdj)):'$0.00'}</td><td class="money">${money(x.final)}</td><td>${configuredMethodCell(x)}</td><td>${actualMethodCell(x)}</td><td>${actualSettlementAddress(x)}</td><td>${statusBadge(x.finance)}</td><td>${statusBadge(x.bill)}</td><td>${statusBadge(x.payout)}</td><td>${rejectReasonCell(x.rejectReason)}</td><td>${agencyWeeklyActions(x)}</td></tr>`).join('');
+    return `<div class="memberRelationNote"><b>代理周结算 = 实际付款账单。</b> 用户配置收款方式仅保留：个人账号（消费金币）/ USDT / 银行 / 电子钱包。<b>Settlement Salary &lt; $20 时，不论配置方式为何，实际结算方式均强制为个人账号（消费金币），但不修改用户原配置。</b></div><div class="table-responsive tableWrap"><table class="table settlementAgencyWeeklyTable"><thead><tr><th class="coinSelectCell">${coinHeader(type)}</th><th>代理昵称、ID</th><th>国家</th><th>总主播数</th><th>有效主播数</th><th>总金币</th><th>总钻石</th><th>主播总薪资</th><th>主播总结算</th><th>代理本人总薪资</th><th>代理总薪资</th><th>代理需调整</th><th>代理总结算</th><th>配置收款方式</th><th>实际结算方式</th><th>收款账号</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>操作</th></tr></thead><tbody>${body||'<tr><td colspan="21"><div class="empty">暂无符合条件的代理周结算数据。</div></td></tr>'}</tbody></table></div>`;
+  };
+
+  window.managementWeeklyTable=function(){
+    const type='managementWeekly',rows=settlementFilter(managementWeeklySettlement);return `<div class="memberRelationNote"><b>BD+ 周结算。</b> 支持完整账单状态；实际结算方式由用户配置与 $20 门槛共同决定。金币结算单在用户确认后可单笔或批量发放。</div><div class="table-responsive tableWrap"><table class="table settlementManagementWeeklyTable"><thead><tr><th class="coinSelectCell">${coinHeader(type)}</th><th>昵称、ID</th><th>角色</th><th>国家</th><th>总代理数</th><th>总主播数</th><th>有效主播数</th><th>代理总薪资</th><th>代理总结算</th><th>等级</th><th>提成比例</th><th>提成薪资</th><th>等级底薪</th><th>总薪资</th><th>需调整</th><th>总结算</th><th>配置收款方式</th><th>实际结算方式</th><th>收款账号</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>操作</th></tr></thead><tbody>${rows.map(x=>`<tr><td class="coinSelectCell">${coinCheckbox(type,x)}</td><td>${identityMerged(x.name,x.uid)}</td><td>${x.role}</td><td>${displayCountry(x.country)}</td><td>${x.totalAgents}</td><td>${x.totalHosts}</td><td>${x.effectiveHosts}</td><td>${money(x.agentTotalSalary)}</td><td>${money(x.agentSettlement)}</td><td>${x.level}</td><td>${x.rate}%</td><td>${money(x.commission)}</td><td>${money(x.base)}</td><td>${money(x.calc)}</td><td class="${x.adj<0?'redTxt':x.adj>0?'greenTxt':''}">${x.adj?((x.adj>0?'+':'')+money(x.adj)):'$0.00'}</td><td class="money">${money(x.final)}</td><td>${configuredMethodCell(x)}</td><td>${actualMethodCell(x)}</td><td>${actualSettlementAddress(x)}</td><td>${statusBadge(x.finance)}</td><td>${statusBadge(x.bill)}</td><td>${statusBadge(x.payout)}</td><td>${rejectReasonCell(x.rejectReason)}</td><td>${managementWeeklyActions(x)}</td></tr>`).join('')||'<tr><td colspan="24"><div class="empty">暂无 BD+ 周结算数据。</div></td></tr>'}</tbody></table></div>`;
+  };
+
+  window.managementMonthlyTable=function(){
+    const type='managementMonthly',rows=settlementFilter(managementMonthlySettlement);return `<div class="memberRelationNote"><b>BD+ 月结算 = 4 个已完成周结算的实际付款账单。</b> Settlement Salary &lt; $20 强制使用个人账号（消费金币）；≥ $20 按用户配置方式结算。</div><div class="table-responsive tableWrap"><table class="table settlementManagementMonthlyTable"><thead><tr><th class="coinSelectCell">${coinHeader(type)}</th><th>昵称、ID</th><th>角色</th><th>国家</th><th>周期范围</th><th>Week 1</th><th>Week 2</th><th>Week 3</th><th>Week 4</th><th>月累计薪资</th><th>月需调整</th><th>月总结算</th><th>配置收款方式</th><th>实际结算方式</th><th>收款账号</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>操作</th></tr></thead><tbody>${rows.map(x=>`<tr><td class="coinSelectCell">${coinCheckbox(type,x)}</td><td>${identityMerged(x.name,x.uid)}</td><td>${x.role}</td><td>${displayCountry(x.country)}</td><td>${x.period}</td><td>${money(x.week1)}</td><td>${money(x.week2)}</td><td>${money(x.week3)}</td><td>${money(x.week4)}</td><td>${money(x.weeklyTotal)}</td><td class="${x.adj<0?'redTxt':x.adj>0?'greenTxt':''}">${x.adj?((x.adj>0?'+':'')+money(x.adj)):'$0.00'}</td><td class="money">${money(x.final)}</td><td>${configuredMethodCell(x)}</td><td>${actualMethodCell(x)}</td><td>${actualSettlementAddress(x)}</td><td>${statusBadge(x.finance)}</td><td>${statusBadge(x.bill)}</td><td>${statusBadge(x.payout)}</td><td>${rejectReasonCell(x.rejectReason)}</td><td>${monthlyManagementActions(x)}</td></tr>`).join('')||'<tr><td colspan="20"><div class="empty">暂无 BD+ 月结算账单。</div></td></tr>'}</tbody></table></div>`;
+  };
+
+  window.settlementQueueTable=function(status){
+    const q=(document.getElementById('settlementSearch')?.value||'').toLowerCase(),payout=document.getElementById('payoutStatus')?.value||'All Payout Status',finance=document.getElementById('financeStatus')?.value||'All Finance Status',pay=document.getElementById('settlementPaymentMethod')?.value||'All Payment Types',country=document.getElementById('settlementCountry')?.value||'All Countries';refreshAgencyWeeklyTotals();const rows=[...agencyWeeklySettlement.map(x=>({...x,_type:'agencyWeekly',_label:'代理周结算'})),...managementWeeklySettlement.map(x=>({...x,_type:'managementWeekly',_label:'BD+ 周结算'})),...managementMonthlySettlement.map(x=>({...x,_type:'managementMonthly',_label:'BD+ 月结算'}))].map(x=>{syncSettlementMethodState(x);return x}).filter(x=>x.bill===status&&(finance==='All Finance Status'||x.finance===finance)&&(payout==='All Payout Status'||x.payout===payout)&&(pay==='All Payment Types'||actualSettlementMethod(x)===pay)&&(country==='All Countries'||x.country===country)&&(!q||String(x.uid||'').includes(q)||String(x.name||'').toLowerCase().includes(q)||String(actualSettlementAddress(x)).toLowerCase().includes(q)));return `<div class="settlementQueueHint"><b>${status==='Rejected'?'用户已拒绝账单':'待用户确认账单'}</b><span>${status==='Rejected'?'由财务查看拒绝原因并处理后重新发布。':'仅展示已发布给用户、等待确认的账单。'}</span></div><div class="table-responsive tableWrap"><table class="table settlementQueueTable"><thead><tr><th>类型</th><th>成员</th><th>国家</th><th>配置收款方式</th><th>实际结算方式</th><th>收款账号</th><th>财务状态</th><th>用户账单状态</th><th>付款状态</th><th>拒绝原因</th><th>结算金额</th><th>操作</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${x._label}</td><td>${memberCell(x.name,x.uid)}</td><td>${displayCountry(x.country)}</td><td>${configuredMethodCell(x)}</td><td>${actualMethodCell(x)}</td><td>${actualSettlementAddress(x)}</td><td>${statusBadge(x.finance)}</td><td>${statusBadge(x.bill)}</td><td>${statusBadge(x.payout)}</td><td>${rejectReasonCell(x.rejectReason)}</td><td class="money">${money(x.final)}</td><td>${x._type==='agencyWeekly'?agencyWeeklyActions(x):x._type==='managementWeekly'?managementWeeklyActions(x):monthlyManagementActions(x)}</td></tr>`).join('')||'<tr><td colspan="12"><div class="empty">暂无符合条件的账单。</div></td></tr>'}</tbody></table></div>`;
+  };
+
+  const renderSettlementV77Base=window.renderSettlement;
+  window.renderSettlement=function(){normalizeAllPayments();const out=renderSettlementV77Base.apply(this,arguments);updateCoinBatchButton();return out};
+  const setSettlementTabV77Base=window.setSettlementTab;
+  window.setSettlementTab=function(tab){coinSelection.clear();const out=setSettlementTabV77Base.apply(this,arguments);updateCoinBatchButton();return out};
+  ensureCoinBatchButton();renderSettlement();
+})();
+</script>
+
+<!-- v79: table alignment, second frozen columns, reward filter semantics -->
+<style id="v79-table-reward-polish-style">
+/* Members: main tabs are one aligned four-item control. */
+#view-members>.boTripletShell>#memberTabs{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  width:min(760px,100%)!important;
+  max-width:100%!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+#view-members>.boTripletShell>#memberTabs .tabBtn{
+  width:100%!important;
+  min-width:0!important;
+  height:46px!important;
+  padding:0 14px!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+#view-members>.boTripletShell>#memberTabs .tabBtn+ .tabBtn{border-left:1px solid #edf2f8!important}
+
+/* Main member list: first column already freezes globally; freeze Role beside it. */
+#view-members .memberListTable>thead>tr>th:nth-child(2){
+  position:sticky!important;left:240px!important;top:0!important;z-index:11!important;
+  background:#f8fbff!important;box-shadow:8px 0 14px rgba(31,70,120,.055)!important
+}
+#view-members .memberListTable>tbody>tr>td:nth-child(2):not([colspan]){
+  position:sticky!important;left:240px!important;z-index:6!important;
+  background:#fff!important;box-shadow:8px 0 14px rgba(31,70,120,.045)!important
+}
+#view-members .memberListTable>tbody>tr:hover>td:nth-child(2):not([colspan]){background:#fbfdff!important}
+
+/* Application list: freeze applicant + application role. */
+#view-applications .applicationListTable>thead>tr>th:nth-child(2){
+  position:sticky!important;left:250px!important;top:0!important;z-index:11!important;
+  background:#f8fbff!important;box-shadow:8px 0 14px rgba(31,70,120,.055)!important
+}
+#view-applications .applicationListTable>tbody>tr>td:nth-child(2):not([colspan]){
+  position:sticky!important;left:250px!important;z-index:6!important;
+  background:#fff!important;box-shadow:8px 0 14px rgba(31,70,120,.045)!important
+}
+#view-applications .applicationListTable>tbody>tr:hover>td:nth-child(2):not([colspan]){background:#fbfdff!important}
+
+/* Member management summary reuses the dashboard "管理线成员" KPI component. */
+#boMemberStats .memberManagementKpi{min-height:118px!important;width:auto!important}
+#boMemberStats .memberManagementKpi .managementBreakdown{margin-top:7px!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:3px 8px!important;font-size:11px!important;line-height:1.35!important}
+#boMemberStats .memberManagementKpi .managementBreakdown span{display:inline!important;padding:0!important;margin:0!important;color:var(--muted)!important;font-size:11px!important;white-space:nowrap!important}
+#boMemberStats .memberManagementKpi .managementBreakdown b{display:inline!important;margin:0 0 0 3px!important;color:var(--text)!important;font-size:12px!important;line-height:1.35!important}
+
+/* Invitation filters are intentionally different between Recipient and Host views. */
+#view-rewards .invitationFilterBar .input{min-width:250px!important}
+#view-rewards .invitationFilterBar .select{min-width:150px!important}
+@media(max-width:760px){
+  #view-members>.boTripletShell>#memberTabs{width:100%!important}
+  #view-members>.boTripletShell>#memberTabs .tabBtn{padding:0 7px!important;font-size:12px!important}
+}
+</style>
+<script id="v79-table-reward-polish-script">
+(()=>{
+  /* Member top stats: the management card carries explicit role counts. */
+  const oldUpdateMemberStatsV79=window.updateMemberStats;
+  /* updateMemberStats is closure-scoped in v73, so render hooks below patch its generated DOM instead. */
+  function patchManagementSummaryCard(){
+    const stats=document.getElementById('boMemberStats');
+    if(!stats||state.memberTab!=='list'||(state.memberScope||'all')!=='all')return;
+    const cards=Array.from(stats.querySelectorAll('.ctStat'));
+    const card=cards.find(x=>x.querySelector('span')?.textContent.trim()==='管理线');
+    if(!card)return;
+    const rows=members.filter(x=>['BD','Admin','Super Admin','Manager'].includes(x.role));
+    const mode=document.getElementById('boMemberView')?.value||'HQ';
+    const op=mode!=='HQ'?mode:(document.getElementById('boMemberOperatorFilter')?.value||'All');
+    const scoped=(op&&op!=='All')?rows.filter(x=>x.operator===op):rows;
+    const counts={BD:0,Admin:0,'Super Admin':0,Manager:0};scoped.forEach(x=>counts[x.role]=(counts[x.role]||0)+1);
+    card.className='kpi memberManagementKpi';
+    card.innerHTML=`<div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">管理线成员</span><span class="metricHelp" tabindex="0" data-tip="当前成员列表筛选范围内 BD / Admin / Super Admin / Manager 的成员数及角色构成。">?</span></span><span class="kpiIcon">M</span></div><div class="kpiValue">${scoped.length}</div><div class="managementBreakdown"><span>BD <b>${counts.BD}</b></span><span>Admin <b>${counts.Admin}</b></span><span>Super Admin <b>${counts['Super Admin']}</b></span><span>Manager <b>${counts.Manager}</b></span></div>`;
+  }
+  ['renderMembers','renderHostMemberList','renderAgentMemberList','renderManagementMemberList'].forEach(name=>{
+    const base=window[name];if(typeof base!=='function')return;
+    window[name]=function(){const out=base.apply(this,arguments);patchManagementSummaryCard();return out};
+  });
+
+  /* Recipient and Host tables have different filter semantics. */
+  state.invitationRecipientRole=state.invitationRecipientRole||'All';
+  state.invitationRecipientQualified=state.invitationRecipientQualified||'All';
+  state.invitationRecipientClaim=state.invitationRecipientClaim||'All';
+  state.invitationRecipientSearch=state.invitationRecipientSearch||'';
+  state.invitationHostQualified=state.invitationHostQualified||'All';
+  state.invitationHostSearch=state.invitationHostSearch||'';
+  const sel=(a,b)=>a===b?' selected':'';
+  const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  window.renderInvitationRewards=function(){
+    const recipient=state.invitationTab==='recipient';
+    const filters=recipient
+      ? `<div class="filterBar invitationFilterBar"><select class="select rewardPeriodSelect"><option>2026-W35 · UTC+0</option></select><select class="select" onchange="state.invitationRecipientRole=this.value;refreshInvitationRewardTable()"><option value="All"${sel(state.invitationRecipientRole,'All')}>全部角色</option><option value="Agency"${sel(state.invitationRecipientRole,'Agency')}>Agency</option><option value="BD"${sel(state.invitationRecipientRole,'BD')}>BD</option><option value="Admin"${sel(state.invitationRecipientRole,'Admin')}>Admin</option><option value="Super Admin"${sel(state.invitationRecipientRole,'Super Admin')}>Super Admin</option><option value="Manager"${sel(state.invitationRecipientRole,'Manager')}>Manager</option></select><select class="select" onchange="state.invitationRecipientQualified=this.value;refreshInvitationRewardTable()"><option value="All"${sel(state.invitationRecipientQualified,'All')}>全部达标状态</option><option value="Qualified"${sel(state.invitationRecipientQualified,'Qualified')}>已达标</option><option value="Not Qualified"${sel(state.invitationRecipientQualified,'Not Qualified')}>未达标</option></select><select class="select" onchange="state.invitationRecipientClaim=this.value;refreshInvitationRewardTable()"><option value="All"${sel(state.invitationRecipientClaim,'All')}>全部领取状态</option><option value="Unclaimed"${sel(state.invitationRecipientClaim,'Unclaimed')}>未领取</option><option value="Claimed"${sel(state.invitationRecipientClaim,'Claimed')}>已领取</option></select><input class="input" value="${esc(state.invitationRecipientSearch)}" placeholder="按领奖人 UID / 昵称搜索" oninput="state.invitationRecipientSearch=this.value;refreshInvitationRewardTable()"><span class="filterSpacer"></span></div>`
+      : `<div class="filterBar invitationFilterBar"><select class="select rewardPeriodSelect"><option>2026-W35 · UTC+0</option></select><select class="select" onchange="state.invitationHostQualified=this.value;refreshInvitationRewardTable()"><option value="All"${sel(state.invitationHostQualified,'All')}>全部主播达标状态</option><option value="Qualified"${sel(state.invitationHostQualified,'Qualified')}>已达标</option><option value="Not Qualified"${sel(state.invitationHostQualified,'Not Qualified')}>未达标</option></select><input class="input" value="${esc(state.invitationHostSearch)}" placeholder="按 Host UID / 昵称搜索" oninput="state.invitationHostSearch=this.value;refreshInvitationRewardTable()"><span class="filterSpacer"></span></div>`;
+    return `<div class="tabs"><button class="tabBtn ${recipient?'active':''}" onclick="state.invitationTab='recipient';renderRewards()">按领奖人</button><button class="tabBtn ${!recipient?'active':''}" onclick="state.invitationTab='host';renderRewards()">按 Host</button></div><div class="rewardPolicyNote"><b>奖励周期 · UTC+0</b><span>周二 01:00 ～ 周日 24:00 可领取；周一 00:00 ～ 周二 01:00 为统计期，不可领取。</span><span>Agency：每名达标 Host 达标后直接获得奖励；BD 及以上：达标 Host ≥ 10 后，按本周期全部达标 Host 计算奖励。</span><span>只有已达标并产生奖励后，才进入未领取 / 已领取状态。</span></div>${filters}<div id="invitationTableMount">${recipient?invitationRecipientTable():invitationHostTable()}</div>`;
+  };
+
+  window.refreshInvitationRewardTable=function(){
+    const mount=document.getElementById('invitationTableMount');if(!mount)return;
+    mount.innerHTML=state.invitationTab==='recipient'?invitationRecipientTable():invitationHostTable();
+  };
+
+  window.invitationRecipientTable=function(){
+    const q=String(state.invitationRecipientSearch||'').trim().toLowerCase();
+    const rows=invitationByRecipient.filter(x=>{
+      const qualified=invitationQualified(x),qstate=qualified?'Qualified':'Not Qualified';
+      return (state.invitationRecipientRole==='All'||x.role===state.invitationRecipientRole)
+        &&(state.invitationRecipientQualified==='All'||qstate===state.invitationRecipientQualified)
+        &&(state.invitationRecipientClaim==='All'||(qualified&&x.claimStatus===state.invitationRecipientClaim))
+        &&(!q||String(x.uid).toLowerCase().includes(q)||String(x.name).toLowerCase().includes(q));
+    });
+    return `<div class="table-responsive tableWrap"><table class="table rewardTable rewardRecipientTable"><colgroup><col style="width:230px"><col style="width:110px"><col style="width:110px"><col style="width:170px"><col style="width:130px"><col style="width:150px"><col style="width:160px"><col style="width:130px"><col style="width:210px"></colgroup><thead><tr><th>领奖成员</th><th>角色</th><th>新增 Host</th><th>达标 Host / 要求</th><th>达标状态</th><th>Coins 可领</th><th>Beans 可领 (+50%)</th><th>领取状态</th><th>领取结果 / 详情</th></tr></thead><tbody>${rows.map(x=>{const qualified=invitationQualified(x),base=invitationBaseReward(x),beans=invitationBeansReward(x),claimed=qualified&&x.claimStatus==='Claimed',claimAmount=x.claimType==='Beans'?beans:base;return `<tr><td>${memberCell(x.name,x.uid)}</td><td><span class="roleText">${x.role}</span></td><td>${x.newHosts}</td><td><button class="linkText" onclick="openEligibleHosts('${x.uid}')">${x.eligibleHosts.length}${x.role==='Agency'?'':' / 10'}</button></td><td>${statusBadge(qualified?'Qualified':'Not Qualified')}</td><td class="money">${qualified?fmt(base):'—'}</td><td class="money">${qualified?fmt(beans):'—'}</td><td>${qualified?statusBadge(x.claimStatus):'—'}</td><td>${claimed?`<b>${x.claimType} · ${fmt(claimAmount)}</b>`:(qualified?'可领取':'—')}<div><button class="linkText" onclick="openEligibleHosts('${x.uid}')">查看明细</button></div></td></tr>`}).join('')||'<tr><td colspan="9"><div class="empty">暂无符合筛选条件的领奖人记录。</div></td></tr>'}</tbody></table></div>`;
+  };
+
+  window.invitationHostTable=function(){
+    const q=String(state.invitationHostSearch||'').trim().toLowerCase();
+    const rows=invitationByHost.filter(x=>(state.invitationHostQualified==='All'||(x.eligible?'Qualified':'Not Qualified')===state.invitationHostQualified)&&(!q||String(x.uid).toLowerCase().includes(q)||String(x.name).toLowerCase().includes(q)));
+    return `<div class="table-responsive tableWrap"><table class="table rewardTable rewardHostTable"><colgroup><col style="width:230px"><col style="width:110px"><col style="width:150px"><col style="width:180px"><col style="width:120px"><col style="width:120px"><col style="width:110px"><col style="width:110px"><col style="width:130px"><col style="width:110px"></colgroup><thead><tr><th>Host</th><th>Host 等级</th><th>本周 Coins</th><th>有效时长</th><th>主播是否达标</th><th>Agency</th><th>BD</th><th>Admin</th><th>Super Admin</th><th>Manager</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${memberCell(x.name,x.uid)}</td><td>${x.level}</td><td>${fmt(x.coins)}</td><td>${x.time}</td><td>${x.eligible?'<span class="greenTxt">是</span>':'<span class="redTxt">否</span>'}</td><td>${x.eligible?fmt(invitationRate('Agency',x.level)):'—'}</td><td>${x.eligible?fmt(invitationRate('BD',x.level)):'—'}</td><td>${x.eligible?fmt(invitationRate('Admin',x.level)):'—'}</td><td>${x.eligible?fmt(invitationRate('Super Admin',x.level)):'—'}</td><td>${x.eligible?fmt(invitationRate('Manager',x.level)):'—'}</td></tr>`).join('')||'<tr><td colspan="10"><div class="empty">暂无符合筛选条件的 Host 记录。</div></td></tr>'}</tbody></table></div>`;
+  };
+
+  /* Initial patch for the currently rendered member stats. */
+  setTimeout(patchManagementSummaryCard,0);
+})();
+</script>
+
+
+
+<!-- v80: member summary grouping + member-tab visual unification -->
+<style id="v80-member-summary-tabs-style">
+#view-members>.boTripletShell>#memberTabs{
+  display:flex!important;align-items:stretch!important;gap:20px!important;
+  width:100%!important;max-width:100%!important;margin:0 0 18px!important;padding:0 16px!important;
+  border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;
+  background:#fff!important;box-shadow:none!important;overflow-x:auto!important;overflow-y:hidden!important
+}
+#view-members>.boTripletShell>#memberTabs .tabBtn{
+  flex:0 0 auto!important;width:auto!important;min-width:0!important;height:44px!important;min-height:44px!important;
+  padding:0 1px!important;border:0!important;border-bottom:2px solid transparent!important;background:transparent!important;
+  color:#6f86ab!important;font-size:13px!important;font-weight:900!important;text-align:left!important;
+  justify-content:flex-start!important;white-space:nowrap!important
+}
+#view-members>.boTripletShell>#memberTabs .tabBtn.active{color:var(--blue)!important;border-bottom-color:var(--blue)!important}
+#view-members>.boTripletShell>#memberTabs .tabBtn+.tabBtn{border-left:0!important}
+#boMemberStats .memberCompoundStat .memberCompoundValues{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:8px 14px!important;margin-top:8px!important}
+#boMemberStats .memberCompoundStat .memberCompoundValues span{display:inline-flex!important;align-items:baseline!important;gap:5px!important;color:var(--muted)!important;font-size:12px!important;line-height:1.35!important;white-space:nowrap!important}
+#boMemberStats .memberCompoundStat .memberCompoundValues b{color:var(--text)!important;font-size:17px!important;line-height:1.2!important}
+#boMemberStats .memberManagementKpi .kpiLabelWrap{gap:0!important}
+@media(max-width:760px){
+  #view-members>.boTripletShell>#memberTabs{gap:16px!important;padding:0 12px!important}
+  #view-members>.boTripletShell>#memberTabs .tabBtn{font-size:12px!important;padding:0 1px!important}
+}
+</style>
+<script id="v80-member-summary-tabs-script">
+(()=>{
+  const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  function scopedRows(scope){
+    let rows=members.slice();
+    if(scope==='host')rows=rows.filter(x=>x.role==='Host');
+    else if(scope==='agent')rows=rows.filter(x=>x.role==='Agent');
+    else if(scope==='management')rows=rows.filter(x=>['BD','Admin','Super Admin','Manager'].includes(x.role));
+    const mode=document.getElementById('boMemberView')?.value||'HQ';
+    const filterId={all:'boMemberOperatorFilter',host:'boHostOperatorFilter',agent:'boAgentOperatorFilter',management:'boManagementOperatorFilter'}[scope]||'boMemberOperatorFilter';
+    const op=mode!=='HQ'?mode:(document.getElementById(filterId)?.value||'All');
+    if(op&&op!=='All')rows=rows.filter(x=>x.operator===op);
+    return rows;
+  }
+  const simple=(label,value)=>`<div class="ctStat"><span>${esc(label)}</span><b>${esc(value)}</b></div>`;
+  const compound=(label,a,av,b,bv)=>`<div class="ctStat memberCompoundStat"><span>${esc(label)}</span><div class="memberCompoundValues"><span>${esc(a)} <b>${esc(av)}</b></span><span>${esc(b)} <b>${esc(bv)}</b></span></div></div>`;
+  function managementCard(rows){
+    const counts={BD:0,Admin:0,'Super Admin':0,Manager:0};rows.filter(x=>counts[x.role]!==undefined).forEach(x=>counts[x.role]++);
+    const total=Object.values(counts).reduce((s,n)=>s+n,0);
+    return `<div class="kpi memberManagementKpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">管理线成员</span></span><span class="kpiIcon">M</span></div><div class="kpiValue">${total}</div><div class="managementBreakdown"><span>BD <b>${counts.BD}</b></span><span>Admin <b>${counts.Admin}</b></span><span>Super Admin <b>${counts['Super Admin']}</b></span><span>Manager <b>${counts.Manager}</b></span></div></div>`;
+  }
+  function refreshMemberSummaryV80(){
+    const stats=document.getElementById('boMemberStats');if(!stats||state.memberTab!=='list')return;
+    const scope=state.memberScope||'all',rows=scopedRows(scope),active=rows.filter(x=>x.status==='Active').length,suspended=rows.filter(x=>x.status==='Suspended').length,invited=rows.filter(x=>(x.joinedType||'Invitation')==='Invitation').length,backend=rows.filter(x=>x.joinedType==='Backend Add').length;
+    stats.className='ctStats boUnifiedStats';
+    if(scope==='host')stats.innerHTML=simple('主播总数',rows.length)+compound('业务状态','启用',active,'封禁',suspended)+compound('加入方式','邀请加入',invited,'后台新增',backend);
+    else if(scope==='agent')stats.innerHTML=simple('代理总数',rows.length)+compound('业务状态','启用',active,'封禁',suspended)+compound('加入方式','邀请加入',invited,'后台新增',backend);
+    else if(scope==='all'){
+      const mgmt=rows.filter(x=>['BD','Admin','Super Admin','Manager'].includes(x.role));
+      stats.innerHTML=simple('当前成员',rows.length)+compound('业务状态','启用',active,'封禁',suspended)+compound('加入方式','邀请加入',invited,'后台新增',backend)+simple('Host',rows.filter(x=>x.role==='Host').length)+simple('Agent',rows.filter(x=>x.role==='Agent').length)+managementCard(mgmt);
+    }
+  }
+  ['renderMembers','renderHostMemberList','renderAgentMemberList'].forEach(name=>{const base=window[name];if(typeof base!=='function')return;window[name]=function(){const out=base.apply(this,arguments);refreshMemberSummaryV80();return out}});
+  try{window.renderMembers?.()}catch(e){}
+})();
+</script>
+
+<!-- v82: final management summary repair (must stay last) -->
+<style id="v82-management-summary-final-style">
+#boMemberStats.managementSummaryOnly{
+  display:grid!important;
+  grid-template-columns:minmax(250px,300px)!important;
+  gap:14px!important;
+  align-items:stretch!important;
+  justify-content:start!important;
+}
+#boMemberStats.managementSummaryOnly>.memberManagementKpi{
+  width:100%!important;
+  min-width:0!important;
+  max-width:300px!important;
+  min-height:118px!important;
+}
+#boMemberStats.managementSummaryOnly .managementBreakdown{
+  margin-top:7px!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:3px 8px!important;
+}
+#boMemberStats.managementSummaryOnly .managementBreakdown span{white-space:nowrap!important}
+@media(max-width:760px){
+  #boMemberStats.managementSummaryOnly{grid-template-columns:minmax(0,1fr)!important}
+  #boMemberStats.managementSummaryOnly>.memberManagementKpi{max-width:100%!important}
+}
+</style>
+<script id="v82-management-summary-final-script">
+(()=>{
+  function managementRows(){
+    let rows=members.filter(x=>['BD','Admin','Super Admin','Manager'].includes(x.role));
+    const mode=document.getElementById('boMemberView')?.value||'HQ';
+    const op=mode!=='HQ'?mode:(document.getElementById('boManagementOperatorFilter')?.value||'All');
+    if(op&&op!=='All')rows=rows.filter(x=>x.operator===op);
+    return rows;
+  }
+  function paintManagementStats(){
+    const stats=document.getElementById('boMemberStats');
+    if(!stats||state.memberTab!=='list'||state.memberScope!=='management')return;
+    const rows=managementRows();
+    const c={BD:0,Admin:0,'Super Admin':0,Manager:0};
+    rows.forEach(x=>{if(Object.prototype.hasOwnProperty.call(c,x.role))c[x.role]++});
+    stats.className='ctStats boUnifiedStats managementSummaryOnly';
+    stats.style.display='';
+    stats.innerHTML=`<div class="kpi memberManagementKpi"><div class="kpiTop"><span class="kpiLabelWrap"><span class="kpiLabel">管理线成员</span></span><span class="kpiIcon">M</span></div><div class="kpiValue">${rows.length}</div><div class="managementBreakdown"><span>BD <b>${c.BD}</b></span><span>Admin <b>${c.Admin}</b></span><span>Super Admin <b>${c['Super Admin']}</b></span><span>Manager <b>${c.Manager}</b></span></div></div>`;
+  }
+  const wrap=name=>{
+    const base=window[name];if(typeof base!=='function')return;
+    window[name]=function(){const out=base.apply(this,arguments);paintManagementStats();return out};
+  };
+  wrap('renderManagementMemberList');
+  wrap('renderMembers');
+  document.querySelectorAll('.memberSubNav[data-memberscope="management"]').forEach(btn=>btn.addEventListener('click',()=>setTimeout(paintManagementStats,0)));
+  document.getElementById('boManagementOperatorFilter')?.addEventListener('change',()=>setTimeout(paintManagementStats,0));
+  setTimeout(paintManagementStats,0);
+})();
+</script>
+
+<!-- v83: unified frozen identity + role columns for every mixed-role list -->
+<style id="v83-multirole-freeze-style">
+/*
+  Mixed-role tables must keep both the identity column and the role-category
+  column visible during horizontal scrolling. If a selection column precedes
+  identity (settlement), it remains frozen at the far left as well.
+*/
+.view .tableWrap>table.table.boMultiRoleFreeze>thead>tr>th.boFrozenIdentity,
+.view .tableWrap>table.table.boMultiRoleFreeze>thead>tr>th.boFrozenRole{
+  position:sticky!important;
+  top:0!important;
+  background:#f8fbff!important;
+}
+.view .tableWrap>table.table.boMultiRoleFreeze>tbody>tr>td.boFrozenIdentity:not([colspan]),
+.view .tableWrap>table.table.boMultiRoleFreeze>tbody>tr>td.boFrozenRole:not([colspan]){
+  position:sticky!important;
+  background:#fff!important;
+}
+.view .tableWrap>table.table.boMultiRoleFreeze>thead>tr>th.boFrozenIdentity{
+  left:var(--bo-freeze-identity-left,0px)!important;
+  z-index:12!important;
+  box-shadow:none!important;
+}
+.view .tableWrap>table.table.boMultiRoleFreeze>tbody>tr>td.boFrozenIdentity:not([colspan]){
+  left:var(--bo-freeze-identity-left,0px)!important;
+  z-index:7!important;
+  box-shadow:none!important;
+}
+.view .tableWrap>table.table.boMultiRoleFreeze>thead>tr>th.boFrozenRole{
+  left:var(--bo-freeze-role-left,220px)!important;
+  z-index:11!important;
+  box-shadow:8px 0 14px rgba(31,70,120,.055)!important;
+}
+.view .tableWrap>table.table.boMultiRoleFreeze>tbody>tr>td.boFrozenRole:not([colspan]){
+  left:var(--bo-freeze-role-left,220px)!important;
+  z-index:6!important;
+  box-shadow:8px 0 14px rgba(31,70,120,.045)!important;
+}
+.view .tableWrap>table.table.boMultiRoleFreeze>tbody>tr:hover>td.boFrozenIdentity:not([colspan]),
+.view .tableWrap>table.table.boMultiRoleFreeze>tbody>tr:hover>td.boFrozenRole:not([colspan]){
+  background:#fbfdff!important;
+}
+/* The global first-column freeze remains valid for a leading checkbox column. */
+.view .tableWrap>table.table.boMultiRoleFreeze.boHasFrozenPrefix>thead>tr>th:first-child,
+.view .tableWrap>table.table.boMultiRoleFreeze.boHasFrozenPrefix>tbody>tr>td:first-child:not([colspan]){
+  left:0!important;
+  box-shadow:none!important;
+}
+/* Override older one-off second-column rules with the calculated offsets above. */
+#view-members .memberListTable.boMultiRoleFreeze>thead>tr>th:nth-child(2),
+#view-members .memberListTable.boMultiRoleFreeze>tbody>tr>td:nth-child(2):not([colspan]),
+#view-applications .applicationListTable.boMultiRoleFreeze>thead>tr>th:nth-child(2),
+#view-applications .applicationListTable.boMultiRoleFreeze>tbody>tr>td:nth-child(2):not([colspan]){
+  left:var(--bo-freeze-role-left)!important;
+}
+</style>
+<script id="v83-multirole-freeze-script">
+(()=>{
+  const identityPattern=/(成员|昵称|申请人|领奖成员|头像|用户|host)/i;
+  const rolePattern=/(角色|role)/i;
+  let scheduled=false;
+
+  function cellWidth(cell){
+    if(!cell)return 0;
+    const r=cell.getBoundingClientRect();
+    if(r.width>0)return r.width;
+    const w=parseFloat(getComputedStyle(cell).width||'0');
+    return Number.isFinite(w)?w:0;
+  }
+  function markCells(table,identityIndex,roleIndex){
+    const rows=[...(table.tHead?.rows||[]),...(table.tBodies?.[0]?.rows||[])];
+    rows.forEach(row=>{
+      const idCell=row.cells?.[identityIndex],roleCell=row.cells?.[roleIndex];
+      if(idCell)idCell.classList.add('boFrozenIdentity');
+      if(roleCell)roleCell.classList.add('boFrozenRole');
+    });
+  }
+  function applyTable(table){
+    const head=table.tHead?.rows?.[0];
+    if(!head)return;
+    const cells=[...head.cells];
+    const texts=cells.map(c=>(c.textContent||'').trim().replace(/\s+/g,' '));
+    const roleIndex=texts.findIndex(t=>rolePattern.test(t));
+    if(roleIndex<1)return;
+    const identityIndex=roleIndex-1;
+    if(!identityPattern.test(texts[identityIndex]||''))return;
+
+    let identityLeft=0;
+    for(let i=0;i<identityIndex;i++)identityLeft+=cellWidth(cells[i]);
+    let roleLeft=identityLeft+cellWidth(cells[identityIndex]);
+    if(roleLeft<=identityLeft)roleLeft=identityLeft+220;
+
+    table.classList.add('boMultiRoleFreeze');
+    table.classList.toggle('boHasFrozenPrefix',identityIndex>0);
+    table.style.setProperty('--bo-freeze-identity-left',`${Math.round(identityLeft*100)/100}px`);
+    table.style.setProperty('--bo-freeze-role-left',`${Math.round(roleLeft*100)/100}px`);
+    markCells(table,identityIndex,roleIndex);
+  }
+  function applyAll(){
+    scheduled=false;
+    document.querySelectorAll('.view .tableWrap>table.table').forEach(applyTable);
+  }
+  function schedule(){
+    if(scheduled)return;scheduled=true;
+    requestAnimationFrame(()=>requestAnimationFrame(applyAll));
+  }
+  const observer=new MutationObserver(schedule);
+  observer.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+  window.addEventListener('resize',schedule);
+  window.boRefreshMultiRoleFreeze=schedule;
   schedule();
 })();
 </script>
