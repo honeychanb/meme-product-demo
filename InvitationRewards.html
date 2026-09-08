@@ -227,14 +227,26 @@ const rewardTemplates = {
     <div class="reward">
       <div class="reward-title">Last Week's Reward</div>
       <div class="reward-sub">Calculating rewards...</div>
-      <div class="period" style="padding:0;margin-bottom:0">Last Week: Aug 24 – Aug 30</div>
+      <div class="period" style="padding:0;margin-bottom:12px">Last Week: Aug 24 – Aug 30</div>
+      <div class="choices">
+        <div class="option dim"><div class="ri coin">🪙</div><div class="rname">Coins</div><div class="ramt">--</div></div>
+        <div class="or">OR</div>
+        <div class="option dim"><div class="bonus">+50%</div><div class="ri bean">🫘</div><div class="rname">Beans</div><div class="ramt">--</div></div>
+      </div>
+      <button class="btn disabled" disabled>Calculating</button>
       <div class="info">Available after Tuesday 01:00 (UTC+0).</div>
     </div>`,
   none: `
     <div class="reward">
       <div class="reward-title">Last Week's Reward</div>
       <div class="reward-sub">No rewards available.</div>
-      <div class="period" style="padding:0;margin-bottom:0">Last Week: Aug 24 – Aug 30</div>
+      <div class="period" style="padding:0;margin-bottom:12px">Last Week: Aug 24 – Aug 30</div>
+      <div class="choices">
+        <div class="option dim"><div class="ri coin">🪙</div><div class="rname">Coins</div><div class="ramt">0</div></div>
+        <div class="or">OR</div>
+        <div class="option dim"><div class="bonus">+50%</div><div class="ri bean">🫘</div><div class="rname">Beans</div><div class="ramt">0</div></div>
+      </div>
+      <button class="btn disabled" disabled>No Reward</button>
       <div class="info">Last week was not qualified.</div>
     </div>`
 };
