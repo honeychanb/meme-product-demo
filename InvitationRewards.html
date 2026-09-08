@@ -196,61 +196,54 @@ const rewardTemplates = {
       </div>
       <button class="btn">One-click claim</button>
       <div class="info">Claim by Sunday 24:00 (UTC+0).</div>
-    </div>`,
-  claimed: `
-    <div class="reward">
-      <div class="reward-title">Last Week's Reward</div>
-      <div class="reward-sub">Reward received.</div>
-      <div class="period" style="padding:0;margin-bottom:12px">Last Week: Aug 24 – Aug 30</div>
-      <div class="choices">
-        <div class="option dim"><div class="ri coin">🪙</div><div class="rname">Coins</div><div class="ramt">120,000</div></div>
-        <div class="or">OR</div>
-        <div class="option"><div class="bonus">+50%</div><div class="ri bean">🫘</div><div class="rname">Beans</div><div class="ramt">180,000</div></div>
-      </div>
-      <button class="btn disabled" disabled>Claimed</button>
-      <div class="info">Beans 180,000 credited.</div>
-    </div>`,
-  expired: `
-    <div class="reward">
-      <div class="reward-title">Last Week's Reward</div>
-      <div class="reward-sub">Claim period ended.</div>
-      <div class="period" style="padding:0;margin-bottom:12px">Last Week: Aug 24 – Aug 30</div>
-      <div class="choices">
-        <div class="option dim"><div class="ri coin">🪙</div><div class="rname">Coins</div><div class="ramt">120,000</div></div>
-        <div class="or">OR</div>
-        <div class="option dim"><div class="bonus">+50%</div><div class="ri bean">🫘</div><div class="rname">Beans</div><div class="ramt">180,000</div></div>
-      </div>
-      <button class="btn disabled" disabled>Expired</button>
-      <div class="info">Not claimed.</div>
-    </div>`,
-  calculating: `
-    <div class="reward">
-      <div class="reward-title">Last Week's Reward</div>
-      <div class="reward-sub">Calculating rewards...</div>
-      <div class="period" style="padding:0;margin-bottom:12px">Last Week: Aug 24 – Aug 30</div>
-      <div class="choices">
-        <div class="option dim"><div class="ri coin">🪙</div><div class="rname">Coins</div><div class="ramt">--</div></div>
-        <div class="or">OR</div>
-        <div class="option dim"><div class="bonus">+50%</div><div class="ri bean">🫘</div><div class="rname">Beans</div><div class="ramt">--</div></div>
-      </div>
-      <button class="btn disabled" disabled>Calculating</button>
-      <div class="info">Available after Tuesday 01:00 (UTC+0).</div>
-    </div>`,
-  none: `
-    <div class="reward">
-      <div class="reward-title">Last Week's Reward</div>
-      <div class="reward-sub">No rewards available.</div>
-      <div class="period" style="padding:0;margin-bottom:12px">Last Week: Aug 24 – Aug 30</div>
-      <div class="choices">
-        <div class="option dim"><div class="ri coin">🪙</div><div class="rname">Coins</div><div class="ramt">0</div></div>
-        <div class="or">OR</div>
-        <div class="option dim"><div class="bonus">+50%</div><div class="ri bean">🫘</div><div class="rname">Beans</div><div class="ramt">0</div></div>
-      </div>
-      <button class="btn disabled" disabled>No Reward</button>
-      <div class="info">Last week was not qualified.</div>
     </div>`
 };
 
+// All non-claimable states share the same UI structure.
+// Only the amount and status explanation change.
+const unavailableRewardData = {
+  claimed: {
+    sub:"Reward received.",
+    coins:"120,000",
+    beans:"180,000",
+    info:"Beans 180,000 credited."
+  },
+  expired: {
+    sub:"Claim period ended.",
+    coins:"120,000",
+    beans:"180,000",
+    info:"Not claimed."
+  },
+  calculating: {
+    sub:"Calculating rewards...",
+    coins:"--",
+    beans:"--",
+    info:"Available after Tuesday 01:00 (UTC+0)."
+  },
+  none: {
+    sub:"No rewards available.",
+    coins:"0",
+    beans:"0",
+    info:"Last week was not qualified."
+  }
+};
+
+function unavailableRewardTemplate(key){
+  const d=unavailableRewardData[key];
+  return `
+    <div class="reward">
+      <div class="reward-title">Last Week's Reward</div>
+      <div class="reward-sub">${d.sub}</div>
+      <div class="period" style="padding:0;margin-bottom:12px">Last Week: Aug 24 – Aug 30</div>
+      <div class="choices">
+        <div class="option dim"><div class="ri coin">🪙</div><div class="rname">Coins</div><div class="ramt">${d.coins}</div></div>
+        <div class="or">OR</div>
+        <div class="option dim"><div class="bonus">+50%</div><div class="ri bean">🫘</div><div class="rname">Beans</div><div class="ramt">${d.beans}</div></div>
+      </div>
+      <button class="btn disabled" disabled>Unavailable</button>
+      <div class="info">${d.info}</div>
+    </div>`;
+}
 
 const recordsTemplates = {
   claimable: `
@@ -321,7 +314,9 @@ function setProgress(key){
 }
 function setReward(key){
   document.querySelectorAll("[data-reward]").forEach(x=>x.classList.toggle("active",x.dataset.reward===key));
-  document.getElementById("rewardCard").innerHTML=rewardTemplates[key];
+  document.getElementById("rewardCard").innerHTML = key === "claimable"
+    ? rewardTemplates.claimable
+    : unavailableRewardTemplate(key);
   document.getElementById("recordsArea").innerHTML=recordsTemplates[key];
 }
 document.getElementById("progressTabs").onclick=e=>{
