@@ -6871,7 +6871,6 @@ window.cancelPendingAdjustment=function(id){
 (function(){const header=document.querySelector('.topbar');if(!header)return;const clock=document.createElement('div');clock.id='businessClock';clock.title='业务时间（UTC+5）；统计与结算统一按此时区';clock.innerHTML='<span class="clockZone">UTC+5</span><time id="businessClockTime"></time>';header.prepend(clock);const update=()=>{const t=document.getElementById('businessClockTime'),now=new Date();t.dateTime=now.toISOString();t.textContent=formatAdminTime(now,5).replace(' UTC+5','')};update();setInterval(update,1000)})();
 </script>
 
-<style>#backendBuildLabel{margin-left:12px;font-size:11px;color:#627da1;white-space:nowrap}</style><script>(function(){const clock=document.getElementById('businessClock');if(clock){const badge=document.createElement('span');badge.id='backendBuildLabel';badge.textContent='V2.3 · 20260911';clock.append(badge)}})();</script>
 
 <script id="finance-adjustment-final">
 (function(){
@@ -6942,5 +6941,18 @@ renderSettlement();
  };
  const choose=chooseManagementMonth;chooseManagementMonth=function(value){const select=document.getElementById('settlementPeriod');if(select)select.value=value;choose(value)};
  renderSettlement();
+})();
+</script>
+
+<script id="finance-user-visibility">
+(function(){
+const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const previousAdjustment=openAdjustment;
+openAdjustment=function(type,uid){previousAdjustment(type,uid);const x=getBill(type,uid),reason=document.getElementById('financeAdjReason');if(!reason||!x)return;reason.value=x.adjustmentReason||'';reason.placeholder='必填，发布后向被调整用户展示，请填写清晰、可理解的原因';const label=reason.closest('.field')?.querySelector('label');if(label)label.textContent='调整原因（用户可见）';const note=document.getElementById('financeAdjNote');if(note){note.value=x.adjustmentNote||'';note.placeholder='仅内部查看，不展示给用户';const label=note.closest('.field')?.querySelector('label');if(label)label.textContent='内部备注（用户不可见）'}const select=document.getElementById('financeAdjType');if(select&&x.adjustmentType)select.value=x.adjustmentType;};
+function adjustmentBlock(x,title){const adj=Number(x.adj??x.agentAdj??0);return `<div class="detailSec"><h4>${escape(title)}</h4><p>调整金额：<b>${adj>0?'+':''}${money(adj)}</b></p>${adj?`<p style="white-space:pre-wrap;overflow-wrap:anywhere">调整原因：${escape(x.adjustmentReason||'未记录原因，请补充后发布')}</p>`:''}</div>`}
+const previousDetail=openBill;
+openBill=function(type,uid){previousDetail(type,uid);const x=getBill(type,uid),root=document.getElementById('drawerBody');if(!x||!root)return;root.insertAdjacentHTML('beforeend',adjustmentBlock(x,'财务调整 · 用户可见内容')+(type==='managementMonthly'?(x.weeklyEntries||[]).filter(w=>w.adj).map(w=>adjustmentBlock(w,w.period+' · 周调整（已计入月累计薪资）')).join(''):'')+'<div class="detailSec"><p>发布后展示调整前金额、调整金额、原因及最终薪资；内部备注不展示。周调整已计入月累计薪资，月度调整另计，不重复扣减。财务调整不改变档位、Weekly Agency Salary、Commission 或 Base 考核。</p></div>')};
+const previousPublish=publishBill;
+publishBill=function(type,uid){const x=getBill(type,uid);if(!x)return;const records=[x,...(type==='managementMonthly'?x.weeklyEntries||[]:[])];if(records.some(w=>Number(w.adj??w.agentAdj??0)!==0&&!String(w.adjustmentReason||'').trim()))return toast('存在财务调整但未填写用户可见原因，请补充后发布');previousPublish(type,uid)};
 })();
 </script>
