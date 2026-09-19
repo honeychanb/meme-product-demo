@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Host Center Demo</title>
+<style>
+  :root{
+    --bg:#0c0716;
+    --bg-2:#151024;
+    --card:#1a1330;
+    --card-2:#21183b;
+    --line:rgba(255,255,255,.075);
+    --text:#f7f4ff;
+    --muted:#a89fbb;
+    --muted-2:#756c88;
+    --purple:#8d5cff;
+    --purple-2:#b48cff;
+    --purple-3:#6d42d8;
+    --green:#56d89a;
+    --red:#ff6f7b;
+    --gold:#f0c96a;
+    --bright-yellow:#ffe168;
+    --shadow:0 14px 40px rgba(0,0,0,.28);
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#07040e;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  body{min-height:100vh;display:flex;justify-content:center}
+  button{font:inherit}
+
+  .phone{
+    width:min(100%,430px);
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 70% -5%, rgba(119,66,230,.30), transparent 32%),
+      linear-gradient(180deg,#120b22 0%,#0c0716 54%,#0a0612 100%);
+    padding:env(safe-area-inset-top) 16px calc(28px + env(safe-area-inset-bottom));
+  }
+
+  .topbar{
+    height:64px;
+    display:grid;
+    grid-template-columns:44px 1fr 44px;
+    align-items:center;
+  }
+  .topbar h1{
+    margin:0;text-align:center;font-size:18px;font-weight:750;letter-spacing:.1px
+  }
+  .icon-btn{
+    width:40px;height:40px;border:0;border-radius:14px;background:transparent;color:#fff;
+    display:grid;place-items:center;cursor:pointer
+  }
+  .icon-btn:active{background:rgba(255,255,255,.06)}
+
+  .section-label{
+    margin:24px 2px 10px;font-size:15px;font-weight:750;color:#f7f1ff
+  }
+  .agency-label{margin-top:18px;margin-bottom:4px;font-size:12px;font-weight:650;color:#7f768e}
+
+  .host-card{
+    position:relative;
+    overflow:hidden;
+    padding:18px;
+    border:1px solid rgba(182,143,255,.18);
+    background:
+      radial-gradient(circle at 100% 0%, rgba(164,101,255,.25), transparent 35%),
+      linear-gradient(135deg,#241743,#1b1232 58%,#21143d);
+    border-radius:22px;
+    box-shadow:var(--shadow);
+  }
+  .host-card:before{
+    content:"";position:absolute;left:-20px;bottom:-55px;width:150px;height:150px;border-radius:50%;
+    background:rgba(129,78,223,.13);filter:blur(2px)
+  }
+  .identity{display:flex;align-items:center;gap:13px;position:relative;z-index:1}
+  .avatar{
+    width:60px;height:60px;border-radius:50%;flex:0 0 auto;
+    display:grid;place-items:center;font-weight:800;font-size:19px;
+    color:#fff;background:linear-gradient(145deg,#8b5cff,#4b2b95);
+    border:2px solid rgba(255,255,255,.12);
+    box-shadow:0 8px 20px rgba(54,27,109,.35)
+  }
+  .identity-main{min-width:0;flex:1}
+  .name-row{display:flex;align-items:center;gap:8px;min-width:0}
+  .name{font-size:17px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .role-badge{
+    font-size:10px;font-weight:800;letter-spacing:.55px;color:#e9dbff;
+    padding:4px 7px;border-radius:8px;background:rgba(146,92,255,.18);border:1px solid rgba(177,138,255,.25)
+  }
+  .id{margin-top:5px;color:#a89fbb;font-size:12px}
+  .wa{
+    width:44px;height:44px;border:0;border-radius:14px;cursor:pointer;
+    background:#25D366;color:#fff;display:grid;place-items:center;
+    border:1px solid rgba(37,211,102,.55);box-shadow:0 6px 16px rgba(37,211,102,.18)
+  }
+  .wa:active{transform:scale(.97)}
+
+  .agency-card{
+    display:flex;align-items:center;gap:10px;padding:10px 2px;
+    border:0;background:transparent;border-radius:0;
+    cursor:pointer
+  }
+  .agency-avatar{
+    width:36px;height:36px;border-radius:50%;background:linear-gradient(145deg,#f0c96a,#9e6f1d);
+    display:grid;place-items:center;font-weight:800;color:#281b00
+  }
+  .agency-info{flex:1;min-width:0}
+  .agency-title{font-size:13px;font-weight:650;color:#d7d0e4}
+  .agency-id{margin-top:2px;color:#766d85;font-size:11px}
+  .chev{color:#625a70;font-size:20px}
+
+  .data-block{
+    margin-top:12px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.025);
+    border-radius:22px;
+    padding:12px;
+  }
+  .tabs{
+    position:relative;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+    background:#130e22;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:5px;
+  }
+  .tab{
+    border:0;background:transparent;color:#857b98;height:42px;border-radius:12px;
+    font-weight:760;font-size:13px;cursor:pointer;transition:.18s ease
+  }
+  .tab.active{
+    color:#fff;background:linear-gradient(135deg,#7d50ef,#9d6eff);
+    box-shadow:0 7px 18px rgba(128,76,235,.28)
+  }
+
+  .date-row{
+    display:none;
+    margin:12px 0 2px;
+  }
+  .date-row.show{display:block}
+
+  .role-date-row{
+    width:100%;
+    min-height:48px;
+    border:0;
+    border-bottom:1px solid rgba(255,255,255,.075);
+    background:transparent;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:10px;
+    padding:0 2px 10px;
+    color:inherit;
+    cursor:pointer;
+    text-align:left;
+  }
+  .role-date-label{
+    color:#9b92a9;
+    font-size:13px;
+    font-weight:700;
+  }
+  .role-date-value{
+    justify-self:end;
+    color:#ded7e8;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.1px;
+  }
+  .role-date-chevron{
+    color:#675e73;
+    font-size:20px;
+    line-height:1;
+  }
+
+  .calendar-overlay{
+    position:fixed;inset:0;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    background:rgba(3,2,7,.64);
+    backdrop-filter:blur(3px);
+    z-index:80;
+  }
+  .calendar-overlay.show{display:flex}
+
+  .calendar-panel{
+    width:min(100%,430px);
+    max-height:76vh;
+    border-radius:28px 28px 0 0;
+    overflow:hidden;
+    background:
+      linear-gradient(180deg,#603092 0%,#35164f 32%,#160b20 100%);
+    border:1px solid rgba(255,255,255,.08);
+    border-bottom:0;
+    box-shadow:0 -18px 60px rgba(0,0,0,.48);
+  }
+
+  .calendar-weekbar{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    padding:22px 18px 18px;
+    background:linear-gradient(180deg,#6b369f,#5a2c87);
+    border-bottom:1px solid rgba(255,255,255,.11);
+    color:#fff;
+    font-size:12px;
+    font-weight:750;
+    text-align:center;
+  }
+
+  .calendar-scroll{
+    max-height:46vh;
+    overflow:auto;
+    padding:18px 18px 8px;
+    scrollbar-width:none;
+  }
+  .calendar-scroll::-webkit-scrollbar{display:none}
+
+  .calendar-month{
+    margin-bottom:18px;
+  }
+  .calendar-month-title{
+    color:#e3dbea;
+    font-size:12px;
+    margin:0 0 12px 2px;
+    font-weight:650;
+  }
+  .calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:7px 5px;
+  }
+  .calendar-spacer{aspect-ratio:1/1}
+  .calendar-day{
+    aspect-ratio:1/1;
+    border:0;
+    border-radius:12px;
+    background:transparent;
+    color:#eee8f4;
+    font-size:14px;
+    cursor:pointer;
+    position:relative;
+    display:grid;
+    place-items:center;
+  }
+  .calendar-day.disabled{
+    color:#514859;
+    pointer-events:none;
+  }
+  .calendar-day.selected{
+    background:linear-gradient(180deg,#8254b8,#6c3da1);
+    color:#fff;
+    font-weight:850;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .calendar-day.today:not(.selected){
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);
+  }
+
+  .calendar-actions{
+    display:grid;
+    grid-template-columns:1fr 1.2fr;
+    gap:14px;
+    padding:14px 24px calc(22px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,rgba(23,11,33,.15),#120918 42%);
+  }
+  .calendar-actions button{
+    height:52px;
+    border-radius:28px;
+    font-size:16px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .calendar-cancel{
+    border:0;
+    background:#554966;
+    color:#fff;
+  }
+  .calendar-confirm{
+    border:0;
+    background:linear-gradient(135deg,#8d55ff,#a660ff);
+    color:#fff;
+    box-shadow:0 8px 24px rgba(145,84,255,.28);
+  }
+
+  .period-info{
+    margin-top:12px;
+    padding:13px 14px;
+    border-radius:15px;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.055);
+    color:#ddd7e6;
+    font-size:11.5px;
+    line-height:1.5;
+    text-align:left;
+  }
+  .period-info .tz{
+    color:#8f869d;
+    margin-left:4px;
+    white-space:nowrap;
+  }
+  .period-update{
+    margin-top:4px;
+    color:var(--bright-yellow);
+    font-size:11px;
+    font-weight:750;
+  }
+
+  .level-card{
+    margin-top:12px;
+    padding:18px 16px 16px;
+    border-radius:18px;
+    border:1px solid rgba(255,225,104,.10);
+    background:
+      radial-gradient(circle at 50% 0%, rgba(255,225,104,.07), transparent 38%),
+      linear-gradient(135deg,rgba(255,225,104,.035),rgba(141,92,255,.04));
+    text-align:center;
+  }
+  .level-card.hidden{display:none}
+  .level-emblem{
+    min-width:112px;height:38px;margin:0 auto 14px;
+    padding:0 20px;
+    border-radius:12px;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:900;letter-spacing:.4px;
+    color:#2a1c00;
+    background:
+      linear-gradient(180deg,#fff0a0 0%,#f0c96a 56%,#bb8127 100%);
+    border:1px solid rgba(255,243,170,.52);
+    box-shadow:
+      0 8px 20px rgba(202,147,33,.16),
+      inset 0 1px 0 rgba(255,255,255,.45);
+    position:relative;
+  }
+  .level-emblem:before,
+  .level-emblem:after{
+    content:"";position:absolute;top:7px;width:10px;height:22px;
+    background:linear-gradient(180deg,#f8dd82,#b97b20);
+    opacity:.9;
+  }
+  .level-emblem:before{
+    left:-7px;
+    clip-path:polygon(100% 0,100% 100%,0 76%,0 24%);
+  }
+  .level-emblem:after{
+    right:-7px;
+    clip-path:polygon(0 0,0 100%,100% 76%,100% 24%);
+  }
+  .level-track{
+    height:7px;border-radius:999px;
+    background:rgba(255,255,255,.075);
+    overflow:hidden;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.18);
+  }
+  .level-track span{
+    display:block;height:100%;width:62%;border-radius:999px;
+    background:linear-gradient(90deg,#dcae45,#ffe168);
+    box-shadow:0 0 12px rgba(255,225,104,.28)
+  }
+  .level-upgrade{
+    margin-top:12px;
+    font-size:13px;
+    color:#a89fbb;
+    line-height:1.35;
+  }
+  .level-upgrade strong{
+    color:var(--bright-yellow);
+    font-size:16px;
+    font-weight:850;
+  }
+
+  .grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px
+  }
+  .metric{
+    min-height:130px;
+    padding:15px 14px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.055);
+    background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.025));
+    display:flex;flex-direction:column;justify-content:space-between
+  }
+  .metric-top{display:flex;align-items:center;justify-content:flex-end}
+  .qmark{
+    width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.12);
+    background:transparent;color:#aaa1ba;display:grid;place-items:center;cursor:pointer;font-size:12px
+  }
+  .value{margin-top:10px;font-size:25px;font-weight:820;letter-spacing:-.4px;color:var(--bright-yellow)}
+  .value.small{font-size:22px}
+  .label{margin-top:5px;font-size:12px;color:#a89fbb;line-height:1.25}
+  .diamond-note{
+    margin-top:5px;
+    font-size:10.5px;
+    color:#7f758e;
+    line-height:1.35;
+    white-space:nowrap;
+  }
+  .sub{margin-top:8px;color:#756c88;font-size:10px;line-height:1.25}
+  .status-valid{color:var(--bright-yellow)}
+  .status-invalid{color:#ff7d87}
+
+  .progress{
+    margin-top:9px;height:5px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden
+  }
+  .progress span{
+    display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#7c4ff0,#b18aff)
+  }
+
+  .footnote{
+    margin:12px 2px 0;color:#6e657f;font-size:10.5px;line-height:1.55
+  }
+
+  .overlay{
+    position:fixed;inset:0;background:rgba(4,2,8,.72);backdrop-filter:blur(7px);
+    display:none;align-items:flex-end;justify-content:center;padding:16px;z-index:50
+  }
+  .overlay.show{display:flex}
+  .sheet{
+    width:min(100%,430px);
+    border-radius:24px;
+    background:linear-gradient(180deg,#211733,#171020);
+    border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 24px 80px rgba(0,0,0,.55);
+    padding:18px;
+    transform:translateY(0)
+  }
+  .handle{width:44px;height:4px;border-radius:99px;background:#524960;margin:0 auto 16px}
+  .sheet-title{font-size:17px;font-weight:800;margin:0 0 14px}
+  .sheet-text{color:#b7aec6;font-size:13px;line-height:1.6}
+  .sheet-card{
+    padding:14px;border-radius:17px;border:1px solid var(--line);background:rgba(255,255,255,.035);
+    display:flex;align-items:center;gap:12px
+  }
+  .sheet-info{flex:1}
+  .sheet-name{font-size:15px;font-weight:800}
+  .sheet-meta{font-size:12px;color:#a89fbb;margin-top:4px}
+  .primary{
+    width:100%;height:48px;border:0;border-radius:15px;margin-top:16px;
+    background:linear-gradient(135deg,#7e50ef,#a474ff);color:#fff;font-weight:800;cursor:pointer
+  }
+  .whatsapp-primary{
+    background:#25D366;
+    color:#fff;
+    box-shadow:0 8px 20px rgba(37,211,102,.20);
+  }
+  .ghost{
+    width:100%;height:46px;border-radius:15px;margin-top:10px;
+    border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#d8d0e6;font-weight:750
+  }
+
+  @media (max-width:360px){
+    .phone{padding-left:12px;padding-right:12px}
+    .metric{min-height:124px;padding:13px 12px}
+    .value{font-size:22px}
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <header class="topbar">
+    <button class="icon-btn" aria-label="Back">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <h1>Host Center</h1>
+    <span></span>
+  </header>
+
+  <section class="host-card">
+    <div class="identity">
+      <div class="avatar">AL</div>
+      <div class="identity-main">
+        <div class="name-row">
+          <div class="name">Alicia Moon</div>
+          <span class="role-badge">HOST</span>
+        </div>
+        <div class="id">ID: 88888888</div>
+      </div>
+      <button class="wa" aria-label="WhatsApp" onclick="alert('Open WhatsApp')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M20.5 11.8a8.3 8.3 0 0 1-12.3 7.3L4 20.2l1.1-4A8.3 8.3 0 1 1 20.5 11.8Z" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M9 8.3c.2-.5.5-.5.8-.5h.4c.1 0 .3 0 .4.3l.8 1.9c.1.3.1.5 0 .7l-.6.8c-.2.2-.2.4-.1.6.4.8 1 1.5 1.8 2 .3.2.5.2.7 0l.8-.9c.2-.2.4-.3.7-.1l1.8.8c.3.1.5.3.5.5 0 .2-.1 1.2-.7 1.7-.5.5-1.2.8-2 .7-1.1-.1-2.5-.6-4-1.9-1.8-1.5-2.8-3.5-3-4.5-.2-.9 0-1.6.5-2.1Z" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <div class="section-label agency-label">My Agency</div>
+  <section class="agency-card" onclick="openAgency()">
+    <div class="agency-avatar">AM</div>
+    <div class="agency-info">
+      <div class="agency-title">Aurora Media</div>
+      <div class="agency-id">ID: 66666666</div>
+    </div>
+    <div class="chev">›</div>
+  </section>
+
+  <div class="section-label">My Data</div>
+  <section class="data-block">
+    <div class="tabs">
+      <button class="tab active" data-tab="period" onclick="switchTab('period')">Current Period</button>
+      <button class="tab" data-tab="daily" onclick="switchTab('daily')">Daily</button>
+    </div>
+
+    <div class="period-info" id="periodInfo">
+      <div id="periodRange">2026-09-14 00:00:00 ~ 2026-09-20 23:59:59 <span class="tz">(UTC+5)</span></div>
+      <div class="period-update">Updated at: <span id="updateTime">11:00</span></div>
+    </div>
+
+    <div id="dateRow" class="date-row">
+      <button class="role-date-row" onclick="openDailyCalendar()">
+        <span class="role-date-label">Date</span>
+        <span class="role-date-value" id="selectedDateLabel">2026-09-18</span>
+        <span class="role-date-chevron">›</span>
+      </button>
+    </div>
+
+
+    <div id="levelCard" class="level-card">
+      <div class="level-emblem">LV6</div>
+      <div class="level-track"><span></span></div>
+      <div class="level-upgrade"><strong>760,000 Coins</strong> left to LV7</div>
+    </div>
+
+    <div class="grid">
+      <article class="metric">
+        <div>
+          <div class="metric-top">
+            <button class="qmark" onclick="openCoinsRules()">?</button>
+          </div>
+          <div class="value" id="coinsValue">3,230,000</div>
+          <div class="label" id="coinsLabel">Coins</div>
+        </div>
+        
+      </article>
+
+      <article class="metric">
+        <div>
+          
+          <div class="value" id="diamondValue">969</div>
+          <div class="label" id="diamondLabel">Available Diamonds</div>
+          <div class="diamond-note" id="diamondNote">(Received − Exchanged)</div>
+        </div>
+      </article>
+
+      <article class="metric">
+        <div>
+          <div class="metric-top">
+            <button class="qmark" onclick="openRules()">?</button>
+          </div>
+          <div class="value small" id="daysValue">3 / 4</div>
+          <div class="label" id="daysLabel">Valid Days</div>
+        </div>
+        
+      </article>
+
+      <article class="metric">
+        <div>
+          <div class="metric-top">
+            <button class="qmark" onclick="openMicRules()">?</button>
+          </div>
+          <div class="value small" id="micValue">8h 32m / 10h</div>
+          <div class="label" id="micLabel">Up-mic Time</div>
+        </div>
+        
+      </article>
+    </div>
+  </section>
+</div>
+
+
+<div class="calendar-overlay" id="dailyCalendarOverlay" onclick="closeDailyCalendarBackdrop(event)">
+  <div class="calendar-panel" onclick="event.stopPropagation()">
+    <div class="calendar-weekbar">
+      <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+    </div>
+    <div class="calendar-scroll" id="dailyCalendarScroll">
+      <div id="dailyCalendarMonths"></div>
+    </div>
+    <div class="calendar-actions">
+      <button class="calendar-cancel" onclick="closeDailyCalendar()">Cancel</button>
+      <button class="calendar-confirm" onclick="confirmDailyCalendar()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Agency Sheet -->
+<div class="overlay" id="agencyOverlay" onclick="closeOnBackdrop(event,'agencyOverlay')">
+  <div class="sheet">
+    <div class="handle"></div>
+    <h3 class="sheet-title">Agency Information</h3>
+    <div class="sheet-card">
+      <div class="agency-avatar">AM</div>
+      <div class="sheet-info">
+        <div class="sheet-name">Aurora Media</div>
+        <div class="sheet-meta">ID: 66666666</div>
+        <div class="sheet-meta">WhatsApp: +65 8888 6666</div>
+      </div>
+    </div>
+    <button class="primary whatsapp-primary" onclick="alert('Open WhatsApp')">Contact via WhatsApp</button>
+    
+  </div>
+</div>
+
+
+<!-- Coins Rules Sheet -->
+<div class="overlay" id="coinsRulesOverlay" onclick="closeOnBackdrop(event,'coinsRulesOverlay')">
+  <div class="sheet">
+    <div class="handle"></div>
+    <h3 class="sheet-title">Coins</h3>
+    <div class="sheet-text">
+      Lucky Gift Coins are counted at <b style="color:#fff">10%</b>.
+    </div>
+    <button class="primary" onclick="closeModal('coinsRulesOverlay')">Got it</button>
+  </div>
+</div>
+
+
+<!-- Mic Rules Sheet -->
+<div class="overlay" id="micRulesOverlay" onclick="closeOnBackdrop(event,'micRulesOverlay')">
+  <div class="sheet">
+    <div class="handle"></div>
+    <h3 class="sheet-title">Up-mic Time</h3>
+    <div class="sheet-text">
+      Only time when the host is <b style="color:#fff">on mic with the microphone turned on</b> is counted.
+    </div>
+    <button class="primary" onclick="closeModal('micRulesOverlay')">Got it</button>
+  </div>
+</div>
+
+<!-- Rules Sheet -->
+<div class="overlay" id="rulesOverlay" onclick="closeOnBackdrop(event,'rulesOverlay')">
+  <div class="sheet">
+    <div class="handle"></div>
+    <h3 class="sheet-title">Valid Days</h3>
+    <div class="sheet-text">
+      At least <b style="color:#fff">2 hours of valid up-mic time</b> in one day counts as <b style="color:#fff">1 Valid Day</b>.<br><br>
+      For Lv1–Lv9, the current period target is <b style="color:#fff">4 Valid Days + 10 Valid Working Hours</b>.
+    </div>
+    <button class="primary" onclick="closeModal('rulesOverlay')">Got it</button>
+  </div>
+</div>
+
+<script>
+const data = {
+  period:{
+    coins:'3,230,000',
+    coinsLabel:'Coins',
+    diamond:'969',
+    diamondLabel:'Available Diamonds',
+    diamondNote:'(Received − Exchanged)',
+    days:'3 / 4',
+    daysLabel:'Valid Day',
+    mic:'8h 32m / 10h',
+    micLabel:'Up-mic Time'
+  },
+  daily:{
+    coins:'620,000',
+    coinsLabel:'Coins',
+    diamond:'186',
+    diamondLabel:'Available Diamonds',
+    diamondNote:'(Received − Exchanged)',
+    days:'❌',
+    daysLabel:'Valid Day',
+    mic:'1h 26m',
+    micLabel:'Up-mic Time'
+  }
+};
+
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));
+  const d=data[tab];
+  coinsValue.textContent=d.coins;
+  coinsLabel.textContent=d.coinsLabel;
+  diamondValue.textContent=d.diamond;
+  diamondLabel.textContent=d.diamondLabel;
+  diamondNote.textContent=d.diamondNote;
+  daysValue.textContent=d.days;
+  daysLabel.textContent=d.daysLabel;
+  micValue.textContent=d.mic;
+  micLabel.textContent=d.micLabel;
+  document.getElementById('dateRow').classList.toggle('show',tab==='daily');
+  document.getElementById('levelCard').classList.toggle('hidden',tab==='daily');
+  daysValue.classList.toggle('status-invalid',tab==='daily' && d.days==='❌');
+  if(tab==='daily'){
+    renderDailyDate();
+  }else{
+    periodRange.innerHTML = `2026-09-14 00:00:00 ~ 2026-09-20 23:59:59 <span class="tz">(UTC+5)</span>`;
+  }
+}
+
+const dailyDates = [
+  {date:'Sep 15, 2026', coins:'420,000', diamond:'118', diamondNote:'(Received − Exchanged)', days:'✅', mic:'2h 18m'},
+  {date:'Sep 16, 2026', coins:'760,000', diamond:'228', diamondNote:'(Received − Exchanged)', days:'✅', mic:'2h 42m'},
+  {date:'Sep 17, 2026', coins:'510,000', diamond:'153', diamondNote:'(Received − Exchanged)', days:'❌', mic:'1h 36m'},
+  {date:'Sep 18, 2026', coins:'620,000', diamond:'186', diamondNote:'(Received − Exchanged)', days:'❌', mic:'1h 26m'}
+];
+let dailyIndex = dailyDates.length - 1;
+
+function renderDailyDate(){
+  const item = dailyDates[dailyIndex];
+  selectedDateLabel.textContent = formatIsoDate(item.date);
+  coinsValue.textContent = item.coins;
+  diamondValue.textContent = item.diamond;
+  diamondNote.textContent = item.diamondNote;
+  daysValue.textContent = item.days;
+  micValue.textContent = item.mic;
+  daysValue.classList.toggle('status-invalid', item.days === '❌');
+  prevDate.disabled = dailyIndex === 0;
+  nextDate.disabled = dailyIndex === dailyDates.length - 1;
+  const iso = formatIsoDate(item.date);
+  periodRange.innerHTML = `${iso} 00:00:00 ~ ${iso} 23:59:59 <span class="tz">(UTC+5)</span>`;
+}
+function changeDate(step){
+  const next = dailyIndex + step;
+  if(next < 0 || next >= dailyDates.length) return;
+  dailyIndex = next;
+  renderDailyDate();
+}
+
+
+
+let calendarPendingIndex = dailyIndex;
+
+function openDailyCalendar(){
+  calendarPendingIndex = dailyIndex;
+  renderDailyCalendar();
+  document.getElementById('dailyCalendarOverlay').classList.add('show');
+  setTimeout(scrollSelectedDateIntoView, 0);
+}
+function closeDailyCalendar(){
+  document.getElementById('dailyCalendarOverlay').classList.remove('show');
+}
+function closeDailyCalendarBackdrop(e){
+  if(e.target.id==='dailyCalendarOverlay') closeDailyCalendar();
+}
+function parseDailyDate(label){
+  return new Date(label.replace(',', ''));
+}
+function formatIsoDate(label){
+  const d=parseDailyDate(label);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function selectDailyCalendarDate(index){
+  calendarPendingIndex=index;
+  renderDailyCalendar();
+}
+function renderDailyCalendar(){
+  const allowed = new Map();
+  dailyDates.forEach((x,i)=>{
+    const d=parseDailyDate(x.date);
+    allowed.set(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`,i);
+  });
+
+  const firstAllowed=parseDailyDate(dailyDates[0].date);
+  const lastAllowed=parseDailyDate(dailyDates[dailyDates.length-1].date);
+
+  const startMonth = new Date(firstAllowed.getFullYear(), firstAllowed.getMonth(), 1);
+  const endMonth = new Date(lastAllowed.getFullYear(), lastAllowed.getMonth(), 1);
+
+  let monthsHtml='';
+  let cursor=new Date(startMonth);
+
+  while(cursor<=endMonth){
+    const y=cursor.getFullYear();
+    const m=cursor.getMonth();
+    const monthName=cursor.toLocaleDateString('en-US',{year:'numeric',month:'numeric'}).replace('/','/');
+    const firstDay=new Date(y,m,1);
+    const daysInMonth=new Date(y,m+1,0).getDate();
+
+    let cells='';
+    for(let i=0;i<firstDay.getDay();i++) cells+='<span class="calendar-spacer"></span>';
+
+    for(let day=1;day<=daysInMonth;day++){
+      const key=`${y}-${m}-${day}`;
+      const idx=allowed.get(key);
+      const classes=['calendar-day'];
+      if(idx===undefined) classes.push('disabled');
+      if(idx===calendarPendingIndex) classes.push('selected');
+      const isToday=(y===2026 && m===8 && day===18);
+      if(isToday) classes.push('today');
+      cells += `<button class="${classes.join(' ')}" ${idx===undefined?'disabled':`data-calendar-index="${idx}" onclick="selectDailyCalendarDate(${idx})"`}>${day}</button>`;
+    }
+
+    monthsHtml += `
+      <section class="calendar-month">
+        <div class="calendar-month-title">${y}/${m+1}</div>
+        <div class="calendar-grid">${cells}</div>
+      </section>
+    `;
+    cursor=new Date(y,m+1,1);
+  }
+
+  document.getElementById('dailyCalendarMonths').innerHTML=monthsHtml;
+}
+function scrollSelectedDateIntoView(){
+  const selected=document.querySelector(`[data-calendar-index="${calendarPendingIndex}"]`);
+  if(selected) selected.scrollIntoView({block:'center',behavior:'instant'});
+}
+function confirmDailyCalendar(){
+  dailyIndex=calendarPendingIndex;
+  renderDailyDate();
+  closeDailyCalendar();
+}
+function openAgency(){document.getElementById('agencyOverlay').classList.add('show')}
+function openCoinsRules(){document.getElementById('coinsRulesOverlay').classList.add('show')}
+function openMicRules(){document.getElementById('micRulesOverlay').classList.add('show')}
+function openRules(){document.getElementById('rulesOverlay').classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function closeOnBackdrop(e,id){if(e.target.id===id)closeModal(id)}
+
+
+</script>
+</body>
+</html>
