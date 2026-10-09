@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Host Center Demo</title>
+<title>Host Center · My Salary v28 · Scrollable Adjustment</title>
 <style>
   :root{
     --bg:#0c0716;
@@ -131,7 +131,7 @@
     border:0;background:transparent;color:#857b98;height:42px;border-radius:12px;
     font-weight:760;font-size:13px;cursor:pointer;transition:.18s ease
   }
-  .tab.active{
+  .tab.active, .salary-tab.active{
     color:#fff;background:linear-gradient(135deg,#7d50ef,#9d6eff);
     box-shadow:0 7px 18px rgba(128,76,235,.28)
   }
@@ -294,7 +294,7 @@
     color:#ddd7e6;
     font-size:11.5px;
     line-height:1.5;
-    text-align:left;
+    text-align:center;
   }
   .period-info .tz{
     color:#8f869d;
@@ -455,6 +455,119 @@
     .metric{min-height:124px;padding:13px 12px}
     .value{font-size:22px}
   }
+
+  /* My Salary — v24: share active tab palette with My Data, retain compact spacing */
+  .salary-card{
+    margin-top:23px;padding:15px 15px 16px;border:1px solid rgba(240,201,106,.18);
+    border-radius:21px;background:radial-gradient(circle at 100% 0%,rgba(240,201,106,.10),transparent 51%),linear-gradient(135deg,#251b37,#1a142b 75%);
+    box-shadow:0 9px 28px rgba(0,0,0,.14)
+  }
+  .salary-header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+  .salary-header h2{font-size:15px;font-weight:780;margin:0;color:#f7f1ff;line-height:24px}
+  .salary-help{height:24px;width:24px;border-radius:50%;border:1px solid rgba(255,255,255,.19);color:#cbbfdb;background:rgba(255,255,255,.04);cursor:pointer;font-size:12px;font-weight:700}
+  .salary-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:12px;background:#130e22;border:1px solid var(--line)}
+  .salary-tab{height:36px;border:0;border-radius:9px;background:transparent;color:#9084a3;font-size:12px;font-weight:730;cursor:pointer;transition:background .16s,color .16s}
+  .salary-panel{padding-top:15px}
+  .salary-panel[hidden],.salary-full-goal[hidden],.salary-adjustment[hidden],.salary-settled[hidden],.salary-empty[hidden]{display:none!important}
+  .salary-main-head{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+  .salary-main-label{font-size:12px;font-weight:630;color:#b9accb}
+  .salary-period{color:#968aa6;font-size:11px;line-height:1.45;overflow-wrap:normal;white-space:normal;max-width:100%;font-variant-numeric:tabular-nums}
+  .salary-main-amount{display:block;margin-top:4px;color:#ffe29a;font-size:32px;font-weight:850;line-height:1.2;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
+  .salary-full-goal{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap}
+  .salary-goal-amount{color:#58dca3;font-size:13px;font-weight:760;font-variant-numeric:tabular-nums}
+  .salary-goal-context{color:#81768e;font-size:10px}
+  .salary-breakdown{display:grid;grid-template-columns:1fr 1fr;column-gap:12px;margin-top:15px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+  .salary-item-label{font-size:11px;color:#aa9cbd;margin-bottom:5px}
+  .salary-item-value{font-size:18px;color:#fff;font-weight:780;font-variant-numeric:tabular-nums;letter-spacing:-.2px;white-space:nowrap}
+  .salary-value-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+  .salary-rate{padding:3px 6px;border-radius:6px;font-size:10px;font-weight:780;background:rgba(255,182,75,.15);color:#ffc77e;white-space:nowrap}
+  .salary-rate.full{background:rgba(86,216,154,.12);color:#71e6b0}
+  .salary-adjustment{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding-top:11px;border-top:1px solid rgba(255,255,255,.08);font-size:12px}
+  .salary-adjustment-label{color:#aa9cbd}
+  .salary-adjustment-value{color:#f5eefc;font-weight:700;font-variant-numeric:tabular-nums}
+  .salary-empty{padding:18px 0 10px;color:#b9accb;text-align:center;font-size:13px}
+  /* Only for the interactive prototype; not part of the production Host Center. */
+  .salary-demo-controls{margin-top:10px;padding:10px 12px;border-radius:13px;border:1px dashed rgba(165,135,205,.28);background:rgba(123,81,185,.06)}
+  .salary-demo-title{font-size:10px;font-weight:700;letter-spacing:.15px;color:#9384a9}
+  .salary-demo-switch{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+  .salary-demo-switch button{padding:7px 8px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#c3b7d6;border-radius:9px;cursor:pointer;font-size:10.5px;white-space:nowrap}
+  .salary-demo-switch button.selected{border-color:rgba(162,117,255,.7);color:#fff;background:rgba(141,92,255,.26)}
+  .salary-demo-section + .salary-demo-section{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.075)}
+  .salary-rule-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .salary-rule-heading .sheet-title{margin:0}
+  .salary-rule-close{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.055);color:#d0c2df;font-size:20px;line-height:1;cursor:pointer}
+  .salary-rule-sheet{padding-bottom:22px}
+  @media(max-width:360px){
+    .salary-card{padding:14px 12px 15px}
+    .salary-item-value{font-size:17px}
+    .salary-period{font-size:10.5px}
+  }
+
+  /* v26: one-row formula cards; Target Salary 70%-100% upward swoosh */
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .metric{min-width:0}
+  .salary-panel[hidden],.salary-settled[hidden],.salary-empty[hidden],.target-compare[hidden],.target-solo[hidden],.formula-adjustment[hidden]{display:none!important}
+  .salary-panel{padding-top:13px}
+  .salary-formula{display:flex;align-items:stretch;gap:3px;min-width:0;width:100%}
+  .formula-card{min-width:0;min-height:98px;border-radius:11px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.055);padding:10px 4px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;text-align:center}
+  .formula-total{flex:1.12;background:linear-gradient(140deg,rgba(112,66,156,.33),rgba(84,55,120,.19));border-color:rgba(190,141,255,.13)}
+  .formula-target{flex:2.04;gap:7px;background:rgba(143,95,199,.105);border-color:rgba(192,145,255,.17);padding-left:5px;padding-right:5px}
+  .formula-last-target{flex:1.2}
+  .formula-diamond{flex:.95}
+  .formula-label{display:block;font-size:10px;line-height:1.3;color:#baaccd;font-weight:560;letter-spacing:-.1px}
+  .formula-amount{display:block;white-space:nowrap;color:#fff;font-size:15px;letter-spacing:-.6px;font-weight:800;font-variant-numeric:tabular-nums}
+  .formula-main-amount{color:#ffe19a;font-size:18px;letter-spacing:-.75px}
+  .formula-operator{flex:0 0 11px;color:#8d7f9e;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700}
+  .target-compare{display:grid;grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr);width:100%;align-items:stretch;border-radius:9px;overflow:visible;min-height:51px}
+  .target-side{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px 0}
+  .target-side-current{background:rgba(255,255,255,.045);border-radius:9px 0 0 9px}
+  .target-side-goal{background:linear-gradient(120deg,rgba(139,85,242,.48),rgba(153,105,252,.4));border-radius:0 9px 9px 0}
+  .target-percent{font-size:9px;font-weight:780;line-height:1;color:#e8b46f}
+  .target-side-goal .target-percent{color:#d6bbff}
+  .target-amount{color:#f9f4ff;font-size:12px;font-weight:800;white-space:nowrap;line-height:1.2;letter-spacing:-.55px;font-variant-numeric:tabular-nums}
+  .target-side-goal .target-amount{color:#fff}
+  .target-divider{display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,rgba(255,255,255,.045),rgba(139,85,242,.48));position:relative;z-index:1;overflow:visible}
+  .target-up-arrow{display:block;flex:none;width:30px;height:32px;filter:drop-shadow(0 2px 2px rgba(48,12,90,.38));transform:translateY(-2px)}
+  .target-solo{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:5px;min-height:49px}
+  .target-solo-amount{font-size:15px;font-weight:800;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .target-solo-percent{font-size:9px;color:#79e9b8;background:rgba(86,216,154,.1);border-radius:5px;padding:3px 5px;font-weight:750}
+  .formula-period{margin-top:10px;margin-bottom:10px;text-align:center;font-size:10px;color:#a99bb8;line-height:1.5;overflow-wrap:anywhere}
+  /* v28: Last Period continues the equation into a swipeable Adjustment card.
+     At rest, exactly half of the last card peeks into view. No scrollbar or hint. */
+  .salary-last-formula{
+    width:100%;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+    -ms-overflow-style:none;-webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;touch-action:pan-x;
+  }
+  .salary-last-formula::-webkit-scrollbar{display:none;width:0;height:0}
+  .salary-last-formula.has-adjustment>.formula-card:not(.formula-adjustment-card){
+    /* 3 operators (11px), 6 gaps (3px), half Adjustment (47px) = 98px */
+    flex:0 0 calc((100% - 98px) / 3);
+  }
+  .salary-last-formula.has-adjustment>.formula-operator{flex:0 0 11px}
+  .salary-last-formula.has-adjustment>.formula-adjustment-card{flex:0 0 94px}
+  .salary-last-formula .formula-adjustment-card{background:rgba(143,95,199,.105);border-color:rgba(192,145,255,.15)}
+  .salary-last-formula .formula-adjustment-card .formula-amount{font-size:14px}
+  .salary-last-formula .salary-last-extra[hidden]{display:none!important}
+  @media (max-width:360px){
+    .salary-formula{gap:2px}
+    .formula-card{padding:8px 3px;min-height:91px}
+    .formula-label{font-size:9px}
+    .formula-amount{font-size:13px;letter-spacing:-.65px}
+    .formula-main-amount{font-size:16px}
+    .formula-operator{flex-basis:9px;font-size:14px}
+    .salary-last-formula.has-adjustment{gap:2px}
+    .salary-last-formula.has-adjustment>.formula-card:not(.formula-adjustment-card){
+      /* 3 operators (9px), 6 gaps (2px), half Adjustment (47px) = 86px */
+      flex-basis:calc((100% - 86px) / 3);
+    }
+    .salary-last-formula.has-adjustment>.formula-operator{flex-basis:9px}
+    .formula-target{padding-left:3px;padding-right:3px}
+    .target-amount{font-size:10.5px;letter-spacing:-.65px}
+    .target-percent{font-size:8px}
+    .target-compare{grid-template-columns:minmax(0,1fr) 16px minmax(0,1fr)}
+    .target-up-arrow{width:25px;height:28px}
+  }
 </style>
 </head>
 <body>
@@ -496,6 +609,98 @@
     </div>
     <div class="chev">›</div>
   </section>
+
+  <!-- v26: horizontal formula, curved upward salary-growth arrow; dates between tabs and cards -->
+  <section class="salary-card" aria-label="My Salary">
+    <div class="salary-header">
+      <h2>My Salary</h2>
+      <button class="salary-help" type="button" onclick="openSalaryRules()" aria-label="Salary Rules">?</button>
+    </div>
+    <div class="salary-tabs" role="tablist" aria-label="Salary Period">
+      <button class="salary-tab active" id="salaryTabCurrent" role="tab" aria-controls="salaryCurrentPanel" aria-selected="true" onclick="switchSalaryTab('current')">Current Period</button>
+      <button class="salary-tab" id="salaryTabLast" role="tab" aria-controls="salaryLastPanel" aria-selected="false" onclick="switchSalaryTab('last')">Last Period</button>
+    </div>
+    <div class="salary-panel" id="salaryCurrentPanel" role="tabpanel" aria-labelledby="salaryTabCurrent">
+      <div class="salary-period formula-period">2026-09-14 00:00:00 ~ 2026-09-20 23:59:59 (UTC+5)</div>
+      <div class="salary-formula" aria-label="Estimated Salary equals Target Salary plus Diamond Salary">
+        <div class="formula-card formula-total">
+          <span class="formula-label">Estimated<br>Salary</span>
+          <strong class="formula-amount formula-main-amount" id="salaryEstimatedTotal">$84.04</strong>
+        </div>
+        <span class="formula-operator" aria-hidden="true">=</span>
+        <div class="formula-card formula-target">
+          <span class="formula-label">Target Salary</span>
+          <div class="target-compare" id="salaryTargetCompare">
+            <div class="target-side target-side-current">
+              <span class="target-percent">70%</span>
+              <strong class="target-amount" id="salaryTargetAmount">$84.00</strong>
+            </div>
+            <span class="target-divider" aria-hidden="true"><svg class="target-up-arrow" viewBox="0 0 44 38" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 30 C15 34 25 23 32 9" stroke="white" stroke-width="5.5" stroke-linecap="round"/><path d="M21 11 L34 5 L38 19" stroke="white" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div class="target-side target-side-goal">
+              <span class="target-percent">100%</span>
+              <strong class="target-amount" id="salaryFullTargetAmount">$120.00</strong>
+            </div>
+          </div>
+          <div class="target-solo" id="salaryTargetSolo" hidden>
+            <strong class="target-solo-amount" id="salaryTargetSoloAmount">$120.00</strong>
+            <span class="target-solo-percent">100%</span>
+          </div>
+        </div>
+        <span class="formula-operator" aria-hidden="true">+</span>
+        <div class="formula-card formula-diamond">
+          <span class="formula-label">Diamond<br>Salary</span>
+          <strong class="formula-amount" id="salaryDiamondAmount">$0.04</strong>
+        </div>
+      </div>
+    </div>
+    <div class="salary-panel" id="salaryLastPanel" role="tabpanel" aria-labelledby="salaryTabLast" hidden>
+      <div class="salary-period formula-period" id="salaryLastPeriod">2026-09-07 00:00:00 ~ 2026-09-13 23:59:59 (UTC+5)</div>
+      <div id="salaryLastSettled" class="salary-settled">
+        <div class="salary-formula salary-last-formula has-adjustment" id="salaryLastFormula" aria-label="Final Salary equals Target Salary plus Diamond Salary minus Adjustment">
+          <div class="formula-card formula-total">
+            <span class="formula-label">Final<br>Salary</span>
+            <strong class="formula-amount formula-main-amount" id="salaryLastTotal">$124.50</strong>
+          </div>
+          <span class="formula-operator" aria-hidden="true">=</span>
+          <div class="formula-card formula-last-target">
+            <span class="formula-label">Target<br>Salary</span>
+            <strong class="formula-amount" id="salaryLastTarget">$120.00</strong>
+          </div>
+          <span class="formula-operator" aria-hidden="true">+</span>
+          <div class="formula-card formula-diamond">
+            <span class="formula-label">Diamond<br>Salary</span>
+            <strong class="formula-amount" id="salaryLastDiamond">$6.50</strong>
+          </div>
+          <span class="formula-operator salary-last-extra" id="salaryLastAdjustmentOperator" aria-hidden="true">−</span>
+          <div class="formula-card formula-adjustment-card salary-last-extra" id="salaryLastAdjustmentCard">
+            <span class="formula-label">Adjustment</span>
+            <strong class="formula-amount" id="salaryLastAdjustment">$2.00</strong>
+          </div>
+        </div>
+      </div>
+      <div class="salary-empty" id="salaryLastEmpty" hidden>Pending Settlement</div>
+    </div>
+  </section>
+
+  <!-- Demo-only controls outside the rules sheet, never shipped in the actual Host Center. -->
+  <div class="salary-demo-controls" aria-label="Demo Preview Controls">
+    <div class="salary-demo-section">
+      <div class="salary-demo-title">DEMO · Working Time</div>
+      <div class="salary-demo-switch" id="salaryDemoSwitch">
+        <button type="button" data-demo-state="incomplete" class="selected" aria-pressed="true" onclick="setSalaryDemoState('incomplete')">Incomplete · 70%</button>
+        <button type="button" data-demo-state="completed" aria-pressed="false" onclick="setSalaryDemoState('completed')">Completed · 100%</button>
+        <button type="button" data-demo-state="exempt" aria-pressed="false" onclick="setSalaryDemoState('exempt')">Lv10+ · 100%</button>
+      </div>
+    </div>
+    <div class="salary-demo-section">
+      <div class="salary-demo-title">DEMO · Last Period Settlement</div>
+      <div class="salary-demo-switch" id="salarySettlementDemoSwitch">
+        <button type="button" data-settlement-state="settled" class="selected" aria-pressed="true" onclick="setLastSettlementDemoState('settled')">Settled</button>
+        <button type="button" data-settlement-state="pending" aria-pressed="false" onclick="setLastSettlementDemoState('pending')">Pending</button>
+        <button type="button" data-settlement-state="none" aria-pressed="false" onclick="setLastSettlementDemoState('none')">No Record</button>
+      </div>
+    </div>
+  </div>
 
   <div class="section-label">My Data</div>
   <section class="data-block">
@@ -605,6 +810,24 @@
 </div>
 
 
+<!-- Salary Rules (production-facing text only) -->
+<div class="overlay" id="salaryRulesOverlay" onclick="closeOnBackdrop(event,'salaryRulesOverlay')">
+  <div class="sheet salary-rule-sheet" role="dialog" aria-modal="true" aria-labelledby="salaryRulesTitle">
+    <div class="handle"></div>
+    <div class="salary-rule-heading">
+      <h3 class="sheet-title" id="salaryRulesTitle">Salary Rules</h3>
+      <button class="salary-rule-close" type="button" aria-label="Close salary rules" onclick="closeModal('salaryRulesOverlay')">×</button>
+    </div>
+    <div class="sheet-text">
+      Estimated Salary = <b style="color:#fff">Target Salary + Diamond Salary</b>.<br><br>
+      Lv1–Lv9: Target Salary is calculated at <b style="color:#fff">70%</b> until both 4 Valid Days and 10 Valid Working Hours are completed; then it is calculated at <b style="color:#fff">100%</b> for the period.<br><br>
+      Lv10+ is exempt from Working Time requirements and receives 100% Target Salary. Diamond Salary is not reduced by Working Time and is converted at <b style="color:#fff">25,000 Diamonds = $1</b>.<br><br>
+      The 100% amount uses the current period's data and may change. Estimated Salary is not the final settlement. Last Period uses the settled Final Salary, including adjustments where applicable.
+    </div>
+
+  </div>
+</div>
+
 <!-- Coins Rules Sheet -->
 <div class="overlay" id="coinsRulesOverlay" onclick="closeOnBackdrop(event,'coinsRulesOverlay')">
   <div class="sheet">
@@ -644,6 +867,84 @@
 </div>
 
 <script>
+// Demonstration only; production must fetch the correct Target Salary tier,
+// working-time totals, salary-eligible Diamonds, and settled final bill.
+const salaryPreviewData = { level:6, targetSalaryUSD:120, validDays:3, validHours:8+32/60, salaryDiamonds:969 };
+const lastSalaryData = {
+  status:'settled', // settled | pending | none
+  finalSalaryUSD:124.50, targetSalaryUSD:120, diamondSalaryUSD:6.50,
+  adjustmentUSD:-2.00
+};
+const salaryUSD=n=>'$'+n.toFixed(2);
+function updateSalaryPreview(d=salaryPreviewData){
+  const met=d.level>=10 || (d.validDays>=4 && d.validHours>=10);
+  const targetFull=d.targetSalaryUSD;
+  const targetCurrent=targetFull*(met?1:.7);
+  const diamond=d.salaryDiamonds/25000;
+  document.getElementById('salaryEstimatedTotal').textContent=salaryUSD(targetCurrent+diamond);
+  document.getElementById('salaryTargetAmount').textContent=salaryUSD(targetCurrent);
+  document.getElementById('salaryFullTargetAmount').textContent=salaryUSD(targetFull);
+  document.getElementById('salaryTargetSoloAmount').textContent=salaryUSD(targetCurrent);
+  document.getElementById('salaryDiamondAmount').textContent=salaryUSD(diamond);
+  document.getElementById('salaryTargetCompare').hidden=met;
+  document.getElementById('salaryTargetSolo').hidden=!met;
+}
+function renderLastSalary(d=lastSalaryData){
+  const settled=d.status==='settled';
+  document.getElementById('salaryLastSettled').hidden=!settled;
+  const empty=document.getElementById('salaryLastEmpty');
+  empty.hidden=settled;
+  if(!settled){empty.textContent=d.status==='none'?'No Settlement Record':'Pending Settlement';return;}
+  document.getElementById('salaryLastTotal').textContent=salaryUSD(d.finalSalaryUSD);
+  document.getElementById('salaryLastTarget').textContent=salaryUSD(d.targetSalaryUSD);
+  document.getElementById('salaryLastDiamond').textContent=salaryUSD(d.diamondSalaryUSD);
+  const hasAdjustment=Math.abs(d.adjustmentUSD)>0.00001;
+  const formula=document.getElementById('salaryLastFormula');
+  const operator=document.getElementById('salaryLastAdjustmentOperator');
+  formula.classList.toggle('has-adjustment',hasAdjustment);
+  operator.hidden=!hasAdjustment;
+  document.getElementById('salaryLastAdjustmentCard').hidden=!hasAdjustment;
+  operator.textContent=d.adjustmentUSD<0?'−':'+';
+  document.getElementById('salaryLastAdjustment').textContent=salaryUSD(Math.abs(d.adjustmentUSD));
+  formula.setAttribute('aria-label','Final Salary equals Target Salary plus Diamond Salary'+(hasAdjustment?(d.adjustmentUSD<0?' minus ':' plus ')+'Adjustment':''));
+  formula.scrollLeft=0;
+}
+function switchSalaryTab(tab){
+  const current=tab==='current';
+  document.getElementById('salaryCurrentPanel').hidden=!current;
+  document.getElementById('salaryLastPanel').hidden=current;
+  if(!current) document.getElementById('salaryLastFormula').scrollLeft=0;
+  for(const [id,selected] of [['salaryTabCurrent',current],['salaryTabLast',!current]]){
+    const button=document.getElementById(id);
+    button.classList.toggle('active',selected);
+    button.setAttribute('aria-selected',String(selected));
+  }
+}
+function openSalaryRules(){document.getElementById('salaryRulesOverlay').classList.add('show')}
+function setSalaryDemoState(state){
+  if(state==='completed') Object.assign(salaryPreviewData,{level:6,validDays:4,validHours:10});
+  else if(state==='exempt') Object.assign(salaryPreviewData,{level:10,validDays:0,validHours:0});
+  else Object.assign(salaryPreviewData,{level:6,validDays:3,validHours:8+32/60});
+  document.querySelectorAll('[data-demo-state]').forEach(b=>{
+    const selected=b.dataset.demoState===state;
+    b.classList.toggle('selected',selected);
+    b.setAttribute('aria-pressed',String(selected));
+  });
+  updateSalaryPreview();
+  switchSalaryTab('current');
+}
+function setLastSettlementDemoState(state){
+  if(!['settled','pending','none'].includes(state))return;
+  lastSalaryData.status=state;
+  document.querySelectorAll('[data-settlement-state]').forEach(button=>{
+    const selected=button.dataset.settlementState===state;
+    button.classList.toggle('selected',selected);
+    button.setAttribute('aria-pressed',String(selected));
+  });
+  renderLastSalary();
+  switchSalaryTab('last');
+}
+document.addEventListener('DOMContentLoaded',()=>{updateSalaryPreview();renderLastSalary()});
 const data = {
   period:{
     coins:'3,230,000',
@@ -652,7 +953,7 @@ const data = {
     diamondLabel:'Available Diamonds',
     diamondNote:'(Received − Exchanged)',
     days:'3 / 4',
-    daysLabel:'Valid Day',
+    daysLabel:'Valid Days',
     mic:'8h 32m / 10h',
     micLabel:'Up-mic Time'
   },
@@ -662,7 +963,7 @@ const data = {
     diamond:'186',
     diamondLabel:'Available Diamonds',
     diamondNote:'(Received − Exchanged)',
-    days:'❌',
+    days:'Not Valid',
     daysLabel:'Valid Day',
     mic:'1h 26m',
     micLabel:'Up-mic Time'
@@ -683,7 +984,7 @@ function switchTab(tab){
   micLabel.textContent=d.micLabel;
   document.getElementById('dateRow').classList.toggle('show',tab==='daily');
   document.getElementById('levelCard').classList.toggle('hidden',tab==='daily');
-  daysValue.classList.toggle('status-invalid',tab==='daily' && d.days==='❌');
+  daysValue.classList.toggle('status-invalid',tab==='daily' && d.days==='Not Valid');
   if(tab==='daily'){
     renderDailyDate();
   }else{
@@ -692,10 +993,10 @@ function switchTab(tab){
 }
 
 const dailyDates = [
-  {date:'Sep 15, 2026', coins:'420,000', diamond:'118', diamondNote:'(Received − Exchanged)', days:'✅', mic:'2h 18m'},
-  {date:'Sep 16, 2026', coins:'760,000', diamond:'228', diamondNote:'(Received − Exchanged)', days:'✅', mic:'2h 42m'},
-  {date:'Sep 17, 2026', coins:'510,000', diamond:'153', diamondNote:'(Received − Exchanged)', days:'❌', mic:'1h 36m'},
-  {date:'Sep 18, 2026', coins:'620,000', diamond:'186', diamondNote:'(Received − Exchanged)', days:'❌', mic:'1h 26m'}
+  {date:'Sep 15, 2026', coins:'420,000', diamond:'118', diamondNote:'(Received − Exchanged)', days:'Valid', mic:'2h 18m'},
+  {date:'Sep 16, 2026', coins:'760,000', diamond:'228', diamondNote:'(Received − Exchanged)', days:'Valid', mic:'2h 42m'},
+  {date:'Sep 17, 2026', coins:'510,000', diamond:'153', diamondNote:'(Received − Exchanged)', days:'Not Valid', mic:'1h 36m'},
+  {date:'Sep 18, 2026', coins:'620,000', diamond:'186', diamondNote:'(Received − Exchanged)', days:'Not Valid', mic:'1h 26m'}
 ];
 let dailyIndex = dailyDates.length - 1;
 
@@ -707,9 +1008,7 @@ function renderDailyDate(){
   diamondNote.textContent = item.diamondNote;
   daysValue.textContent = item.days;
   micValue.textContent = item.mic;
-  daysValue.classList.toggle('status-invalid', item.days === '❌');
-  prevDate.disabled = dailyIndex === 0;
-  nextDate.disabled = dailyIndex === dailyDates.length - 1;
+  daysValue.classList.toggle('status-invalid', item.days === 'Not Valid');
   const iso = formatIsoDate(item.date);
   periodRange.innerHTML = `${iso} 00:00:00 ~ ${iso} 23:59:59 <span class="tz">(UTC+5)</span>`;
 }
